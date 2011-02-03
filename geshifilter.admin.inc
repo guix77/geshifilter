@@ -376,17 +376,19 @@ function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
 
 /**
  * Helper function for some settings form fields usable as general and specific settings
+ *
+ * @param stdClass $format format object (e.g. with field $format->format)
  */
 function _geshifilter_general_highlight_tags_settings($format = NULL) {
   $form = array();
   $f = ($format === NULL) ? '' : "_$format->format";
-  $passed_format = ($format === NULL) ? NULL : $format->format;
+  $format_id = ($format === NULL) ? NULL : $format->format;
   
   // generic tags
   $form["geshifilter_tags$f"] = array(
     '#type' => 'textfield',
     '#title' => t('Generic syntax highlighting tags'),
-    '#default_value' => geshifilter_tags($passed_format),
+    '#default_value' => geshifilter_tags($format_id),
     '#description' => t('Tags that should activate the GeSHi syntax highlighting. Specify a space-separated list of tagnames.'),
   );
   // Container tag styles.
@@ -402,7 +404,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
         '!percent' =>  '<code>'. check_plain('<% ... %>'). '</code>',
       )),
     ),
-    '#default_value' => _geshifilter_tag_styles($format),
+    '#default_value' => _geshifilter_tag_styles($format_id),
     '#description' => t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
   );
   return $form;

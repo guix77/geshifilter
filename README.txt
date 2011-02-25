@@ -1,4 +1,3 @@
-// $Id$
 
 ============================
 GeSHi Filter (Drupal Module)

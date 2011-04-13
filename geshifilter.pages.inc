@@ -211,9 +211,9 @@ function _geshifilter_prepare_php_callback($match) {
  */
 function _geshifilter_process($format, $text) {
   // load GeSHi library (if not already)
-  $geshi_library = _geshifilter_check_geshi_library();
-  if (!$geshi_library['success']) {
-    drupal_set_message($geshi_library['message'], 'error');
+  $geshi_library = libraries_load('geshi');
+  if (!$geshi_library['loaded']) {
+    drupal_set_message($geshi_library['error message'], 'error');
     return $text;
   }
   // get the available tags
@@ -325,9 +325,9 @@ function geshifilter_process_sourcecode($source_code, $lang, $line_numbering=0, 
  */
 function geshifilter_geshi_process($source_code, $lang, $line_numbering=0, $linenumbers_start=1, $inline_mode=FALSE, $title = NULL) {
   // load GeSHi library (if not already)
-  $geshi_library = _geshifilter_check_geshi_library();
+  $geshi_library = libraries_load('geshi');
   if (!$geshi_library['loaded']) {
-    drupal_set_message($geshi_library['message'], 'error');
+    drupal_set_message($geshi_library['error message'], 'error');
     return $source_code;
   }
 

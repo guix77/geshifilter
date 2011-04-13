@@ -58,7 +58,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
   $form = array();
 
   // Try to load GeSHi library and get version if successful.
-  $geshi_library = _geshifilter_check_geshi_library();
+  $geshi_library = libraries_load('geshi');
 
   // GeSHi library settings (constant GESHI_VERSION is defined in GeSHi library)
   $form['geshifilter_library'] = array(
@@ -67,15 +67,8 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).',
       array('!geshi' => url('http://qbnz.com/highlighter/'))),
     '#collapsible' => TRUE,
-    '#collapsed' => $geshi_library['success'],
+    '#collapsed' => $geshi_library['loaded'],
   );
-  $form['geshifilter_library']['geshifilter_geshi_dir'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Path to GeSHi library'),
-    '#default_value' => _geshifilter_get_geshi_dir(),
-    '#description' => t('Specify the path to the GeSHi library directory (which contains a file called <em>geshi.php</em>).')
-  );
-  $form['geshifilter_library']['#after_build'] = array('geshifilter_admin_general_settings_after_build');
 
   // If the GeSHi library is loaded, show all the options and settings.
   if ($geshi_library['loaded']) {
@@ -233,17 +226,6 @@ function geshifilter_admin_general_settings($form, &$form_state) {
 }
 
 /**
- * After build function for admin settings
- */
-function geshifilter_admin_general_settings_after_build($form, &$form_state) {
-  $geshi_library = _geshifilter_check_geshi_library(FALSE, $form_state['values']['geshifilter_geshi_dir'], FALSE);
-  if (!$geshi_library['success']) {
-    form_set_error('geshifilter_geshi_dir', $geshi_library['message']);
-  }
-  return $form;
-}
-
-/**
  * Validate function for admin settings
  */
 function geshifilter_admin_general_settings_validate($form, &$form_state) {
@@ -257,15 +239,6 @@ function geshifilter_admin_general_settings_validate($form, &$form_state) {
  * Submit function for admin settings
  */
 function geshifilter_admin_general_settings_submit($form, &$form_state) {
-  // Cache of available languages should be cleared when GeSHi library dir changes
-  // _geshifilter_get_geshi_dir() returns the new value set by
-  // system_settings_form_submit() which runs before
-  // geshifilter_admin_general_settings_submit(),
-  // $form['geshifilter_library']['geshifilter_geshi_dir']['#default_value'] is
-  // the old value
-  if (_geshifilter_get_geshi_dir() != $form['geshifilter_library']['geshifilter_geshi_dir']['#default_value']) {
-    variable_del('geshifilter_available_languages_cache');
-  }
   // Regenerate language_css
   // Note the use of variable_get('geshifilter_css_mode') which is alread set
   // to $form_state['values']['geshifilter_css_mode'] by
@@ -283,9 +256,9 @@ function geshifilter_admin_general_settings_submit($form, &$form_state) {
 function geshifilter_admin_per_language_settings($form_state, $view = 'enabled') {
   $form = array();
   // check if GeSHi library is available
-  $geshi_library = _geshifilter_check_geshi_library();
-  if (!$geshi_library['success']) {
-    drupal_set_message($geshi_library['message'], 'error');
+  $geshi_library = libraries_load('geshi');
+  if (!$geshi_library['loaded']) {
+    drupal_set_message($geshi_library['error message'], 'error');
     return;
   }
   $add_checkbox = TRUE;
@@ -549,7 +522,7 @@ function _geshifilter_clear_filter_cache() {
  */
 function _geshifilter_generate_languages_css_rules() {
   $output = '';
-  $geshi_library = _geshifilter_check_geshi_library();
+  $geshi_library = libraries_load('geshi');
   if ($geshi_library['loaded']) {
     require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.pages.inc';
     $languages = _geshifilter_get_enabled_languages();

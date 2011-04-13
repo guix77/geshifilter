@@ -12,14 +12,14 @@ require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
  */
 function geshifilter_admin_filter_conflicts($check_only=FALSE) {
   global $user;
-  
+
   // start
   $output = '';
   // check if GeSHi library is available
-  $geshi_library = _geshifilter_check_geshi_library();
-  if (!$geshi_library['success']) {
+  $geshi_library = libraries_load('geshi');
+  if (!$geshi_library['loaded']) {
     if (!$check_only) {
-      drupal_set_message($geshi_library['message'], 'error');
+      drupal_set_message($geshi_library['error message'], 'error');
     }
     return $output;
   }

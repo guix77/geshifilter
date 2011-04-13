@@ -29,3 +29,10 @@ function geshifilter_uninstall() {
   db_query("DELETE FROM {variable} WHERE name LIKE 'geshifilter_%'");
   cache_clear_all('variables', 'cache');
 }
+
+/**
+ * Remove 'geshifilter_geshi_dir' since it is replaced by libraries API.
+ */
+function geshifilter_update_7100() {
+  variable_del('geshifilter_geshi_dir');
+}

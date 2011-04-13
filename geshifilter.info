@@ -3,3 +3,4 @@ description = "Provides a filter to highlight source code using the GeSHi librar
 package = "Filters"
 core = 7.x
 files[] = geshifilter.test
+dependencies[] = libraries

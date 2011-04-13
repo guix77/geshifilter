@@ -228,13 +228,19 @@ function geshifilter_requirements($phase) {
   if ($phase == 'runtime') {
     require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
     // check if GeSHi library is available
-    $geshi_library = _geshifilter_check_geshi_library();
+    $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('GeSHi library not found.'),
-        'description' => t('You should install the GeSHi library and set its path in the <a href="!geshisettings">GeSHi settings</a>.',
-          array('!geshisettings' => url('admin/config/content/geshifilter'))),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    elseif (($version = explode('.', GESHI_VERSION)) && !($version[0] == '1' && $version[1] == '0')) {
+      $requirements[] = array(
+        'title' => 'GeSHi filter',
+        'value' => t('GeSHi library invalid version.'),
+        'description' => t('The detected version of GeSHi library (%version) is not supported. A version from the 1.0.x branch is required.', array('%version' => GESHI_VERSION)),
         'severity' => REQUIREMENT_ERROR,
       );
     }
@@ -272,6 +278,28 @@ function geshifilter_requirements($phase) {
   return $requirements;
 }
 
+/**
+ * Implements hook_libraries_info()
+ */
+function geshifilter_libraries_info() {
+  return array(
+    'geshi' => array(
+      'title' => 'GeSHi - Generic Syntax Highlighter for PHP',
+      'vendor url' => 'http://sourceforge.net/projects/geshi',
+      'download url' => 'http://sourceforge.net/projects/geshi/files/geshi',
+      'version arguments' => array(
+        'file' => 'geshi.php',
+        'pattern' => "/define\('GESHI_VERSION', '(.*)'\);/",
+        'lines' => 50,
+      ),
+      'files' => array(
+        'php' => array(
+          'geshi.php',
+        ),
+      ),
+    ),
+  );
+}
 
 /**
  * Helper function for checking if an automatically managed style sheet is possible

@@ -151,7 +151,7 @@ function geshifilter_init() {
   // Since the filtered content is cached, it is not possible to know on which
   // pages the css file is actually needed. Thus it is included on all pages.
   if (variable_get('geshifilter_css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
-    drupal_add_css(file_directory_path() .'/geshifilter-languages.css');
+    drupal_add_css(_geshifilter_language_css_path());
   }
   drupal_add_css(drupal_get_path('module', 'geshifilter') .'/geshifilter.css');
 }
@@ -307,8 +307,8 @@ function geshifilter_libraries_info() {
  * @return boolean indicating if an automatically managed style sheet is possible
  */
 function _geshifilter_managed_external_stylesheet_possible() {
-  $directory = file_directory_path();
-  return is_dir($directory) && is_writable($directory) && (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PUBLIC);
+  $directory = _geshifilter_language_css_path(TRUE);
+  return file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 }
 
 /**
@@ -320,4 +320,9 @@ function geshifilter_generate_language_css_rules() {
   $output = _geshifilter_generate_languages_css_rules();
   print($output);
   exit();
+}
+
+function _geshifilter_language_css_path($dironly = FALSE) {
+  $directory = file_default_scheme() . '://geshi';
+  return $dironly ? $directory : $directory .'/geshifilter-languages.css';
 }

@@ -557,7 +557,7 @@ function _geshifilter_generate_languages_css_file($force=FALSE) {
     // Build stylesheet.
     $stylesheet = _geshifilter_generate_languages_css_rules();
     // Save stylesheet.
-    $stylesheet_filename = file_directory_path() .'/geshifilter-languages.css';
+    $stylesheet_filename = _geshifilter_language_css_path();;
     $ret = file_save_data($stylesheet, $stylesheet_filename, FILE_EXISTS_REPLACE);
     if ($ret) {
       drupal_set_message(t('(Re)generated external CSS style sheet %file.', array('%file' => $ret)));

@@ -1,6 +1,6 @@
-name = "GeSHi field"
-description = "Provides a CCK field for source code with GeSHI syntax highlighting."
-package = "Filters"
-core = 6.x
-dependencies[] = content
+name = GeSHi field
+description = Provides a field for source code with GeSHI syntax highlighting.
+package = Filters
+core = 7.x
+dependencies[] = field
 dependencies[] = geshifilter

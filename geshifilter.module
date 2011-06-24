@@ -36,7 +36,7 @@ define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY10', 10);
 define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20', 20);
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function geshifilter_help($path, $arg) {
   switch ($path) {
@@ -72,7 +72,7 @@ function geshifilter_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function geshifilter_menu() {
   $items = array();
@@ -145,7 +145,7 @@ function geshifilter_menu() {
 
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function geshifilter_init() {
   // Since the filtered content is cached, it is not possible to know on which
@@ -210,7 +210,7 @@ function geshifilter_filter_settings_callback($form, &$form_state, $filter, $for
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function geshifilter_theme() {
   return array(
@@ -221,7 +221,7 @@ function geshifilter_theme() {
 }
 
 /**
- * Implementation of hook_requirements().
+ * Implements hook_requirements().
  */
 function geshifilter_requirements($phase) {
   $requirements = array();
@@ -279,7 +279,7 @@ function geshifilter_requirements($phase) {
 }
 
 /**
- * Implements hook_libraries_info()
+ * Implements hook_libraries_info().
  */
 function geshifilter_libraries_info() {
   return array(
@@ -302,9 +302,9 @@ function geshifilter_libraries_info() {
 }
 
 /**
- * Helper function for checking if an automatically managed style sheet is possible
+ * Helper function for checking if an automatically managed style sheet is possible.
  *
- * @return boolean indicating if an automatically managed style sheet is possible
+ * @return boolean indicating if an automatically managed style sheet is possible.
  */
 function _geshifilter_managed_external_stylesheet_possible() {
   $directory = _geshifilter_language_css_path(TRUE);
@@ -312,7 +312,7 @@ function _geshifilter_managed_external_stylesheet_possible() {
 }
 
 /**
- * Callback function for generating the CSS rules for the syntax highlighting
+ * Callback function for generating the CSS rules for the syntax highlighting.
  */
 function geshifilter_generate_language_css_rules() {
   require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.admin.inc';

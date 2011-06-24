@@ -7,7 +7,8 @@
 
 /**
  * List of available languages.
- * @return an array mapping language code to array with the language path and full language name
+ *
+ * @return an array mapping language code to array with the language path and full language name.
  */
 function _geshifilter_get_available_languages() {
   // try to get it from cache (database actually)
@@ -59,7 +60,7 @@ function _geshifilter_get_enabled_languages() {
 }
 
 /**
- * Helper function for gettings the tags
+ * Helper function for gettings the tags.
  * (with caching)
  */
 function _geshifilter_get_tags($format) {
@@ -82,7 +83,7 @@ function _geshifilter_get_tags($format) {
 }
 
 /**
- * helper function for generating a GeSHi object
+ * Helper function for generating a GeSHi object.
  * @param $language the language to generate a GeSHi object for
  */
 function _geshifilter_geshi_factory($source_code, $language) {

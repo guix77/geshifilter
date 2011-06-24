@@ -12,11 +12,11 @@
 require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
 
 /**
- * Helper function for parsing the attributes of GeSHi code tags
+ * Helper function for parsing the attributes of GeSHi code tags.
  * to get the settings for language, line numbers, etc.
  *
- * @param $attributes string with the attributes
- * @param $format the concerning text format
+ * @param $attributes string with the attributes.
+ * @param $format the concerning text format.
  * @return array of settings with fields 'language', 'line_numbering', 'linenumbers_start' and 'title'.
  */
 function _geshifilter_parse_attributes($attributes, $format) {
@@ -198,7 +198,7 @@ function _geshifilter_prepare_callback($match, $format) {
 }
 
 /**
- * _geshifilter_prepare callback for < ?php ... ? > blocks
+ * _geshifilter_prepare callback for < ?php ... ? > blocks.
  */
 function _geshifilter_prepare_php_callback($match) {
   return '[geshifilter-questionmarkphp]'
@@ -234,7 +234,7 @@ function _geshifilter_process($format, $text) {
 
 
 /**
- * preg_replace_callback callback
+ * preg_replace_callback callback.
  */
 function _geshifilter_replace_callback($match, $format) {
   // $match[0]: complete matched string
@@ -294,7 +294,7 @@ function _geshifilter_replace_callback($match, $format) {
 }
 
 /**
- * Helper function for overriding some GeSHi defaults
+ * Helper function for overriding some GeSHi defaults.
  */
 function _geshifilter_override_geshi_defaults(&$geshi, $langcode) {
   // override the some default GeSHi styles (e.g. GeSHi uses Courier by default, which is ugly)
@@ -392,7 +392,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering=0, $line
 }
 
 /**
- * geshifilter wrapper for highlight_string() processing of PHP
+ * geshifilter wrapper for highlight_string() processing of PHP.
  */
 function geshifilter_highlight_string_process($source_code, $inline_mode) {
   // Make sure that the source code starts with < ?php and ends with ? >

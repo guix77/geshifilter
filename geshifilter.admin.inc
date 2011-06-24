@@ -226,7 +226,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
 }
 
 /**
- * Validate function for admin settings
+ * Validate function for admin settings.
  */
 function geshifilter_admin_general_settings_validate($form, &$form_state) {
   // Check if automatically managed style sheet is posible
@@ -236,7 +236,7 @@ function geshifilter_admin_general_settings_validate($form, &$form_state) {
 }
 
 /**
- * Submit function for admin settings
+ * Submit function for admin settings.
  */
 function geshifilter_admin_general_settings_submit($form, &$form_state) {
   // Regenerate language_css
@@ -251,7 +251,7 @@ function geshifilter_admin_general_settings_submit($form, &$form_state) {
 }
 
 /**
- * Menu callback for per language settings
+ * Menu callback for per language settings.
  */
 function geshifilter_admin_per_language_settings($form_state, $view = 'enabled') {
   $form = array();
@@ -276,7 +276,7 @@ function geshifilter_admin_per_language_settings($form_state, $view = 'enabled')
 }
 
 /**
- * Validate function for per language settings
+ * Validate function for per language settings.
  *
  * Check that language tags differ between languages and fro the generic tags.
  */
@@ -336,7 +336,7 @@ function geshifilter_per_language_settings_validate($form, &$form_state) {
 }
 
 /**
- * Submit function for per language settings
+ * Submit function for per language settings.
  */
 function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
   // regenerate language_css
@@ -347,9 +347,9 @@ function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
 }
 
 /**
- * Helper function for some settings form fields usable as general and specific settings
+ * Helper function for some settings form fields usable as general and specific settings.
  *
- * @param stdClass $format format object (e.g. with field $format->format)
+ * @param stdClass $format format object (e.g. with field $format->format).
  */
 function _geshifilter_general_highlight_tags_settings($format = NULL) {
   $form = array();
@@ -383,7 +383,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
 }
 
 /**
- * function for generating a form table for per language settings
+ * Function for generating a form table for per language settings.
  */
 function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_tag_option) {
   $form = array(
@@ -443,7 +443,7 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
 }
 
 /**
- * theming function for the per language settings table
+ * Theming function for the per language settings table.
  */
 function theme_geshifilter_per_language_settings($variables) {
   $form = $variables['form'];
@@ -475,7 +475,7 @@ function theme_geshifilter_per_language_settings($variables) {
 }
 
 /**
- * Helper function for flushing the GeSHi language definition cache
+ * Helper function for flushing the GeSHi language definition cache.
  */
 function _geshifilter_flush_language_definition_cache() {
   if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == variable_get('geshifilter_css_mode', GESHIFILTER_CSS_INLINE)) {
@@ -488,7 +488,7 @@ function _geshifilter_flush_language_definition_cache() {
 }
 
 /**
- * Helper function for clearing the appropriate filter cache entries
+ * Helper function for clearing the appropriate filter cache entries.
  */
 function _geshifilter_clear_filter_cache() {
   $message = FALSE;
@@ -516,9 +516,9 @@ function _geshifilter_clear_filter_cache() {
 }
 
 /**
- * Helper function for generating the CSS rules
+ * Helper function for generating the CSS rules.
  *
- * @return string with the CSS rules
+ * @return string with the CSS rules.
  */
 function _geshifilter_generate_languages_css_rules() {
   $output = '';
@@ -545,7 +545,7 @@ function _geshifilter_generate_languages_css_rules() {
 /**
  * Function for generating the external stylesheet.
  *
- * @param $force force the regeneration of the CSS file
+ * @param $force force the regeneration of the CSS file.
  */
 function _geshifilter_generate_languages_css_file($force=FALSE) {
   $languages = _geshifilter_get_enabled_languages();

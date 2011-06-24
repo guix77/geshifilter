@@ -1,6 +1,6 @@
-name = "GeSHi Filter"
-description = "Provides a filter to highlight source code using the GeSHi library (Generic Syntax Highlighter)"
-package = "Filters"
+name = GeSHi Filter
+description = Provides a filter to highlight source code using the GeSHi library (Generic Syntax Highlighter)
+package = Filters
 core = 7.x
 files[] = geshifilter.test
 dependencies[] = libraries

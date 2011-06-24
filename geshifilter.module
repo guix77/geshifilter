@@ -40,7 +40,7 @@ define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20', 20);
  */
 function geshifilter_help($path, $arg) {
   switch ($path) {
-    case 'admin/config/content/geshifilter':
+    case 'admin/config/content/formats/geshifilter':
     case 'admin/help#geshifilter':
       $output = '<p>'. t('The GeSHi filter module provides a filter for syntax highlighting of inline source code or blocks of source code based on the PHP library !GeSHi.', array('!GeSHi' => l('GeSHi (Generic Syntax Highlighter)', 'http://qbnz.com/highlighter/'))) .'</p>';
       if ($path == 'admin/help#geshifilter') {
@@ -49,19 +49,19 @@ function geshifilter_help($path, $arg) {
           '!geshi' => url('http://qbnz.com/highlighter/'),
         )) .'</p>';
         $output .= t('<p>Quick overview of how to set up and use the GeSHi filter:</p><ul><li>Install the GeSHi library and specify its path on the <a href="!geshifilter_settings">GeSHi filter administration page</a>.</li><li>Configure the <a href="!geshifilter_settings">general GeSHi filter settings</a>.</li><li><a href="!geshifilter_languages">Enable the relevant languages</a> for your site and set their language tags if needed.</li><li>Enable the GeSHi filter in the desired !inputformats.</li><li>Check for !filterconflicts and resolve them.</li><li>Use the text format during content submission as described in the !filtertips.</li></ul>', array(
-          '!geshifilter_settings' => url('admin/config/content/geshifilter'),
-          '!geshifilter_languages' => url('admin/config/content/geshifilter/languages/all'),
+          '!geshifilter_settings' => url('admin/config/content/formats/geshifilter'),
+          '!geshifilter_languages' => url('admin/config/content/formats/geshifilter/languages/all'),
           '!inputformats' => l(t('text formats'), 'admin/config/content/formats'),
-          '!filterconflicts' => l(t('filter conflicts'), 'admin/config/content/geshifilter/filterconflicts'),
+          '!filterconflicts' => l(t('filter conflicts'), 'admin/config/content/formats/geshifilter/filterconflicts'),
           '!filtertips' => l(t('filter tips'), 'filter/tips'),
         ));
       }
       return $output;
       break;
-    case 'admin/config/content/geshifilter/languages':
-    case 'admin/config/content/geshifilter/languages/enabled':
-    case 'admin/config/content/geshifilter/languages/all':
-    case 'admin/config/content/geshifilter/languages/disabled':
+    case 'admin/config/content/formats/geshifilter/languages':
+    case 'admin/config/content/formats/geshifilter/languages/enabled':
+    case 'admin/config/content/formats/geshifilter/languages/all':
+    case 'admin/config/content/formats/geshifilter/languages/disabled':
       $output = '<p>'. t('Here you can enable/disable the desired languages to use. It is suggested to disable languages that are not relevant for you site not only to avoid unnecessary cluttering of the GeSHi filter configuration pages and the !filtertips, but also to make the GeSHi filter processing lighter.', array('!filtertips' => l(t('filter tips'), 'filter/tips'))) .'</p>';
       if (!geshifilter_use_format_specific_options()) {
         $output .= '<p>'. t('You can also define the language specific tags here.') .'</p>';
@@ -76,7 +76,7 @@ function geshifilter_help($path, $arg) {
  */
 function geshifilter_menu() {
   $items = array();
-  $items['admin/config/content/geshifilter'] = array(
+  $items['admin/config/content/formats/geshifilter'] = array(
     'title' => 'GeSHi Filter',
     'description' => 'Configure the GeSHi filter.',
     'file' => 'geshifilter.admin.inc',
@@ -85,13 +85,13 @@ function geshifilter_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['admin/config/content/geshifilter/general'] = array(
+  $items['admin/config/content/formats/geshifilter/general'] = array(
     'title' => 'General settings',
     'description' => 'General GeSHi filter settings.',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/config/content/geshifilter/filterconflicts'] = array(
+  $items['admin/config/content/formats/geshifilter/filterconflicts'] = array(
     'title' => 'Filter conflicts',
     'description' => 'Information on possible conflicts with other filters.',
     'file' => 'geshifilter.conflicts.inc',
@@ -101,7 +101,7 @@ function geshifilter_menu() {
     'weight' => 10,
   );
   // language settings
-  $items['admin/config/content/geshifilter/languages'] = array(
+  $items['admin/config/content/formats/geshifilter/languages'] = array(
     'title' => 'Languages',
     'description' => 'Enable the desired languages and configure their settings.',
     'file' => 'geshifilter.admin.inc',
@@ -110,14 +110,14 @@ function geshifilter_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_LOCAL_TASK,
   );
-  $items['admin/config/content/geshifilter/languages/enabled'] = array(
+  $items['admin/config/content/formats/geshifilter/languages/enabled'] = array(
     'title' => 'Enabled',
     'description' => 'Show the enabled languages',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 3,
   );
-  $items['admin/config/content/geshifilter/languages/all'] = array(
+  $items['admin/config/content/formats/geshifilter/languages/all'] = array(
     'title' => 'All',
     'description' => 'Show all the available languages',
     'page arguments' => array('geshifilter_admin_per_language_settings', 4),
@@ -125,7 +125,7 @@ function geshifilter_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 1,
   );
-  $items['admin/config/content/geshifilter/languages/disabled'] = array(
+  $items['admin/config/content/formats/geshifilter/languages/disabled'] = array(
     'title' => 'Disabled',
     'description' => 'Show the disabled languages',
     'page arguments' => array('geshifilter_admin_per_language_settings', 4),
@@ -134,7 +134,7 @@ function geshifilter_menu() {
     'weight' => 6,
   );
   // Callback for generating CSS rules.
-  $items['admin/config/content/geshifilter/generate_css'] = array(
+  $items['admin/config/content/formats/geshifilter/generate_css'] = array(
     'page callback' => 'geshifilter_generate_language_css_rules',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_CALLBACK,
@@ -260,7 +260,7 @@ function geshifilter_requirements($phase) {
         'value' => t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
         'severity' => REQUIREMENT_ERROR,
         'description' => t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.',
-          array('!geshi' => url('admin/config/content/geshifilter'), '!filesystem' => url('admin/config/content/file-system'))),
+          array('!geshi' => url('admin/config/content/formats/geshifilter'), '!filesystem' => url('admin/config/content/file-system'))),
       );
     }
 
@@ -270,7 +270,7 @@ function geshifilter_requirements($phase) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('Some filter conflicts were detected.'),
-        'description' => l(t('View and resolve the detected filter conflicts'), 'admin/config/content/geshifilter/filterconflicts'),
+        'description' => l(t('View and resolve the detected filter conflicts'), 'admin/config/content/formats/geshifilter/filterconflicts'),
         'severity' => REQUIREMENT_ERROR,
       );
     }

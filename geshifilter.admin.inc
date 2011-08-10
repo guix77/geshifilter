@@ -253,8 +253,7 @@ function geshifilter_admin_general_settings_submit($form, &$form_state) {
 /**
  * Menu callback for per language settings.
  */
-function geshifilter_admin_per_language_settings($form_state, $view = 'enabled') {
-  $form = array();
+function geshifilter_admin_per_language_settings($form, &$form_state, $view = 'enabled') {
   // check if GeSHi library is available
   $geshi_library = libraries_load('geshi');
   if (!$geshi_library['loaded']) {

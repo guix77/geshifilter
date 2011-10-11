@@ -316,7 +316,7 @@ function _geshifilter_managed_external_stylesheet_possible() {
  */
 function geshifilter_generate_language_css_rules() {
   require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.admin.inc';
-  drupal_set_header("Content-type: text/css");
+  drupal_add_http_header("Content-type", "text/css");
   $output = _geshifilter_generate_languages_css_rules();
   print($output);
   exit();

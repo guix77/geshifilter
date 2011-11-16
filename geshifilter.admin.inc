@@ -420,13 +420,13 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
     else {
       $form['languages'][$language]['fullname'] = array(
         '#type' => 'markup',
-        '#value' => $language_data['fullname'],
+        '#markup' => $language_data['fullname'],
       );
     }
     // language code
     $form['languages'][$language]['name'] = array(
       '#type' => 'markup',
-      '#value' => $language,
+      '#markup' => $language,
     );
     // add a textfield for tags
     if ($add_tag_option) {

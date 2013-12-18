@@ -9,30 +9,73 @@
  * Implements hook_install().
  */
 function geshifilter_install() {
-  // Enable some popular languages and set their language tags by default
-  $languages = array('php', 'drupal5', 'drupal6', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
-  foreach ($languages as $language) {
-    variable_set('geshifilter_language_enabled_' . $language, TRUE);
-    variable_set('geshifilter_language_tags_' . $language, '<' . $language . '>');
-  }
-
-  // what to do next?
-  drupal_set_message(t('GeSHi filter is installed. You should now <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the desired <a href="!input_formats">text formats</a>.',
-    array('!geshi_admin' => url('admin/config/content/formats/geshifilter'), '!input_formats' => url('admin/config/content/formats'))
+  drupal_set_message(t('GeSHi filter is installed. You should now
+    <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the
+    desired <a href="!input_formats">text formats</a>.',
+    array(
+      '!geshi_admin' => url('admin/config/content/formats/geshifilter'),
+      '!input_formats' => url('admin/config/content/formats'),
+    )
   ));
 }
 
 /**
- * On uninstall: remove module variables and clear variable cache.
+ * Implements hook_requirements().
  */
-function geshifilter_uninstall() {
-  db_query("DELETE FROM {variable} WHERE name LIKE 'geshifilter_%'");
-  cache_clear_all('variables', 'cache');
-}
+function geshifilter_requirements($phase) {
+  $config = \Drupal::config('geshifilter.settings');
+  $requirements = array();
+  if ($phase == 'runtime') {
+    require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
+    // Check if GeSHi library is available.
+    $geshi_library = libraries_load('geshi');
+    if (!$geshi_library['loaded']) {
+      $requirements[] = array(
+        'title' => 'GeSHi filter',
+        'value' => t('GeSHi library not found.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    elseif (($version = explode('.', GESHI_VERSION)) && !($version[0] == '1' && $version[1] == '0')) {
+      $requirements[] = array(
+        'title' => 'GeSHi filter',
+        'value' => t('GeSHi library invalid version.'),
+        'description' => $t('The detected version of GeSHi library (%version) is not supported. A version from the 1.0.x branch is required.', array('%version' => GESHI_VERSION)),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    else {
+      $requirements[] = array(
+        'title' => 'GeSHi filter',
+        // GESHI_VERSION is defined in GeSHi library.
+        'value' => t('Found GeSHi library version %version',
+          array('%version' => GESHI_VERSION)),
+        'severity' => REQUIREMENT_OK,
+      );
+    }
 
-/**
- * Remove 'geshifilter_geshi_dir' since it is replaced by libraries API.
- */
-function geshifilter_update_7100() {
-  variable_del('geshifilter_geshi_dir');
+    // Warn if GeSHi filter is configured to automatically managed external
+    // stylesheet when it's not possible.
+    if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
+      $requirements[] = array(
+        'title' => 'GeSHi filter CSS mode',
+        'value' => $t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.', array('!geshi' => url('admin/config/content/formats/geshifilter'), '!filesystem' => url('admin/config/content/file-system'))),
+      );
+    }
+
+    // Check for filter conflicts.
+    require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.conflicts.inc';
+    if (geshifilter_admin_filter_conflicts(TRUE) > 0) {
+      $requirements[] = array(
+        'title' => 'GeSHi filter',
+        'value' => $t('Some filter conflicts were detected.'),
+        'description' => l(t('View and resolve the detected filter conflicts'),
+          'admin/config/content/formats/geshifilter/filterconflicts'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  return $requirements;
 }

@@ -9,8 +9,14 @@ require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
 
 /**
  * Menu callback for filter conflicts page
+ *
+ * @todo: update this function to Drupal 8.
  */
 function geshifilter_admin_filter_conflicts($check_only=FALSE) {
+  /**
+   * Just returning '' now, but must update this function to work in Drupal 8.
+   */
+  return '';
   global $user;
 
   // start
@@ -29,14 +35,16 @@ function geshifilter_admin_filter_conflicts($check_only=FALSE) {
     'codefilter/0' => '_geshifilter_codefilter_conflicts',
   );
   foreach (filter_formats($user) as $format => $input_format) {
-    // Get the filters in this text format
-    $filters = filter_list_format($format);
-    // look if GeSHi is enabled in this text format
+    // Get the filters in this text format.
+    $filter_format_entity = entity_load('filter_format', $format);
+    $filters = $filter_format_entity->filters();
+
+    // Look if GeSHi is enabled in this text format.
     if (isset($filters['geshifilter/0'])) {
       $geshifilter = $filters['geshifilter/0'];
-      // Check if possibly conflicting filters are also present in text format
+      // Check if possibly conflicting filters are also present in text format.
       foreach ($conflict_detectors as $filter_key => $conflict_detector) {
-        // does this filter exist in the text format?
+        // Does this filter exist in the text format?
         if (array_key_exists($filter_key, $filters)) {
           $cfilter = $filters[$filter_key];
           $conflicts = $conflict_detector($format, $cfilter, $geshifilter);
@@ -71,6 +79,7 @@ function geshifilter_admin_filter_conflicts($check_only=FALSE) {
  */
 function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
   $conflicts = array();
+  return $conflicts();
   // check order
   if ($cfilter->weight >= $geshifilter->weight) {
     $conflicts[] = array(

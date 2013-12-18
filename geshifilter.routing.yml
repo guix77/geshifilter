@@ -1,0 +1,53 @@
+# Settings for geshifilter  
+geshifilter.settings:
+  path: 'admin/config/content/formats/geshifilter'
+  defaults:
+    _form: '\Drupal\geshifilter\Form\GeshiFilterSettingsForm'
+    _title: 'GeSHi Filter'
+  requirements:
+    _permission: 'administer site configuration' 
+
+# Settings for filter conflicts
+geshifilter.settings_filter_conflicts:
+  path: 'admin/config/content/formats/geshifilter/filterconflicts'
+  defaults:
+    _form: '\Drupal\geshifilter\Form\GeshiFilterSettingsFilterConflictsForm'
+    _title: 'Filter conflicts'
+  requirements:
+    _permission: 'administer site configuration' 
+    
+# Route for enabled languages
+geshifilter.settings_languages:
+  path: 'admin/config/content/formats/geshifilter/languages'
+  defaults:
+    _form: '\Drupal\geshifilter\Form\GeshiFilterLanguagesForm'
+    _title: 'Languages'
+    view: enabled
+  requirements:
+    _permission: 'administer site configuration' 
+    
+# Route for all languages   
+geshifilter.settings_languages_all:
+  path: 'admin/config/content/formats/geshifilter/languages/all'
+  defaults:
+    _form: '\Drupal\geshifilter\Form\GeshiFilterLanguagesForm'
+    _title: 'All Languages'
+    view: all
+  requirements:
+    _permission: 'administer site configuration' 
+    
+# Route for disabled languages    
+geshifilter.settings_languages_disabled:
+  path: 'admin/config/content/formats/geshifilter/languages/disabled'
+  defaults:
+    _form: '\Drupal\geshifilter\Form\GeshiFilterLanguagesForm'
+    _title: 'Disabled Languages'
+    view: disabled
+  requirements:
+    _permission: 'administer site configuration'
+
+# Route for generate css    
+geshifilter.generate_css:
+  path: 'admin/config/content/formats/geshifilter/generate_css'
+  defaults:
+    _content: '\Drupal\geshifilter\Controller\GeshiFilterGenerateCss'

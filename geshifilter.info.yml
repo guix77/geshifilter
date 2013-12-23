@@ -4,3 +4,5 @@ type: module
 package: 'Filters'
 core: 8.x
 configure: admin/config/content/formats/geshifilter
+dependencies:
+  - libraries

@@ -5,18 +5,17 @@
  * Implementation of the conflict detection feature of the GeSHi filter.
  */
 
-require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
+require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
 /**
- * Menu callback for filter conflicts page
+ * Menu callback for filter conflicts page.
  *
  * @todo: update this function to Drupal 8.
  */
-function geshifilter_admin_filter_conflicts($check_only=FALSE) {
-  /**
-   * Just returning '' now, but must update this function to work in Drupal 8.
-   */
+function geshifilter_admin_filter_conflicts($check_only = FALSE) {
+  // Just returning '' now, but must update this function to work in Drupal 8.
   return '';
+  /*
   global $user;
 
   // start
@@ -66,37 +65,49 @@ function geshifilter_admin_filter_conflicts($check_only=FALSE) {
   else {
     // show alerts
     if (count($alerts) == 0) {
-      $alerts[] = array(array('data' => t('No known filter conflicts were detected.'), 'colspan' => 4));
+      $alerts[] = array(array('data' => t('No known filter conflicts were
+   *  detected.'), 'colspan' => 4));
     }
-    $header = array(t('Input format'), t('Filter'), t('Description'), t('Possible solutions'));
+    $header = array(t('Input format'), t('Filter'), t('Description'),
+   * t('Possible solutions'));
     $output .= theme('table', array('header' => $header, 'rows' => $alerts));
     return $output;
   }
+  */
 }
 
 /**
- * conflict detection for html filter
+ * Conflict detection for html filter.
  */
 function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
   $conflicts = array();
   return $conflicts();
+  /*
   // check order
   if ($cfilter->weight >= $geshifilter->weight) {
     $conflicts[] = array(
-      'description' => t('%cfilter should not come after %geshifilter to prevent loss of layout and highlighting.',
-          array('%cfilter' => $cfilter->name, '%geshifilter' => $geshifilter->name)),
-      'solution' => l(t('Rearrange filters'), "admin/config/content/formats/$format"),
+      'description' => t('%cfilter should not come after %geshifilter to prevent
+   *  loss of layout and highlighting.',
+          array('%cfilter' => $cfilter->name, '%geshifilter' =>
+   * $geshifilter->name)),
+      'solution' => l(t('Rearrange filters'),
+   * "admin/config/content/formats/$format"),
     );
   }
   // check tag escaping of html filter
-  if (variable_get("filter_html_$format", FILTER_HTML_STRIP) == FILTER_HTML_ESCAPE) {
+  if (variable_get("filter_html_$format", FILTER_HTML_STRIP) ==
+   * FILTER_HTML_ESCAPE) {
     $conflicts[] = array(
-      'description' => t('%cfilter is configured to "Escape all tags", which is likely to cause problems with %geshifilter.',
-        array('%cfilter' => $cfilter->name, '%geshifilter' => $geshifilter->name)),
-      'solution' => l(t('Configure HTML filtering to "Strip disallowed tags"'), "admin/config/content/formats/$format", array('html' => TRUE)),
+      'description' => t('%cfilter is configured to "Escape all tags", which is
+   * likely to cause problems with %geshifilter.',
+        array('%cfilter' => $cfilter->name, '%geshifilter' =>
+   * $geshifilter->name)),
+      'solution' => l(t('Configure HTML filtering to "Strip disallowed tags"'),
+   *  "admin/config/content/formats/$format", array('html' => TRUE)),
     );
   }
   return $conflicts;
+  */
 }
 
 /**

@@ -16,11 +16,11 @@ require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc'
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
 
 /**
- * Form used to set enable/disabled for languages
+ * Form used to set enable/disabled for languages.
  */
 class GeshiFilterLanguagesForm extends ConfigFormBase {
 
-    /**
+  /**
    * List of modules to enable.
    */
   public static $modules = array('libraries', 'geshifilter');

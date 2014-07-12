@@ -48,9 +48,8 @@ function _geshifilter_get_available_languages() {
 }
 
 /**
- * List of enabled languages.
+ * List of enabled languages(with caching).
  *
- * (with caching)
  * @return array
  *   Array with enabled languages mapping language code to full name.
  */
@@ -102,9 +101,9 @@ function _geshifilter_get_tags($format) {
 /**
  * Helper function for generating a GeSHi object.
  *
- * @param String $source_code
+ * @param string $source_code
  *   The source code to process.
- * @param String $language
+ * @param string $language
  *   The language to generate a GeSHi object for.
  */
 function _geshifilter_geshi_factory($source_code, $language) {
@@ -125,31 +124,46 @@ function _geshifilter_whitespace_explode($string) {
 }
 
 /**
+ * Document this function.
  *
- * @param type $string
- * @return type
+ * @param string $string
+ *   Need documentation.
+ *
+ * @return string
+ *   The tag split
+ *
+ * @todo Document this function.
  */
 function _geshifilter_tag_split($string) {
   return preg_split('/\s+|<|>|\[|\]/', $string, -1, PREG_SPLIT_NO_EMPTY);
 }
 
 /**
+ * Need documentation.
  *
- * @param type $format
- * @return type
+ * @return string
+ *   Need documentation.
+ *
+ * @todo Document this function.
  */
 function geshifilter_tags() {
   $config = \Drupal::config('geshifilter.settings');
-    return $config->get('tags', 'code blockcode');
+  return $config->get('tags', 'code blockcode');
 }
 
 /**
+ * Need documentation.
  *
- * @param type $format
- * @return type
+ * @param string $format
+ *   Need documentation.
+ *
+ * @return string
+ *   Need documentation
+ *
+ * @todo Document this function.
  */
 function _geshifilter_tag_styles($format = NULL) {
-   $config = \Drupal::config('geshifilter.settings');
+  $config = \Drupal::config('geshifilter.settings');
   if (!$config->get('use_format_specific_options', FALSE) || $format === NULL) {
     $value = $config->get('tag_styles', array(
       GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
@@ -163,10 +177,15 @@ function _geshifilter_tag_styles($format = NULL) {
 }
 
 /**
+ * Need documentation.
  *
- * @param type $language
- * @param type $format
- * @return type
+ * @param string $language
+ *   Need documentation.
+ *
+ * @return string
+ *   Need Documentation.
+ *
+ * @todo Document this function.
  */
 function geshifilter_language_tags($language) {
   $config = \Drupal::config('geshifilter.settings');

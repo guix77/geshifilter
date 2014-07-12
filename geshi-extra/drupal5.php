@@ -1,5 +1,10 @@
 <?php
-/*************************************************************************************
+/**
+ * @file
+ * Drupal 5 language definition file for GeSHi.
+ */
+
+/*
  * drupal5.php
  * ----------
  * Authors:
@@ -11,9 +16,9 @@
  * Drupal 5 language definition file for GeSHi
  * http://drupal.org/node/179470
  *
- ************************************************************************************/
+ */
 
-$language_data = array (
+$language_data = array(
   'LANG_NAME' => 'Drupal 5',
   'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),
   'COMMENT_MULTI' => array('/*' => '*/'),
@@ -25,7 +30,7 @@ $language_data = array (
       'include', 'require', 'include_once', 'require_once',
       'for', 'foreach', 'as', 'if', 'elseif', 'else', 'while', 'do', 'endwhile',
       'endif', 'switch', 'case', 'endswitch', 'endfor', 'endforeach',
-      'return', 'break', 'continue'
+      'return', 'break', 'continue',
     ),
     2 => array(
       'null', '__LINE__', '__FILE__',
@@ -39,7 +44,7 @@ $language_data = array (
       'PHP_LOCALSTATEDIR', 'PHP_CONFIG_FILE_PATH', 'PHP_OUTPUT_HANDLER_START', 'PHP_OUTPUT_HANDLER_CONT',
       'PHP_OUTPUT_HANDLER_END', 'E_ERROR', 'E_WARNING', 'E_PARSE', 'E_NOTICE',
       'E_CORE_ERROR', 'E_CORE_WARNING', 'E_COMPILE_ERROR', 'E_COMPILE_WARNING', 'E_USER_ERROR',
-      'E_USER_WARNING', 'E_USER_NOTICE', 'E_ALL'
+      'E_USER_WARNING', 'E_USER_NOTICE', 'E_ALL',
     ),
     3 => array(
       'zlib_get_coding_type','zend_version','zend_logo_guid','yp_order','yp_next',
@@ -219,7 +224,7 @@ $language_data = array (
       'apache_child_terminate','aggregation_info','aggregate_properties_by_regexp','aggregate_properties_by_list','aggregate_properties','aggregate_methods_by_regexp',
       'aggregate_methods_by_list','aggregate_methods','aggregate','addslashes','addcslashes','acosh',
       'acos','abs','_','echo', 'print', 'global', 'static', 'exit', 'array', 'empty',
-      'eval', 'isset', 'unset', 'die', 'list'
+      'eval', 'isset', 'unset', 'die', 'list',
     ),
     5 => array(
       'timer_start', 'timer_read', 'timer_stop', 'conf_path', 'drupal_unset_globals', 'conf_init',
@@ -574,16 +579,16 @@ $language_data = array (
     ),
   ),
   'SYMBOLS' => array(
-    '(', ')', '[', ']', '{', '}', '!', '@', '%', '&', '*', '|', '/', '<', '>'
+    '(', ')', '[', ']', '{', '}', '!', '@', '%', '&', '*', '|', '/', '<', '>',
   ),
   'CASE_SENSITIVE' => array(
-    GESHI_COMMENTS => false,
-    1 => false,
-    2 => false,
-    3 => false,
-    4 => false,
-    5 => false,
-    6 => false,
+    GESHI_COMMENTS => FALSE,
+    1 => FALSE,
+    2 => FALSE,
+    3 => FALSE,
+    4 => FALSE,
+    5 => FALSE,
+    6 => FALSE,
   ),
   'STYLES' => array(
     'KEYWORDS' => array(
@@ -596,37 +601,37 @@ $language_data = array (
     'COMMENTS' => array(
       1 => 'color: #808080; font-style: italic;',
       2 => 'color: #808080; font-style: italic;',
-      'MULTI' => 'color: #808080; font-style: italic;'
+      'MULTI' => 'color: #808080; font-style: italic;',
     ),
     'ESCAPE_CHAR' => array(
-      0 => 'color: #000099; font-weight: bold;'
+      0 => 'color: #000099; font-weight: bold;',
     ),
     'BRACKETS' => array(
-      0 => 'color: #66cc66;'
+      0 => 'color: #66cc66;',
     ),
     'STRINGS' => array(
-      0 => 'color: #ff0000;'
+      0 => 'color: #ff0000;',
     ),
     'NUMBERS' => array(
-      0 => 'color: #cc66cc;'
+      0 => 'color: #cc66cc;',
     ),
     'METHODS' => array(
       1 => 'color: #006600;',
-      2 => 'color: #006600;'
+      2 => 'color: #006600;',
     ),
     'SYMBOLS' => array(
-      0 => 'color: #66cc66;'
+      0 => 'color: #66cc66;',
     ),
     'REGEXPS' => array(
       0 => 'color: #0000ff;',
-      1 => 'color: #ff0000'
+      1 => 'color: #ff0000',
     ),
     'SCRIPT' => array(
       0 => '',
       1 => '',
       2 => '',
-      3 => ''
-    )
+      3 => '',
+    ),
   ),
   'URLS' => array(
     1 => '',
@@ -636,7 +641,7 @@ $language_data = array (
     5 => 'http://api.drupal.org/api/function/{FNAME}/5',
     6 => 'http://api.drupal.org/api/constant/{FNAME}/5',
   ),
-  'OOLANG' => true,
+  'OOLANG' => TRUE,
   'OBJECT_SPLITTERS' => array(
     1 => '-&gt;',
     2 => '::',
@@ -648,26 +653,26 @@ $language_data = array (
       GESHI_REPLACE => '\3',
       GESHI_BEFORE => '\1\2',
       GESHI_AFTER => '\4\5',
-      GESHI_MODIFIERS => 'siU'
+      GESHI_MODIFIERS => 'siU',
     ),
   ),
   'STRICT_MODE_APPLIES' => GESHI_MAYBE,
   'SCRIPT_DELIMITERS' => array(
     0 => array(
-      '<?php' => '?>'
+      '<?php' => '?>',
     ),
     1 => array(
-      '<?' => '?>'
+      '<?' => '?>',
     ),
     2 => array(
-      '<%' => '%>'
+      '<%' => '%>',
     ),
   ),
   'HIGHLIGHT_STRICT_BLOCK' => array(
-    0 => true,
-    1 => true,
-    2 => true,
-    3 => true
+    0 => TRUE,
+    1 => TRUE,
+    2 => TRUE,
+    3 => TRUE,
   ),
-  'TAB_WIDTH' => 2
+  'TAB_WIDTH' => 2,
 );

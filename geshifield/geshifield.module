@@ -7,27 +7,27 @@
  */
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function geshifield_theme() {
   return array(
     'geshifield_textarea' => array(
-       'render element' => 'element',
+      'render element' => 'element',
     ),
     'geshifield_formatter_default' => array(
-       'render element' => 'element',
+      'render element' => 'element',
     ),
     'geshifield_formatter_nohighlighting' => array(
-       'render element' => 'element',
+      'render element' => 'element',
     ),
     'geshifield_formatter_trimmed' => array(
-       'render element' => 'element',
+      'render element' => 'element',
     ),
   );
 }
 
 /**
- * Implementation of hook_field_info().
+ * Implements hook_field_info().
  */
 function geshifield_field_info() {
   return array(
@@ -52,14 +52,14 @@ function geshifield_field_widget_form(&$form, &$form_state, $field, $instance, $
 }
 
 /**
- * Implementation of hook_content_is_empty().
+ * Implements hook_content_is_empty().
  */
 function geshifield_field_is_empty($item, $field) {
   return empty($item['sourcecode']);
 }
 
 /**
- * Implementation of hook_widget_info().
+ * Implements hook_widget_info().
  */
 function geshifield_field_widget_info() {
   return array(
@@ -69,26 +69,27 @@ function geshifield_field_widget_info() {
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
   );
-
+  /*
   return array(
-    'geshifield_textarea' => array(
-      'label' => t('Source code text area'),
-      'field types' => array('geshifield'),
-      // Let CCK core handle multiple values.
-      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
-      'callbacks' => array(),
-    ),
+  'geshifield_textarea' => array(
+  'label' => t('Source code text area'),
+  'field types' => array('geshifield'),
+  // Let CCK core handle multiple values.
+  'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+  'callbacks' => array(),
+  ),
   );
+  */
 }
 
 /**
- * Implementation of hook_elements_info().
-*/
+ * Implements hook_elements_info().
+ */
 function geshifield_element_info() {
   $elements = array(
     'geshifield_textarea' => array(
       '#input' => TRUE,
-      '#process' => array('geshifield_textarea_process' ),
+      '#process' => array('geshifield_textarea_process'),
     ),
   );
   return $elements;
@@ -100,20 +101,19 @@ function geshifield_element_info() {
 function geshifield_textarea_process($element, $form_state, $complete_form) {
   module_load_include('inc', 'geshifilter');
 
-
   $defaults = $element['#value'];
-  #$field = content_fields($element['#field_name'], $element['#type_name']);
+  // $field = content_fields($element['#field_name'], $element['#type_name']);
   $field = field_widget_instance($element, $form_state);
 
   $enabled_languages = _geshifilter_get_enabled_languages();
   // @todo: also add "no highlighting" options.
-
   $element['sourcecode'] = array(
     '#type' => 'textarea',
     '#title' => t('Source code'),
     '#default_value' => isset($defaults['sourcecode']) ? $defaults['sourcecode'] : '',
     '#required' => $element['#required'],
-    '#rows' => isset($field['widget']['rows']) ? $field['widget']['rows'] : 5, // TODO: do we need this row field?
+    // @todo do we need this row field?
+    '#rows' => isset($field['widget']['rows']) ? $field['widget']['rows'] : 5,
     '#description' => filter_xss($field['description']),
   );
 
@@ -129,7 +129,7 @@ function geshifield_textarea_process($element, $form_state, $complete_form) {
 }
 
 /**
- * Implementation of hook_field_formatter_info().
+ * Implements hook_field_formatter_info().
  */
 function geshifield_field_formatter_info() {
   return array(
@@ -148,16 +148,46 @@ function geshifield_field_formatter_info() {
   );
 }
 
+/**
+ * TODO: document this function.
+ *
+ * @param string $entity_type
+ *   Need documentation.
+ * @param string $entity
+ *   Need documentation.
+ * @param string $field
+ *   Need documentation.
+ * @param string $instance
+ *   Need documentation.
+ * @param string $langcode
+ *   Need documentation.
+ * @param string $items
+ *   Need documentation.
+ * @param string $display
+ *   Need documentation.
+ *
+ * @return string
+ *   Need documentation.
+ */
 function geshifield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $elements = array();
   foreach ($items as $delta => $item) {
     $elements[$delta] = array(
-      '#markup' => theme('geshifield_formatter_'. $display['type'], array('element' => $item, 'field' => $instance)),
+      '#markup' => theme('geshifield_formatter_' . $display['type'], array('element' => $item, 'field' => $instance)),
     );
   }
   return $elements;
 }
 
+/**
+ * TODO: document this function.
+ *
+ * @param string $variables
+ *   $variables Need documentation.
+ *
+ * @return string
+ *   Need documentation.
+ */
 function theme_geshifield_formatter_default($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
@@ -167,6 +197,15 @@ function theme_geshifield_formatter_default($variables) {
   return $output;
 }
 
+/**
+ * TODO: document this function.
+ *
+ * @param string $variables
+ *   Need documentation.
+ *
+ * @return string
+ *   Need documentation.
+ */
 function theme_geshifield_formatter_nohighlighting($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
@@ -176,6 +215,15 @@ function theme_geshifield_formatter_nohighlighting($variables) {
   return $output;
 }
 
+/**
+ * TODO: document this function.
+ *
+ * @param string $variables
+ *   Need documentation.
+ *
+ * @return string
+ *   Need documentation.
+ */
 function theme_geshifield_formatter_trimmed($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');

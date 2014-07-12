@@ -16,12 +16,12 @@ use Drupal\simpletest\WebTestBase;
 class GeshiFilterAdministrationTest extends WebTestBase {
 
   /**
-   * A global filter adminstrator
+   * A global filter adminstrator.
    */
   protected $filterAdminUser;
 
   /**
-   * The id of the text format with only GeSHi filter in it
+   * The id of the text format with only GeSHi filter in it.
    */
   protected $inputFormatIid;
 
@@ -31,7 +31,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
   public static $modules = array('libraries', 'geshifilter');
 
   /**
-   * Configuration object
+   * Configuration object.
    */
   protected $config;
 
@@ -113,22 +113,32 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     // Current format specific options are not working, so will uncoment and
     // fix this part of test latter.
     // $this->config->set('format_specific_options', TRUE);
-    // $this->config->set('tags_' . $this->input_format_id, 'code blockcode generictag');
-
+    // $this->config->set('tags_' . $this->input_format_id,
+    // 'code blockcode generictag');
     // A language tag should differ from the generic tags.
     // $form_values = array(
-    //  'geshifilter_language_tags_php_' . $this->input_format_id => 'php generictag',
-    // );
-    // $this->drupalPostForm('admin/config/content/formats/' . $this->input_format_id . '/configure', $form_values, t('Save configuration'));
-    // $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ from generic tags (with format specific tag options)'));
-
+    // 'geshifilter_language_tags_php_' . $this->input_format_id =>
+    // 'php generictag');
+    // $this->drupalPostForm('admin/config/content/formats/' .
+    // $this->input_format_id
+    // . '/configure', $form_values, t('Save configuration'));
+    // $this->assertText(t('The language tags should differ between languages
+    // and from the generic tags.'), t('Language tags should differ from
+    // (with format specific tag options)'));
     // Language tags should differ between languages.
     // $form_values = array(
-    //  'geshifilter_language_tags_php_' . $this->input_format_id => 'php languagetag',
-    //  'geshifilter_language_tags_python_' . $this->input_format_id => 'languagetag python',
+    // 'geshifilter_language_tags_php_' . $this->input_format_id =>
+    // 'php languagetag',
+    // 'geshifilter_language_tags_python_' . $this->input_format_id =>
+    // 'languagetag python',
     // );
-    // $this->drupalPostForm('admin/config/content/formats/' . $this->input_format_id . '/configure', $form_values, t('Save configuration'));
-    // $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with format specific tag options)'));
+    // $this->drupalPostForm('admin/config/content/formats/' .
+    // $this->input_format_id .
+    // '/configure', $form_values, t('Save configuration'));
+    // $this->assertText(t('The language tags should differ between languages
+    // and from the
+    // generic tags.'), t('Language tags should differ between languages (with
+    // format specific tag options)'));
   }
 
   /**

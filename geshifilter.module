@@ -161,9 +161,10 @@ function geshifilter_libraries_info() {
 }
 
 /**
- * Helper function for checking if an automatically managed style sheet is possible.
+ * Helper for checking if an automatically managed style sheet is possible.
  *
- * @return boolean indicating if an automatically managed style sheet is possible.
+ * @return bool
+ *   Indicating if an automatically managed style sheet is possible.
  */
 function _geshifilter_managed_external_stylesheet_possible() {
   $directory = _geshifilter_language_css_path(TRUE);
@@ -177,10 +178,19 @@ function geshifilter_generate_language_css_rules() {
   require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
   drupal_add_http_header("Content-type", "text/css");
   $output = _geshifilter_generate_languages_css_rules();
-  print($output);
+  print ($output);
   exit();
 }
 
+/**
+ * Get the path for css file.
+ *
+ * @param bool $dironly
+ *   If wants only the dir, not the full path + file.
+ *
+ * @return string
+ *   full path to css file.
+ */
 function _geshifilter_language_css_path($dironly = FALSE) {
   $directory = file_default_scheme() . '://geshi';
   return $dironly ? $directory : $directory . '/geshifilter-languages.css';

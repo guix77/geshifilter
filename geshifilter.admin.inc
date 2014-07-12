@@ -27,7 +27,7 @@ function _geshifilter_tag_styles_validate($form, &$form_state) {
 }
 
 /**
- * Helper function for some settings form fields usable as general and specific settings.
+ * Helper function for some settings form fields usable as general and specific.
  */
 function _geshifilter_general_highlight_tags_settings() {
   $form = array();
@@ -189,7 +189,8 @@ function _geshifilter_clear_filter_cache() {
     // cache_clear_all('geshifilter:', 'cache_filter', TRUE);
     // Show a message that the filter cache was cleared.
     // if ($message) {
-    //  drupal_set_message(t('GeSHi filter cleared the filter cache for the appropriate text formats.'));
+    // drupal_set_message(t('GeSHi filter cleared the filter cache for the
+    // appropriate text formats.'));
   }
 }
 

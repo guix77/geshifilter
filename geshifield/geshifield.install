@@ -14,13 +14,13 @@ function geshifield_field_schema($field) {
         'type' => 'text',
         'size' => 'big',
         'not null' => FALSE,
-        'sortable' => TRUE
+        'sortable' => TRUE,
       ),
       'language' => array(
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
-        'sortable' => TRUE
+        'sortable' => TRUE,
       ),
     ),
   );

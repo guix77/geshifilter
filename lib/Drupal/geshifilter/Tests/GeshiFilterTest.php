@@ -47,7 +47,7 @@ class GeshiFilterTest extends WebTestBase {
   public static $modules = array('libraries', 'geshifilter');
 
   /**
-   * The number of current node
+   * The number of current node.
    */
   protected $node;
 
@@ -134,7 +134,7 @@ class GeshiFilterTest extends WebTestBase {
    * @param array $filters
    *   Array with the machine names of filters to enable.
    */
-  protected function createTextFormat($format_name, $filters) {
+  protected function createTextFormat($format_name, array $filters) {
     $edit = array();
     $edit['format'] = $format_name;
     $edit['name'] = $this->randomName();
@@ -152,21 +152,18 @@ class GeshiFilterTest extends WebTestBase {
    *
    * @param string $body
    *   The body text of the node.
-   *
    * @param array $check_list
    *   List of items that should be in rendered output (assertRaw).
    *   An item is something like array($source_code, $lang, $line_numbering,
    *   $linenumbers_start, $inline_mode). If $lang is set, GeSHifilter syntax
    *   highlighting is applied to $sourcecode. If $lang is false, $sourcecode is
    *   directly looked for.
-   *
    * @param string $description
    *   Description of the assertion.
-   *
    * @param bool $invert
    *   If assertNoRaw should be used instead of assertRaw.
    */
-  protected function assertGeshiFilterHighlighting($body, $check_list, $description, $invert = FALSE) {
+  protected function assertGeshiFilterHighlighting($body, array $check_list, $description, $invert = FALSE) {
     // Create a node.
     $node = array(
       'title' => 'Test for GeShi Filter',
@@ -182,9 +179,9 @@ class GeshiFilterTest extends WebTestBase {
 
     $this->drupalGet('node/' . $this->node);
     $this->node++;
-    //  $format = entity_load('filter_format', 'geshifilter_text_format');
-    //  $filter = $format->filters('geshifilter');
-    //  $format->settings['format'];
+    // $format = entity_load('filter_format', 'geshifilter_text_format');
+    // $filter = $format->filters('geshifilter');
+    // $format->settings['format'];
     foreach ($check_list as $fragment) {
       list($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode) = $fragment;
       if ($lang) {
@@ -460,7 +457,7 @@ class GeshiFilterTest extends WebTestBase {
           FALSE,
           0,
           0,
-          0
+          0,
         ),
       ),
       t('Setting the title attritbute on code block.')

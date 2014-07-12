@@ -79,7 +79,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       // of in the form builder.
       if (!$config->get('use_format_specific_options', FALSE)) {
         $form['geshifilter_tag_options']['geshifilter_general_tags'] = \_geshifilter_general_highlight_tags_settings();
-        //$form['#validate'][] = '_geshifilter_tag_styles_validate';
+        // $form['#validate'][] = '_geshifilter_tag_styles_validate';
       }
 
       // GeSHi filter highlighting options.
@@ -215,7 +215,6 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, array &$form_state) {
-    debug(print_r($form_state['values'], true));
     $config = \Drupal::config('geshifilter.settings');
     $config->set('use_format_specific_options', $form_state['values']['geshifilter_use_format_specific_options'])
            ->set('default_highlighting', $form_state['values']['geshifilter_default_highlighting'])

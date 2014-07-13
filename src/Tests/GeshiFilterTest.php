@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Definition of Drupal\geshifilter\Tests\GeshiFilterTest.
@@ -11,7 +10,6 @@ namespace Drupal\geshifilter\Tests;
 // Use of base class for the tests.
 use Drupal\simpletest\WebTestBase;
 
-
 // Include module, used for constants.
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
 
@@ -19,10 +17,12 @@ require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
 
 /**
- * Tests for GeshiFilter.
+ * Tests for GeshiFilter in node content.
  *
  * Those tests are for the content of the node, to make sure they are
  * processed by geshi library.
+ *
+ * @group geshifilter
  */
 class GeshiFilterTest extends WebTestBase {
 
@@ -44,23 +44,12 @@ class GeshiFilterTest extends WebTestBase {
   /**
    * List of modules to enable.
    */
-  public static $modules = array('libraries', 'geshifilter');
+  public static $modules = array('node', 'libraries', 'geshifilter','filter');
 
   /**
    * The number of current node.
    */
   protected $node;
-
-  /**
-   * Return metadata about the test.
-   */
-  public static function getInfo() {
-    return array(
-      'name'  => t('GeSHi input filter'),
-      'description'  => t('Test the administration settings for GeSHi filter.'),
-      'group' => t('GeSHi filter module'),
-    );
-  }
 
   /**
    * Code run before each and every test method.
@@ -81,6 +70,7 @@ class GeshiFilterTest extends WebTestBase {
     $settings = array(
       // Override default type (a random name).
       'type' => 'geshifilter_content_type',
+      'name' => 'Geshifilter Content',
     );
     $this->drupalCreateContentType($settings);
 
@@ -188,7 +178,6 @@ class GeshiFilterTest extends WebTestBase {
         // Apply syntax highlighting.
         $source_code = geshifilter_geshi_process($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode);
       }
-      debug($source_code);
       if ($invert) {
         $this->assertNoRaw($source_code, $description);
       }

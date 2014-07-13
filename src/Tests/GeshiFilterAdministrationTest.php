@@ -1,10 +1,10 @@
 <?php
-
 /**
  * @file
  * Definition of Drupal\geshifilter\Tests\GeshiFilterAdministrationTest.
  */
 
+// Namespace of tests.
 namespace Drupal\geshifilter\Tests;
 
 // Use of base class for the tests.
@@ -12,6 +12,8 @@ use Drupal\simpletest\WebTestBase;
 
 /**
  * Test for administrative interface of GeshiFilter.
+ *
+ * @group geshifilter
  */
 class GeshiFilterAdministrationTest extends WebTestBase {
 
@@ -28,23 +30,12 @@ class GeshiFilterAdministrationTest extends WebTestBase {
   /**
    * List of modules to enable.
    */
-  public static $modules = array('libraries', 'geshifilter');
+  public static $modules = array('libraries', 'geshifilter','filter');
 
   /**
    * Configuration object.
    */
   protected $config;
-
-  /**
-   * Return metadata about the test.
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('GeSHi Administration Test'),
-      'description' => t('Test the Administration of the GeSHi filter.'),
-      'group' => t('GeSHi filter module'),
-    );
-  }
 
   /**
    * Set up the tests and create the users.

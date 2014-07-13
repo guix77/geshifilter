@@ -1,13 +1,10 @@
 <?php
-
 /**
  * @file
  * Implementation of administration functionality.
  */
 
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
-
-define('GESHIFILTER_FLUSH_LANGUAGE_DEFINITION_CACHE_TEXT', 'Flush the GeSHi language definition cache');
 
 /**
  * Validation handler for the tag styles form element.

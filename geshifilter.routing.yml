@@ -45,9 +45,3 @@ geshifilter.settings_languages_disabled:
     view: disabled
   requirements:
     _permission: 'administer site configuration'
-
-# Route for generate css    
-geshifilter.generate_css:
-  path: 'admin/config/content/formats/geshifilter/generate_css'
-  defaults:
-    _content: '\Drupal\geshifilter\Controller\GeshiFilterGenerateCss'

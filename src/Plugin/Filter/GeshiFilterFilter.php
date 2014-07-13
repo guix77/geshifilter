@@ -29,7 +29,7 @@ require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc'
  *   title = @Translation("GeSHi filter"),
  *   description = @Translation("Enables syntax highlighting of inline/block
  *     source code using the GeSHi engine"),
- *   type = FILTER_TYPE_TRANSFORM_REVERSIBLE,
+ *   type = \Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  *   cache = FALSE,
  *   weight = 0
  * )
@@ -55,7 +55,7 @@ class GeshiFilterFilter extends FilterBase {
   /**
    * {@inheritdoc}
    */
-  public function process($text, $langcode, $cache, $cache_id) {
+  public function process($text, $langcode) {
     // Load GeSHi library (if not already).
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
@@ -84,7 +84,7 @@ class GeshiFilterFilter extends FilterBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare($text, $langcode, $cache, $cache_id) {
+  public function prepare($text, $langcode) {
     // Get the available tags.
     list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
     $tags = array_merge($generic_code_tags, $language_tags);

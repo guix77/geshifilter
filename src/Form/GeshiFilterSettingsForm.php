@@ -56,7 +56,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       // cache.
       $form['geshifilter_library']['geshi_language_definition_caching']['flush_geshi_language_definition_cache'] = array(
         '#type' => 'button',
-        '#value' => t(GESHIFILTER_FLUSH_LANGUAGE_DEFINITION_CACHE_TEXT),
+        '#value' => t("Flush the GeSHi language definition cache"),
         '#executes_submit_callback' => TRUE,
         '#submit' => array('_geshifilter_flush_language_definition_cache'),
       );

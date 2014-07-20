@@ -6,6 +6,9 @@
 
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
+// Necessary for String::checkPlain().
+use Drupal\Component\Utility\String;
+
 /**
  * Validation handler for the tag styles form element.
  *
@@ -18,8 +21,8 @@ function _geshifilter_tag_styles_validate($form, &$form_state) {
   $f = isset($form_state['values']['format']) ? '_' . $form_state['values']['format'] : '';
 
   // Check that at least one tag style is selected.
-  if (0 == count(array_filter($form_state['values']["geshifilter_tag_styles{$f}"]))) {
-    form_set_error("geshifilter_tag_styles{$f}", t('At least one tag style should be selected.'));
+  if (0 == count(array_filter($form_state['values']["tag_styles{$f}"]))) {
+    form_set_error("styles{$f}", t('At least one tag style should be selected.'));
   }
 }
 
@@ -30,7 +33,7 @@ function _geshifilter_general_highlight_tags_settings() {
   $form = array();
 
   // Generic tags.
-  $form["geshifilter_tags"] = array(
+  $form["tags"] = array(
     '#type' => 'textfield',
     '#title' => t('Generic syntax highlighting tags'),
     '#default_value' => geshifilter_tags(),
@@ -38,16 +41,16 @@ function _geshifilter_general_highlight_tags_settings() {
   );
 
   // Container tag styles.
-  $form["geshifilter_tag_styles"] = array(
+  $form["tag_styles"] = array(
     '#type' => 'checkboxes',
     '#title' => t('Container tag style'),
     '#options' => array(
-      GESHIFILTER_BRACKETS_ANGLE => '<code>' . check_plain('<foo> ... </foo>') . '</code>',
-      GESHIFILTER_BRACKETS_SQUARE => '<code>' . check_plain('[foo] ... [/foo]') . '</code>',
-      GESHIFILTER_BRACKETS_DOUBLESQUARE => '<code>' . check_plain('[[foo]] ... [[/foo]]') . '</code>',
+      GESHIFILTER_BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
+      GESHIFILTER_BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
+      GESHIFILTER_BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
       GESHIFILTER_BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-        '!php' => '<code>' . check_plain('<?php ... ?>') . '</code>',
-        '!percent' => '<code>' . check_plain('<% ... %>') . '</code>',
+        '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
+        '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
       )),
     ),
     '#default_value' => _geshifilter_tag_styles(),
@@ -61,21 +64,21 @@ function _geshifilter_general_highlight_tags_settings() {
  */
 function geshifilter_per_language_settings($view, $add_checkbox, $add_tag_option) {
   $config = \Drupal::config('geshifilter.settings');
-  $form = array(
-    '#theme' => 'geshifilter_per_language_settings',
+  $form = array();
+  $header = array(
+    t('Language'),
+    t('GeSHi language code'),
   );
-  // Table header.
-  $form['header'] = array(
-    '#type' => 'value',
-    '#value' => array(),
-  );
-  $form['header']['#value'][] = t('Language');
-  $form['header']['#value'][] = t('GeSHi language code');
   if ($add_tag_option) {
-    $form['header']['#value'][] = t('Tag/language attribute value');
+    $header[] = t('Tag/language attribute value');
   }
+  $form['languages'] = array(
+    '#type' => 'table',
+    '#header' => $header,
+    '#empty' => t('Nome language is available.'),
+  );
+
   // Table body.
-  $form['languages'] = array();
   $languages = _geshifilter_get_available_languages();
   foreach ($languages as $language => $language_data) {
     $enabled = $config->get("language_enabled_{$language}", FALSE);
@@ -117,38 +120,6 @@ function geshifilter_per_language_settings($view, $add_checkbox, $add_tag_option
 }
 
 /**
- * Theming function for the per language settings table.
- */
-function theme_geshifilter_per_language_settings($variables) {
-  $form = $variables['form'];
-  // Build table body.
-  $rows = array();
-  foreach (element_children($form['languages']) as $language) {
-    $row = array();
-    foreach (element_children($form['languages'][$language]) as $key) {
-      $row[] = drupal_render($form['languages'][$language][$key]);
-    }
-    $rows[] = $row;
-  }
-  // Build table header.
-  $header = array();
-  foreach ($form['header']['#value'] as $cell) {
-    if ($cell == t('Enabled')) {
-      // Add JavaScript 'select all/select none' stuff.
-      $header[] = array('data' => $cell) + theme('table_select_header_cell');
-    }
-    else {
-      $header[] = $cell;
-    }
-  }
-  // Return themed table.
-  return theme('table', array(
-    'header' => $header,
-    'rows' => $rows,
-  ));
-}
-
-/**
  * Helper function for flushing the GeSHi language definition cache.
  */
 function _geshifilter_flush_language_definition_cache() {
@@ -158,7 +129,7 @@ function _geshifilter_flush_language_definition_cache() {
     _geshifilter_generate_languages_css_file(TRUE);
   }
   // Flush cache of available languages.
-  $config->clear('geshifilter_available_languages_cache');
+  $config->clear('available_languages_cache');
   $config->save();
   drupal_set_message(t('Flushed the GeSHi language definition cache.'));
 }

@@ -16,7 +16,7 @@ function _geshifilter_get_available_languages() {
   $config = \Drupal::config('geshifilter.settings');
   // Try to get it from cache (database actually).
   $available_languages = $config->get('available_languages_cache', NULL);
-  if ($available_languages === NULL) {
+  // if ($available_languages === NULL) {
     // Not in cache: build the array of available_languages.
     $geshi_library = libraries_load('geshi');
     $available_languages = array();
@@ -43,7 +43,7 @@ function _geshifilter_get_available_languages() {
       $config->set('available_languages_cache', $available_languages);
       $config->save();
     }
-  }
+  //}
   return $available_languages;
 }
 

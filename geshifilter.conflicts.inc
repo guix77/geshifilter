@@ -81,7 +81,7 @@ function geshifilter_admin_filter_conflicts($check_only = FALSE) {
  */
 function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
   $conflicts = array();
-  return $conflicts();
+  return $conflicts;
   /*
   // check order
   if ($cfilter->weight >= $geshifilter->weight) {

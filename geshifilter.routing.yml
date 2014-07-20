@@ -1,11 +1,11 @@
-# Settings for geshifilter  
+# Settings for geshifilter
 geshifilter.settings:
   path: 'admin/config/content/formats/geshifilter'
   defaults:
     _form: '\Drupal\geshifilter\Form\GeshiFilterSettingsForm'
     _title: 'GeSHi Filter'
   requirements:
-    _permission: 'administer site configuration' 
+    _permission: 'administer site configuration'
 
 # Settings for filter conflicts
 geshifilter.settings_filter_conflicts:
@@ -14,8 +14,8 @@ geshifilter.settings_filter_conflicts:
     _form: '\Drupal\geshifilter\Form\GeshiFilterSettingsFilterConflictsForm'
     _title: 'Filter conflicts'
   requirements:
-    _permission: 'administer site configuration' 
-    
+    _permission: 'administer site configuration'
+
 # Route for enabled languages
 geshifilter.settings_languages:
   path: 'admin/config/content/formats/geshifilter/languages'
@@ -24,9 +24,9 @@ geshifilter.settings_languages:
     _title: 'Languages'
     view: enabled
   requirements:
-    _permission: 'administer site configuration' 
-    
-# Route for all languages   
+    _permission: 'administer site configuration'
+
+# Route for all languages
 geshifilter.settings_languages_all:
   path: 'admin/config/content/formats/geshifilter/languages/all'
   defaults:
@@ -34,9 +34,9 @@ geshifilter.settings_languages_all:
     _title: 'All Languages'
     view: all
   requirements:
-    _permission: 'administer site configuration' 
-    
-# Route for disabled languages    
+    _permission: 'administer site configuration'
+
+# Route for disabled languages
 geshifilter.settings_languages_disabled:
   path: 'admin/config/content/formats/geshifilter/languages/disabled'
   defaults:

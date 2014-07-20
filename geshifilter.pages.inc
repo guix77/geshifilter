@@ -11,6 +11,9 @@
 
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
+// Necessary for String::checkPlain().
+use Drupal\Component\Utility\String;
+
 /**
  * Helper function for parsing the attributes of GeSHi code tags.
  *
@@ -121,7 +124,7 @@ function _geshifilter_parse_attributes($attributes, $filter) {
  * possible messing up by other filters, e.g.
  *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
  * Replaces newlines with "&#10;" to prevent issues with the line break filter
- * Escapes the tricky characters like angle brackets with check_plain() to
+ * Escapes the tricky characters like angle brackets with String::checkPlain() to
  * prevent messing up by other filters like the HTML filter.
  */
 function _geshifilter_prepare_callback($match, $format) {
@@ -167,7 +170,7 @@ function _geshifilter_prepare_callback($match, $format) {
   }
   // Return escaped code block.
   return '[geshifilter-' . $tag_name . $tag_attributes . ']'
-    . str_replace(array("\r", "\n"), array('', '&#10;'), check_plain($content))
+    . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($content))
     . '[/geshifilter-' . $tag_name . ']';
 }
 
@@ -176,7 +179,7 @@ function _geshifilter_prepare_callback($match, $format) {
  */
 function _geshifilter_prepare_php_callback($match) {
   return '[geshifilter-questionmarkphp]'
-    . str_replace(array("\r", "\n"), array('', '&#10;'), check_plain($match[2]))
+    . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($match[2]))
     . '[/geshifilter-questionmarkphp]';
 }
 
@@ -254,7 +257,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $li
     // to mimic the 1.0.8 behavior, which is backward compatible.
     $code_class = "{$geshi->language} {$geshi->overall_class}";
     $source_code = '<span class="geshifilter"'
-      . (isset($title) ? ' title="' . check_plain($title) . '"' : '')
+      . (isset($title) ? ' title="' . String::checkPlain($title) . '"' : '')
       . '><code class="' . $code_class . '">' . $geshi->parse_code() . '</code></span>';
   }
   else {
@@ -269,7 +272,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $li
       $geshi->start_line_numbers_at($linenumbers_start);
     }
     if (isset($title)) {
-      $source_code = '<div class="geshifilter-title">' . check_plain($title) . '</div>';
+      $source_code = '<div class="geshifilter-title">' . String::checkPlain($title) . '</div>';
     }
     else {
       $source_code = '';

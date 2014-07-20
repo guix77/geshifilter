@@ -11,6 +11,9 @@ namespace Drupal\geshifilter\Plugin\Filter;
 // Base class for filters.
 use Drupal\filter\Plugin\FilterBase;
 
+// Necessary for String::checkPlain().
+use Drupal\Component\Utility\String;
+
 // Need this for geshifilter_use_format_specifc_options().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
@@ -146,29 +149,29 @@ class GeshiFilterFilter extends FilterBase {
     $bracket_open = NULL;
     if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = check_plain('<');
-        $bracket_close = check_plain('>');
+        $bracket_open = String::checkPlain('<');
+        $bracket_close = String::checkPlain('>');
       }
-      $tag_style_examples[] = '<code>' . check_plain('<foo>') . '</code>';
+      $tag_style_examples[] = '<code>' . String::checkPlain('<foo>') . '</code>';
     }
     if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = check_plain('[');
-        $bracket_close = check_plain(']');
+        $bracket_open = String::checkPlain('[');
+        $bracket_close = String::checkPlain(']');
       }
-      $tag_style_examples[] = '<code>' . check_plain('[foo]') . '</code>';
+      $tag_style_examples[] = '<code>' . String::checkPlain('[foo]') . '</code>';
     }
     if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = check_plain('[[');
-        $bracket_close = check_plain(']]');
+        $bracket_open = String::checkPlain('[[');
+        $bracket_close = String::checkPlain(']]');
       }
-      $tag_style_examples[] = '<code>' . check_plain('[[foo]]') . '</code>';
+      $tag_style_examples[] = '<code>' . String::checkPlain('[[foo]]') . '</code>';
     }
     if (!$bracket_open) {
       drupal_set_message(t('Could not determine a valid tag style for GeSHi filtering.'), 'error');
-      $bracket_open = check_plain('<');
-      $bracket_close = check_plain('>');
+      $bracket_open = String::checkPlain('<');
+      $bracket_close = String::checkPlain('>');
     }
 
     if ($long) {
@@ -375,6 +378,9 @@ class GeshiFilterFilter extends FilterBase {
    * @return array
    *   The $form array with additional form elements for the settings of
    *   this filter. The submitted form values should match $this->settings.
+   *
+   * @todo Add validation of submited form values, it already exists for
+   *       drupal 7, must update it only.
    */
   public function settingsForm(array $form, array &$form_state) {
     if (!$this->config->get('use_format_specific_options', FALSE)) {
@@ -471,12 +477,12 @@ class GeshiFilterFilter extends FilterBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GESHIFILTER_BRACKETS_ANGLE => '<code>' . check_plain('<foo> ... </foo>') . '</code>',
-        GESHIFILTER_BRACKETS_SQUARE => '<code>' . check_plain('[foo] ... [/foo]') . '</code>',
-        GESHIFILTER_BRACKETS_DOUBLESQUARE => '<code>' . check_plain('[[foo]] ... [[/foo]]') . '</code>',
+        GESHIFILTER_BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
+        GESHIFILTER_BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
+        GESHIFILTER_BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
         GESHIFILTER_BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-          '!php' => '<code>' . check_plain('<?php ... ?>') . '</code>',
-          '!percent' => '<code>' . check_plain('<% ... %>') . '</code>',
+          '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
+          '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
         )),
       ),
       '#default_value' => $this->tagStyles(),
@@ -489,10 +495,7 @@ class GeshiFilterFilter extends FilterBase {
    * Function for generating a form table for per language settings.
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
-    $form = array(
-      '#theme' => 'geshifilter_per_language_settings',
-    );
-    // Table header.
+    $form = array();
     $form['header'] = array(
       '#type' => 'value',
       '#value' => array(),
@@ -776,7 +779,7 @@ class GeshiFilterFilter extends FilterBase {
    * possible messing up by other filters, e.g.
    *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
    * Replaces newlines with "&#10;" to prevent issues with the line break filter
-   * Escapes the tricky characters like angle brackets with check_plain() to
+   * Escapes the tricky characters like angle brackets with String::checkPlain() to
    * prevent messing up by other filters like the HTML filter.
    */
   public function prepareCallback($match) {
@@ -821,7 +824,7 @@ class GeshiFilterFilter extends FilterBase {
     }
     // Return escaped code block.
     return '[geshifilter-' . $tag_name . $tag_attributes . ']'
-      . str_replace(array("\r", "\n"), array('', '&#10;'), check_plain($content))
+      . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($content))
       . '[/geshifilter-' . $tag_name . ']';
   }
 

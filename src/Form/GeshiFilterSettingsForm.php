@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Contains \Drupal\geshifilter\Form\GeshiFilterSettingsForm.
@@ -7,6 +6,7 @@
 
 namespace Drupal\geshifilter\Form;
 
+// Need this for base class of the form.
 use Drupal\Core\Form\ConfigFormBase;
 
 // Need this for _geshifilter_general_highlight_tags_settings().
@@ -15,6 +15,9 @@ require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc'
 // Need this for constants.
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
 
+/**
+ * Form with the settings for the module.
+ */
 class GeshiFilterSettingsForm extends ConfigFormBase {
 
   /**
@@ -35,7 +38,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
 
     // GeSHi library settings (constant GESHI_VERSION is defined in GeSHi
     // library).
-    $form['geshifilter_library'] = array(
+    $form['library'] = array(
       '#type' => 'fieldset',
       '#title' => defined('GESHI_VERSION') ? t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
       '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array('!geshi' => url('http://qbnz.com/highlighter/'))),
@@ -45,16 +48,15 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
 
     // If the GeSHi library is loaded, show all the options and settings.
     if ($geshi_library['loaded']) {
-
       // Option for flushing the GeSHi language definition cache.
-      $form['geshifilter_library']['geshi_language_definition_caching'] = array(
+      $form['library']['language_definition_caching'] = array(
         '#type' => 'item',
         '#title' => t('GeSHi language definition caching'),
         '#description' => t('The GeSHi library uses languages definition files to define the properties and highlight rules of the supported languages. In most scenarios these language definition files do not change and a lot of derivative data, such as the list of available languages or the CSS style sheet, can be cached for efficiency reasons. Sometimes however, this cache needs to be flushed and the languages definition files need to be reparsed, for example after an upgrade of the GeSHi library or after adding/editing some language definition files manually.'),
       );
       // Non-submitting button for flushing the GeSHi language definition file
       // cache.
-      $form['geshifilter_library']['geshi_language_definition_caching']['flush_geshi_language_definition_cache'] = array(
+      $form['library']['language_definition_caching']['flush_language_definition_cache'] = array(
         '#type' => 'button',
         '#value' => t("Flush the GeSHi language definition cache"),
         '#executes_submit_callback' => TRUE,
@@ -62,13 +64,13 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       );
 
       // GeSHi filter tags and delimiters options.
-      $form['geshifilter_tag_options'] = array(
+      $form['tag_options'] = array(
         '#type' => 'fieldset',
         '#title' => t('GeSHi filter tags and delimiters'),
         '#collapsible' => TRUE,
       );
       // Usage of format specific options.
-      $form['geshifilter_tag_options']['geshifilter_use_format_specific_options'] = array(
+      $form['tag_options']['use_format_specific_options'] = array(
         '#type' => 'checkbox',
         '#title' => t('Use text format specific tag settings.'),
         '#default_value' => $config->get('use_format_specific_options', FALSE),
@@ -78,19 +80,19 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       // @todo: do this conditional form part showing/hiding in jQuery instead
       // of in the form builder.
       if (!$config->get('use_format_specific_options', FALSE)) {
-        $form['geshifilter_tag_options']['geshifilter_general_tags'] = \_geshifilter_general_highlight_tags_settings();
+        $form['tag_options']['general_tags'] = \_geshifilter_general_highlight_tags_settings();
         // $form['#validate'][] = '_geshifilter_tag_styles_validate';
       }
 
       // GeSHi filter highlighting options.
-      $form['geshifilter_highlighting_options'] = array(
+      $form['highlighting_options'] = array(
         '#type' => 'fieldset',
         '#title' => t('Syntax highlighting options'),
         '#collapsible' => TRUE,
       );
       // Default language.
       $languages = _geshifilter_get_enabled_languages();
-      $form['geshifilter_highlighting_options']['geshifilter_default_highlighting'] = array(
+      $form['highlighting_options']['default_highlighting'] = array(
         '#type' => 'select',
         '#title' => t('Default highlighting mode'),
         '#default_value' => $config->get('default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT),
@@ -104,7 +106,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#description' => t('Select the default highlighting mode to use when no language is defined with a language attribute in the tag.'),
       );
       // Default line numbering scheme.
-      $form['geshifilter_highlighting_options']['geshifilter_default_line_numbering'] = array(
+      $form['highlighting_options']['default_line_numbering'] = array(
         '#type' => 'select',
         '#title' => t('Default line numbering'),
         '#default_value' => $config->get('default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE),
@@ -118,14 +120,14 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#description' => t('Select the default line numbering scheme: no line numbers, normal line numbers or fancy line numbers. With fancy line numbers every n<sup>th</sup> line number is highlighted. (GeSHi documentation: <a href="!link">Line numbers</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#line-numbers')),
       );
       // Highlight_string usage option.
-      $form['geshifilter_highlighting_options']['geshifilter_use_highlight_string_for_php'] = array(
+      $form['highlighting_options']['use_highlight_string_for_php'] = array(
         '#type' => 'checkbox',
         '#title' => t('Use built-in PHP function <code>highlight_string()</code> for PHP source code.'),
         '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code><a href="!highlight_string">highlight_string()</a></code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.', array('!highlight_string' => 'http://php.net/manual/en/function.highlight-string.php')),
         '#default_value' => $config->get('use_highlight_string_for_php', FALSE),
       );
       // Option to disable Keyword URL's
-      $form['geshifilter_highlighting_options']['geshifilter_enable_keyword_urls'] = array(
+      $form['highlighting_options']['enable_keyword_urls'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable GeSHi keyword URLs'),
         '#description' => t('For some languages GeSHi can link language keywords (e.g. standard library functions) to their online documentation. (GeSHi documentation: <a href="!link">Keyword URLs</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#keyword-urls')),
@@ -133,14 +135,14 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       );
 
       // Styling, layout and CSS.
-      $form['geshifilter_styling'] = array(
+      $form['styling'] = array(
         '#type' => 'fieldset',
         '#title' => t('Styling, layout and CSS'),
         '#collapsible' => TRUE,
       );
 
       // CSS mode.
-      $form['geshifilter_styling']['geshifilter_css_mode'] = array(
+      $form['styling']['css_mode'] = array(
         '#type' => 'radios',
         '#title' => t('CSS mode for syntax highlighting'),
         '#options' => array(
@@ -189,7 +191,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         $container_options[GESHI_HEADER_NONE] = t('%val: uses no wrapper.', array('%val' => 'GESHI_HEADER_NONE'));
       }
 
-      $form['geshifilter_styling']['geshifilter_code_container'] = array(
+      $form['styling']['code_container'] = array(
         '#type' => 'radios',
         '#title' => t('Code container, wrapping technique'),
         '#description' => t('Define the wrapping technique to use for code blocks. (GeSHi documentation: <a href="!link">The Code Container</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#the-code-container')
@@ -206,8 +208,8 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, array &$form_state) {
     // Check if automatically managed style sheet is posible.
-    if (isset($form_state['values']['geshifilter_css_mode']) && $form_state['values']['geshifilter_css_mode'] == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
-      form_set_error('geshifilter_css_mode', t('GeSHi filter can not automatically manage an external CSS style sheet when the download method is private.'));
+    if (isset($form_state['values']['css_mode']) && $form_state['values']['css_mode'] == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
+      form_set_error('css_mode', t('GeSHi filter can not automatically manage an external CSS style sheet when the download method is private.'));
     }
   }
 
@@ -216,17 +218,17 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, array &$form_state) {
     $config = \Drupal::config('geshifilter.settings');
-    $config->set('use_format_specific_options', $form_state['values']['geshifilter_use_format_specific_options'])
-           ->set('default_highlighting', $form_state['values']['geshifilter_default_highlighting'])
-           ->set('default_line_numbering', $form_state['values']['geshifilter_default_line_numbering'])
-           ->set('use_highlight_string_for_php', $form_state['values']['geshifilter_use_highlight_string_for_php'])
-           ->set('enable_keyword_urls', $form_state['values']['geshifilter_enable_keyword_urls'])
-           ->set('css_mode', $form_state['values']['geshifilter_css_mode'])
-           ->set('code_container', $form_state['values']['geshifilter_code_container']);
+    $config->set('use_format_specific_options', $form_state['values']['use_format_specific_options'])
+           ->set('default_highlighting', $form_state['values']['default_highlighting'])
+           ->set('default_line_numbering', $form_state['values']['default_line_numbering'])
+           ->set('use_highlight_string_for_php', $form_state['values']['use_highlight_string_for_php'])
+           ->set('enable_keyword_urls', $form_state['values']['enable_keyword_urls'])
+           ->set('css_mode', $form_state['values']['css_mode'])
+           ->set('code_container', $form_state['values']['code_container']);
     // These values are not always set, so this prevents a warning.
-    if (isset($form_state['values']['geshifilter_tags'])) {
-      $config->set('tags', $form_state['values']['geshifilter_tags']);
-      $config->set('tag_styles', $form_state['values']['geshifilter_tag_styles']);
+    if (isset($form_state['values']['tags'])) {
+      $config->set('tags', $form_state['values']['tags']);
+      $config->set('tag_styles', $form_state['values']['tag_styles']);
     }
     $config->save();
 

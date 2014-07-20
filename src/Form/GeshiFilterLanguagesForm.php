@@ -47,7 +47,6 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     $add_checkbox = TRUE;
     $add_tag_option = (!$config->get('format_specific_options', FALSE));
     $form['language_settings'] = geshifilter_per_language_settings($view, $add_checkbox, $add_tag_option);
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -115,13 +114,22 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, array &$form_state) {
     $config = \Drupal::config('geshifilter.settings');
-    foreach ($form_state['values'] as $key => $value) {
-      // Test if we have a language or other value from array.
-      if (substr($key, 0, 9) == "language_") {
-        // Do not add disabled languages or empty language tags.
-        if ($value != 0 || $value != '') {
-          $config->set($key, $value);
-        }
+    foreach ($form_state['values']['languages'] as $key => $value) {
+      if ($value["language_enabled_{$key}"] == FALSE) {
+        // Remove all disabled languages from config.
+        $config->clear("language_enabled_{$key}");
+      }
+      else {
+        // Set only the enabled languages.
+        $config->set("language_enabled_{$key}", TRUE);
+      }
+      if ($value["language_tags_{$key}"] == '') {
+        // Remove all languages without tags from config.
+        $config->clear("language_tags_{$key}");
+      }
+      else {
+        // Set only languages with tags.
+        $config->set("language_tags_{$key}", $value["language_tags_{$key}"]);
       }
     }
     $config->save();

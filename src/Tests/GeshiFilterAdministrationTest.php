@@ -47,7 +47,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->config = \Drupal::config('geshifilter.settings');
 
     // And set the path to the geshi library.
-    $this->config->set('geshi_dir', 'sites/all/libraries/geshi');
+    //$this->config->set('geshi_dir', 'sites/all/libraries/geshi');
 
     // Create a filter admin user.
     $permissions = array(
@@ -87,15 +87,15 @@ class GeshiFilterAdministrationTest extends WebTestBase {
 
     // A language tag should differ from the generic tags.
     $form_values = array(
-      'language_tags_php' => 'php generictag',
+      'languages[php][language_tags_php]' => 'php generictag',
     );
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $form_values, t('Save configuration'));
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ from generic tags (with generic tag options)'));
 
     // Language tags should differ between languages.
     $form_values = array(
-      'language_tags_php' => 'php languagetag',
-      'language_tags_python' => 'languagetag python',
+      'languages[php][language_tags_php]' => 'php languagetag',
+      'languages[python][language_tags_python]' => 'languagetag python',
     );
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $form_values, t('Save configuration'));
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with generic tag options)'));
@@ -137,11 +137,11 @@ class GeshiFilterAdministrationTest extends WebTestBase {
    */
   public function testLanguagesForm() {
     $edit = array();
-    $edit['language_enabled_xml'] = TRUE;
-    $edit['language_tags_xml'] = "<xml>";
+    $edit['languages[xml][language_enabled_xml]'] = TRUE;
+    $edit['languages[xml][language_tags_xml]'] = "<xml>";
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $edit, t('Save configuration'));
     $this->drupalGet('admin/config/content/formats/geshifilter/languages/all');
-    $this->assertFieldChecked('edit-language-enabled-xml', 'The language is enabled.');
+    $this->assertFieldChecked('edit-languages-xml-language-enabled-xml', 'The language is enabled.');
     $this->assertRaw('&lt;xml&gt;', 'The tag is defined.');
   }
 }

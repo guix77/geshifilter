@@ -1,0 +1,46 @@
+geshifilter.settings:
+  type: mapping
+  label: "Setting for geshifilter module"
+  mapping:
+    tags:
+      type: string
+      label: 'HTML tags for geshifilter blocks, like code, blockcode'
+    use_format_specific_options:
+      type: boolean
+      label: "When use options for each filter or use the same for all"
+    default_highlighting:
+      type: integer
+    default_line_numbering:
+      type: integer
+    use_highlight_string_for_php:
+      type: boolean
+    enable_keyword_urls:
+      type: boolean
+    css_mode:
+      type: integer
+    code_container:
+      type: string
+    tags:
+      type: string
+    tag_styles:
+      type: sequence
+      sequence:
+        - type: integer
+    language:
+      type: sequence
+      sequence:
+        - type: mapping
+          mapping:
+            enabled:
+              type: boolean
+            tags:
+              type: string
+
+filter_settings.filter_geshifilter:
+  type: filter
+  label: 'Filter HTML'
+  mapping:
+    tags:
+      type: string
+      label: 'HTML tags for geshifilter blocks, like code, blockcode'
+

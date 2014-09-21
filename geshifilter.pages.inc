@@ -124,8 +124,8 @@ function _geshifilter_parse_attributes($attributes, $filter) {
  * possible messing up by other filters, e.g.
  *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
  * Replaces newlines with "&#10;" to prevent issues with the line break filter
- * Escapes the tricky characters like angle brackets with String::checkPlain() to
- * prevent messing up by other filters like the HTML filter.
+ * Escapes the tricky characters like angle brackets with String::checkPlain()
+ * to prevent messing up by other filters like the HTML filter.
  */
 function _geshifilter_prepare_callback($match, $format) {
   $config = \Drupal::config('geshifilter.settings');
@@ -151,7 +151,6 @@ function _geshifilter_prepare_callback($match, $format) {
     $enabled_languages = _geshifilter_get_enabled_languages();
 
     // Usage of language tag?
-    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
     if (isset($tag_to_lang[$tag_name]) && isset($enabled_languages[$tag_to_lang[$tag_name]])) {
       $lang = $tag_to_lang[$tag_name];
     }

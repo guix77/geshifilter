@@ -72,7 +72,7 @@ function geshifilter_per_language_settings($view, $add_checkbox, $add_tag_option
   if ($add_tag_option) {
     $header[] = t('Tag/language attribute value');
   }
-  $form['languages'] = array(
+  $form['language'] = array(
     '#type' => 'table',
     '#header' => $header,
     '#empty' => t('Nome language is available.'),
@@ -81,57 +81,42 @@ function geshifilter_per_language_settings($view, $add_checkbox, $add_tag_option
   // Table body.
   $languages = _geshifilter_get_available_languages();
   foreach ($languages as $language => $language_data) {
-    $enabled = $config->get("language_enabled_{$language}", FALSE);
+    $enabled = $config->get("language.{$language}.enabled", FALSE);
     // Skip items to hide.
     if (($view == 'enabled' && !$enabled) || ($view == 'disabled' && $enabled)) {
       continue;
     }
     // Build language row.
-    $form['languages'][$language] = array();
+    $form['language'][$language] = array();
     // Add enable/disable checkbox.
     if ($add_checkbox) {
-      $form['languages'][$language]["language_enabled_{$language}"] = array(
+      $form['language'][$language]['enabled'] = array(
         '#type' => 'checkbox',
         '#default_value' => $enabled,
         '#title' => $language_data['fullname'],
       );
     }
     else {
-      $form['languages'][$language]['fullname'] = array(
+      $form['language'][$language]['fullname'] = array(
         '#type' => 'markup',
         '#markup' => $language_data['fullname'],
       );
     }
     // Language code.
-    $form['languages'][$language]['name'] = array(
+    $form['language'][$language]['name'] = array(
       '#type' => 'markup',
       '#markup' => $language,
     );
     // Add a textfield for tags.
     if ($add_tag_option) {
-      $form['languages'][$language]["language_tags_{$language}"] = array(
+      $form['language'][$language]['tags'] = array(
         '#type' => 'textfield',
-        '#default_value' => $config->get("language_tags_{$language}", ''),
+        '#default_value' => $config->get("language.{$language}.tags", ''),
         '#size' => 20,
       );
     }
   }
   return $form;
-}
-
-/**
- * Helper function for flushing the GeSHi language definition cache.
- */
-function _geshifilter_flush_language_definition_cache() {
-  $config = \Drupal::config('geshifilter.settings');
-  if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == $config->get('css_mode', GESHIFILTER_CSS_INLINE)) {
-    // Forced regeneration of the CSS file.
-    _geshifilter_generate_languages_css_file(TRUE);
-  }
-  // Flush cache of available languages.
-  $config->clear('available_languages_cache');
-  $config->save();
-  drupal_set_message(t('Flushed the GeSHi language definition cache.'));
 }
 
 /**

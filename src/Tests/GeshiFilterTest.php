@@ -64,7 +64,7 @@ class GeshiFilterTest extends WebTestBase {
     $this->config = \Drupal::config('geshifilter.settings');
 
     // And set the path to the geshi library.
-    $this->config->set('geshi_dir', 'sites/all/libraries/geshi');
+    $this->config->set('geshi_dir', '/libraries/geshi');
 
     // Create a content type, as we will create nodes on test.
     $settings = array(
@@ -127,7 +127,7 @@ class GeshiFilterTest extends WebTestBase {
   protected function createTextFormat($format_name, array $filters) {
     $edit = array();
     $edit['format'] = $format_name;
-    $edit['name'] = $this->randomName();
+    $edit['name'] = $this->randomMachineName();
     $edit['roles[' . DRUPAL_AUTHENTICATED_RID . ']'] = 1;
     foreach ($filters as $filter) {
       $edit['filters[' . $filter . '][status]'] = TRUE;
@@ -159,7 +159,7 @@ class GeshiFilterTest extends WebTestBase {
       'title' => 'Test for GeShi Filter',
       'body' => array(
         array(
-          'value' => $body . "\n" . $this->randomName(100),
+          'value' => $body . "\n" . $this->randomMachineName(100),
           'format' => 'geshifilter_text_format',
         ),
       ),
@@ -192,10 +192,10 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testGenericTags() {
     $this->config->set('tags', 'code');
-    $this->config->set('language_enabled_c', TRUE);
-    $this->config->set('language_enabled_cpp', TRUE);
-    $this->config->set('language_enabled_csharp', TRUE);
-    $this->config->set('language_enabled_java', TRUE);
+    $this->config->set('language.c.enabled', TRUE);
+    $this->config->set('language.cpp.enabled', TRUE);
+    $this->config->set('language.csharp.enabled', TRUE);
+    $this->config->set('language.java.enabled', TRUE);
     $this->config->save();
 
     // Body material.
@@ -243,9 +243,9 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testBracketsOnlyAngle() {
     $this->config->set('tags', 'code');
-    $this->config->set('language_enabled_cpp', TRUE);
+    $this->config->set('language.cpp.enabled', TRUE);
     // Enable only angle brackets.
-    $this->config->set('geshifilter_tag_styles', array(
+    $this->config->set('tag_styles', array(
       GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
     ));
     $this->config->save();
@@ -272,10 +272,10 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testBracketsOnlySquare() {
     $this->config->set('tags', 'code');
-    $this->config->set('language_enabled_cpp', TRUE);
+    $this->config->set('language.cpp.enabled', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only square brackets.
-    $this->config->set('geshifilter_tag_styles', array(
+    $this->config->set('tag_styles', array(
       GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
     ));
     $this->config->save();
@@ -300,10 +300,10 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testBracketsOnlyDoubleSquare() {
     $this->config->set('tags', 'code');
-    $this->config->set('language_enabled_cpp', TRUE);
+    $this->config->set('language.cpp.enabled', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only double square brackets.
-    $this->config->set('geshifilter_tag_styles', array(
+    $this->config->set('tag_styles', array(
       GESHIFILTER_BRACKETS_DOUBLESQUARE => GESHIFILTER_BRACKETS_DOUBLESQUARE,
     ));
     $this->config->save();
@@ -329,7 +329,7 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testBracketsOnlyPhpCodeBlock() {
     $this->config->set('tags', 'code');
-    $this->config->set('language_enabled_cpp', TRUE);
+    $this->config->set('language.cpp.enabled', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only double square brackets.
     $this->config->set('tag_styles', array(
@@ -361,10 +361,10 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testSpecialTags() {
     // Enabled the tags.
-    $this->config->set('language_enabled_cpp', TRUE);
-    $this->config->set('language_tags_cpp', 'c++');
-    $this->config->set('language_enabled_csharp', TRUE);
-    $this->config->set('language_tags_csharp', 'c#');
+    $this->config->set('language.cpp.enabled', TRUE);
+    $this->config->set('language.cpp.tags', 'c++');
+    $this->config->set('language.csharp.enabled', TRUE);
+    $this->config->set('language.csharp.tags', 'c#');
     $this->config->save();
     // Body material.
     $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
@@ -382,12 +382,12 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testPrefixTags() {
     // Enabled the tags.
-    $this->config->set('language_enabled_c', TRUE);
-    $this->config->set('language_tags_c', 'c');
-    $this->config->set('language_enabled_cpp', TRUE);
-    $this->config->set('language_tags_cpp', 'cpp');
-    $this->config->set('language_enabled_csharp', TRUE);
-    $this->config->set('language_tags_csharp', 'csharp');
+    $this->config->set('language.c.enabled', TRUE);
+    $this->config->set('language.c.tags', 'c');
+    $this->config->set('language.cpp.enabled', TRUE);
+    $this->config->set('language.cpp.tags', 'cpp');
+    $this->config->set('language.csharp.enabled', TRUE);
+    $this->config->set('language.csharp.tags', 'csharp');
     $this->config->save();
     // Body material.
     $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
@@ -405,8 +405,8 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testDoNothingMode() {
     // Enable C++.
-    $this->config->set('language_enabled_cpp', TRUE);
-    $this->config->set('language_tags_cpp', 'cpp');
+    $this->config->set('language.cpp.enabled', TRUE);
+    $this->config->set('language.cpp.tags', 'cpp');
     // Set default highlighting mode to "do nothing".
     $this->config->set('default_highlighting', GESHIFILTER_DEFAULT_DONOTHING);
     $this->config->save();
@@ -484,7 +484,7 @@ class GeshiFilterTest extends WebTestBase {
    */
   public function testSquareBracketConfusion() {
     $this->config->set('tags', 'code');
-    $this->config->set('nguage_enabled_ini', TRUE);
+    $this->config->set('language.ini.enabled', TRUE);
     $source_code = "[section]\nserver=192.0.2.62  ; IP address\nport=12345";
     // Enable square brackets.
     $this->config->set('tag_styles', array(

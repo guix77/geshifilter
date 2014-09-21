@@ -9,6 +9,8 @@ namespace Drupal\geshifilter\Form;
 // Need this for base class of the form.
 use Drupal\Core\Form\ConfigFormBase;
 
+use Drupal\Core\Form\FormStateInterface;
+
 // Need this for _geshifilter_general_highlight_tags_settings().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
 
@@ -30,7 +32,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $config = \Drupal::config('geshifilter.settings');
 
     // Try to load GeSHi library and get version if successful.
@@ -60,7 +62,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'button',
         '#value' => t("Flush the GeSHi language definition cache"),
         '#executes_submit_callback' => TRUE,
-        '#submit' => array('_geshifilter_flush_language_definition_cache'),
+        '#submit' => array($this, 'flushLanguageDefinitionCache'),
       );
 
       // GeSHi filter tags and delimiters options.
@@ -95,7 +97,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       $form['highlighting_options']['default_highlighting'] = array(
         '#type' => 'select',
         '#title' => t('Default highlighting mode'),
-        '#default_value' => $config->get('default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT),
+        '#default_value' => $config->get('default_highlighting'),
         '#options' => array(
           t('No highlighting') => array(
             GESHIFILTER_DEFAULT_DONOTHING => t('Do nothing'),
@@ -109,7 +111,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       $form['highlighting_options']['default_line_numbering'] = array(
         '#type' => 'select',
         '#title' => t('Default line numbering'),
-        '#default_value' => $config->get('default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE),
+        '#default_value' => $config->get('default_line_numbering'),
         '#options' => array(
           GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE => t('no line numbers'),
           GESHIFILTER_LINE_NUMBERS_DEFAULT_NORMAL => t('normal line numbers'),
@@ -124,14 +126,14 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#title' => t('Use built-in PHP function <code>highlight_string()</code> for PHP source code.'),
         '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code><a href="!highlight_string">highlight_string()</a></code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.', array('!highlight_string' => 'http://php.net/manual/en/function.highlight-string.php')),
-        '#default_value' => $config->get('use_highlight_string_for_php', FALSE),
+        '#default_value' => $config->get('use_highlight_string_for_php'),
       );
       // Option to disable Keyword URL's
       $form['highlighting_options']['enable_keyword_urls'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable GeSHi keyword URLs'),
         '#description' => t('For some languages GeSHi can link language keywords (e.g. standard library functions) to their online documentation. (GeSHi documentation: <a href="!link">Keyword URLs</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#keyword-urls')),
-        '#default_value' => $config->get('enable_keyword_urls', TRUE),
+        '#default_value' => $config->get('enable_keyword_urls'),
       );
 
       // Styling, layout and CSS.
@@ -197,7 +199,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#description' => t('Define the wrapping technique to use for code blocks. (GeSHi documentation: <a href="!link">The Code Container</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#the-code-container')
         ),
         '#options' => $container_options,
-        '#default_value' => $config->get('code_container', GESHI_HEADER_PRE),
+        '#default_value' => $config->get('code_container'),
       );
     }
     return parent::buildForm($form, $form_state);
@@ -206,34 +208,37 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, array &$form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     // Check if automatically managed style sheet is posible.
-    if (isset($form_state['values']['css_mode']) && $form_state['values']['css_mode'] == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
-      form_set_error('css_mode', t('GeSHi filter can not automatically manage an external CSS style sheet when the download method is private.'));
-    }
+    // if (isset($form_state['values']['css_mode']) && $form_state['values']
+    // ['css_mode'] == GESHIFILTER_CSS_CLASSES_AUTOMATIC &&
+    // !_geshifilter_managed_external_stylesheet_possible()) {
+    // form_set_error('css_mode', t('GeSHi filter can not automatically manage
+    // an external CSS style sheet when the download method is private.'));
+    // }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = \Drupal::config('geshifilter.settings');
-    $config->set('use_format_specific_options', $form_state['values']['use_format_specific_options'])
-           ->set('default_highlighting', $form_state['values']['default_highlighting'])
-           ->set('default_line_numbering', $form_state['values']['default_line_numbering'])
-           ->set('use_highlight_string_for_php', $form_state['values']['use_highlight_string_for_php'])
-           ->set('enable_keyword_urls', $form_state['values']['enable_keyword_urls'])
-           ->set('css_mode', $form_state['values']['css_mode'])
-           ->set('code_container', $form_state['values']['code_container']);
+    $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
+           ->set('default_highlighting', $form_state->getValue('default_highlighting'))
+           ->set('default_line_numbering', $form_state->getValue('default_line_numbering'))
+           ->set('use_highlight_string_for_php', $form_state->getValue('use_highlight_string_for_php'))
+           ->set('enable_keyword_urls', $form_state->getValue('enable_keyword_urls'))
+           ->set('css_mode', $form_state->getValue('css_mode'))
+           ->set('code_container', $form_state->getValue('code_container'));
     // These values are not always set, so this prevents a warning.
-    if (isset($form_state['values']['tags'])) {
-      $config->set('tags', $form_state['values']['tags']);
-      $config->set('tag_styles', $form_state['values']['tag_styles']);
+    if ($form_state->hasValue('tags')) {
+      $config->set('tags', $form_state->getValue('tags'));
+      $config->set('tag_styles', $form_state->getValue('tag_styles'));
     }
     $config->save();
 
     // Regenerate language css.
-    if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+    if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
       _geshifilter_generate_languages_css_file();
     }
     // Always clear the filter cache.
@@ -241,4 +246,17 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 
+  /**
+   * Helper function for flushing the GeSHi language definition cache.
+   */
+  public function flushLanguageDefinitionCache() {
+    $config = \Drupal::config('geshifilter.settings');
+    if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == $config->get('css_mode')) {
+      // Forced regeneration of the CSS file.
+      _geshifilter_generate_languages_css_file(TRUE);
+    }
+    $cache = \Drupal::cache();
+    $cache->delete('geshifilter_available_languages_cache');
+    drupal_set_message(t('Flushed the GeSHi language definition cache.'));
+  }
 }

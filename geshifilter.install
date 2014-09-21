@@ -66,8 +66,7 @@ function geshifilter_requirements($phase) {
     }
 
     // Check for filter conflicts.
-    require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.conflicts.inc';
-    if (geshifilter_admin_filter_conflicts(TRUE) > 0) {
+    if (count(\Drupal\geshifilter\GeshiFilterConflicts::listConflicts()) > 0) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => $t('Some filter conflicts were detected.'),

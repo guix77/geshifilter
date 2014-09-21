@@ -91,25 +91,11 @@ function geshifilter_help($path, $arg) {
 }
 
 /**
- * Implements hook_menu().
- */
-function geshifilter_menu() {
-  $items = array();
-  $items['admin/config/content/formats/geshifilter'] = array(
-    'title' => 'GeSHi Filter',
-    'description' => 'Configure the GeSHi filter.',
-    'route_name' => 'geshifilter_settings',
-  );
-
-  return $items;
-}
-
-/**
  * Implements hook_page_build().
  *
- * This function does what hook_init does on drupal 7, use it to add css/js,
+ * This function does what hook_init does on drupal 7, use it to add css/js.
  */
-function hook_page_build(&$page) {
+function geshifilter_page_build(&$page) {
   $path = drupal_get_path('module', 'geshifilter');
   $config = \Drupal::config('geshifilter.settings');
   // Add JavaScript/CSS assets to all pages.
@@ -127,16 +113,6 @@ function geshifilter_prepare_callback($text, $filter) {
   return _geshifilter_prepare($filter->format, $text);
 }
 
-/**
- * Implements hook_theme().
- */
-function geshifilter_theme() {
-  return array(
-    'geshifilter_per_language_settings' => array(
-      'render element' => 'form',
-    ),
-  );
-}
 /**
  * Implements hook_libraries_info().
  */

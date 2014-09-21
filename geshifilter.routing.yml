@@ -11,7 +11,7 @@ geshifilter.settings:
 geshifilter.settings_filter_conflicts:
   path: 'admin/config/content/formats/geshifilter/filterconflicts'
   defaults:
-    _form: '\Drupal\geshifilter\Form\GeshiFilterSettingsFilterConflictsForm'
+    _content: '\Drupal\geshifilter\Controller\GeshiFilterConflicts::content'
     _title: 'Filter conflicts'
   requirements:
     _permission: 'administer site configuration'

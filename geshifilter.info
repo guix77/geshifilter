@@ -1,7 +1,0 @@
-name = GeSHi Filter
-description = Provides a filter to highlight source code using the GeSHi library (Generic Syntax Highlighter)
-package = Filters
-core = 7.x
-configure = admin/config/content/formats/geshifilter
-files[] = geshifilter.test
-dependencies[] = libraries (>=2.0)

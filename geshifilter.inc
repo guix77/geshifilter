@@ -13,10 +13,10 @@
  *   full language name.
  */
 function _geshifilter_get_available_languages() {
-  $config = \Drupal::config('geshifilter.settings');
   // Try to get it from cache (database actually).
-  $available_languages = $config->get('available_languages_cache', NULL);
-  // if ($available_languages === NULL) {
+  $cache = \Drupal::cache();
+  $available_languages = $cache->get('geshifilter_available_languages_cache');
+  if (!$available_languages) {
     // Not in cache: build the array of available_languages.
     $geshi_library = libraries_load('geshi');
     $available_languages = array();
@@ -40,10 +40,12 @@ function _geshifilter_get_available_languages() {
       }
       ksort($available_languages);
       // Save array to database.
-      $config->set('available_languages_cache', $available_languages);
-      $config->save();
+      $cache->set('geshifilter_available_languages_cache', $available_languages);
     }
-  //}
+  }
+  else {
+    $available_languages = $available_languages->data;
+  }
   return $available_languages;
 }
 
@@ -60,42 +62,12 @@ function _geshifilter_get_enabled_languages() {
     $enabled_languages = array();
     $languages = _geshifilter_get_available_languages();
     foreach ($languages as $language => $language_data) {
-      if ($config->get('language_enabled_' . $language, FALSE)) {
+      if ($config->get('language.' . $language . ".enabled")) {
         $enabled_languages[$language] = $language_data['fullname'];
       }
     }
   }
   return $enabled_languages;
-}
-
-/**
- * Helper function for gettings the tags.
- *
- * @param object $format
- *   Format is a configuration entity from type "filter_format" with the
- *   format of current filter being processed.
- */
-function _geshifilter_get_tags($format) {
-  static $geshifilter_tags_cache = array();
-  if (!isset($geshifilter_tags_cache[$format])) {
-    $generic_code_tags = _geshifilter_tag_split(geshifilter_tags($format));
-    $language_tags = array();
-    $tag_to_lang = array();
-    $enabled_languages = _geshifilter_get_enabled_languages();
-    foreach ($enabled_languages as $language => $fullname) {
-      $lang_tags = _geshifilter_tag_split(geshifilter_language_tags($language, $format));
-      foreach ($lang_tags as $lang_tag) {
-        $language_tags[] = $lang_tag;
-        $tag_to_lang[$lang_tag] = $language;
-      }
-    }
-    $geshifilter_tags_cache[$format] = array(
-      $generic_code_tags,
-      $language_tags,
-      $tag_to_lang,
-    );
-  }
-  return $geshifilter_tags_cache[$format];
 }
 
 /**
@@ -189,7 +161,7 @@ function _geshifilter_tag_styles($format = NULL) {
  */
 function geshifilter_language_tags($language) {
   $config = \Drupal::config('geshifilter.settings');
-  if (!$config->get('use_format_specific_options', FALSE) || $format === NULL) {
+  if (!$config->get('use_format_specific_options', FALSE)) {
     return $config->get("language_tags_{$language}", '');
   }
   return $config->get("language_tags_{$language}_{$format}", geshifilter_language_tags($language));

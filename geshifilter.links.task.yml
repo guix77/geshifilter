@@ -3,6 +3,7 @@ geshifilter.settings_tab:
   route_name: geshifilter.settings
   title: 'Settings'
   base_route: geshifilter.settings_tab
+  weight: -1
 
 # Filter Conflicts: admin/config/content/formats/geshifilter/filterconflicts
 geshifilter.settings_filter_conflicts:
@@ -20,19 +21,16 @@ geshifilter.settings_languages_tab:
 geshifilter.settings_languages_sub_tab:
   route_name: geshifilter.settings_languages
   title: 'Enabled'
-  #tab_root_id: geshifilter.settings_tab
-  base_route: geshifilter.settings_languages_tab
+  parent_id: geshifilter.settings_languages_tab
 
 # Disabled Languages: admin/config/content/formats/geshifilter/languages/disabled
 geshifilter.settings_languages_disabled_tab:
   route_name: geshifilter.settings_languages_disabled
   title: 'Disabled'
-  #tab_root_id: geshifilter.settings_tab
-  base_route: geshifilter.settings_languages_tab
+  parent_id: geshifilter.settings_languages_tab
 
 #All Languages: admin/config/content/formats/geshifilter/languages/all
 geshifilter.settings_languages_all_tab:
   route_name: geshifilter.settings_languages_all
   title: 'All'
-  #tab_root_id: geshifilter.settings_tab
-  base_route: geshifilter.settings_languages_tab
+  parent_id: geshifilter.settings_languages_tab

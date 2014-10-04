@@ -37,6 +37,9 @@ define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY5', 5);
 define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY10', 10);
 define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20', 20);
 
+// Necessary for URL.
+use Drupal\Core\Url;
+
 /**
  * Implements hook_help().
  */
@@ -48,7 +51,7 @@ function geshifilter_help($path, $arg) {
       $output = '<p>' . t('The GeSHi filter module provides a filter for syntax
         highlighting of inline source code or blocks of source code based on the
         PHP library !GeSHi.', array(
-          '!GeSHi' => l(t('GeSHi (Generic Syntax Highlighter)'), 'http://qbnz.com/highlighter/')))
+          '!GeSHi' => \Drupal::l('GeSHi (Generic Syntax Highlighter)', URL::fromUri('http://qbnz.com/highlighter/'))))
         . '</p>';
       if ($path == 'admin/help#geshifilter') {
         $output .= '<p>' . t('The GeSHi filter module for Drupal requires the
@@ -58,16 +61,16 @@ function geshifilter_help($path, $arg) {
           however, the GeSHi library is not included in the GeSHi filter
           package, so you should <a href="!geshi">download</a> and install the
           GeSHi library separately.', array(
-            '!repositorypolicies' => url('http://drupal.org/node/66113'),
-            '!geshi' => url('http://qbnz.com/highlighter/'),
+            '!repositorypolicies' => URL::fromUri('http://drupal.org/node/66113')->toString(),
+            '!geshi' => URL::fromUri('http://qbnz.com/highlighter/')->toString(),
           ))
           . '</p>';
         $output .= t('<p>Quick overview of how to set up and use the GeSHi filter:</p><ul><li>Install the GeSHi library and specify its path on the <a href="!geshifilter_settings">GeSHi filter administration page</a>.</li><li>Configure the <a href="!geshifilter_settings">general GeSHi filter settings</a>.</li><li><a href="!geshifilter_languages">Enable the relevant languages</a> for your site and set their language tags if needed.</li><li>Enable the GeSHi filter in the desired !inputformats.</li><li>Check for !filterconflicts and resolve them.</li><li>Use the text format during content submission as described in the !filtertips.</li></ul>', array(
-          '!geshifilter_settings' => url('admin/config/content/formats/geshifilter'),
-          '!geshifilter_languages' => url('admin/config/content/formats/geshifilter/languages/all'),
-          '!inputformats' => l(t('text formats'), 'admin/config/content/formats'),
-          '!filterconflicts' => l(t('filter conflicts'), 'admin/config/content/formats/geshifilter/filterconflicts'),
-          '!filtertips' => l(t('filter tips'), 'filter/tips'),
+          '!geshifilter_settings' => URL::fromRoute('geshifilter.settings')->toString(),
+          '!geshifilter_languages' => URL::fromRoute('geshifilter.settings_languages_all')->toString(),
+          '!inputformats' => \Drupal::l('text formats', URL::fromRoute('filter.admin_overview')),
+          '!filterconflicts' => \Drupal::l('filter conflicts', URL::fromRoute('geshifilter.settings_filter_conflicts')),
+          '!filtertips' => \Drupal::l('filter tips', URL::fromRoute('filter.tips_all')),
         ));
       }
       return $output;
@@ -81,7 +84,7 @@ function geshifilter_help($path, $arg) {
         site not only to avoid unnecessary cluttering of the GeSHi filter
         configuration pages and the !filtertips, but also to make the GeSHi
         filter processing lighter.', array(
-          '!filtertips' => l(t('filter tips'), 'filter/tips')))
+          '!filtertips' => \Drupal::l('filter tips', URL::fromRoute('filter.tips_all'))))
         . '</p>';
       if (!$config->get('format_specific_options', FALSE)) {
         $output .= '<p>' . t('You can also define the language specific tags here.') . '</p>';

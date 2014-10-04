@@ -9,6 +9,9 @@ require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 // Necessary for String::checkPlain().
 use Drupal\Component\Utility\String;
 
+// Necessary for URL.
+use Drupal\Core\Url;
+
 /**
  * Validation handler for the tag styles form element.
  *
@@ -198,7 +201,7 @@ function _geshifilter_generate_languages_css_file($force = FALSE) {
       drupal_set_message(t('(Re)generated external CSS style sheet %file.', array('%file' => $ret)));
     }
     else {
-      drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.', array('!filesystem' => url('admin/config/media/file-system'))), 'error');
+      drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.', array('!filesystem' => URL::fromRoute('system.file_system_settings')->toString())), 'error');
     }
     // Remember for which list of languages the CSS file was generated.
     $config->set('cssfile_languages', $languages_hash);

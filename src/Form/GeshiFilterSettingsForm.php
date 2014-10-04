@@ -11,6 +11,9 @@ use Drupal\Core\Form\ConfigFormBase;
 
 use Drupal\Core\Form\FormStateInterface;
 
+// Necessary for URL.
+use Drupal\Core\Url;
+
 // Need this for _geshifilter_general_highlight_tags_settings().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
 
@@ -43,7 +46,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $form['library'] = array(
       '#type' => 'fieldset',
       '#title' => defined('GESHI_VERSION') ? t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
-      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array('!geshi' => url('http://qbnz.com/highlighter/'))),
+      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array('!geshi' => URL::fromUri('http://qbnz.com/highlighter/')->toString())),
       '#collapsible' => TRUE,
       '#collapsed' => $geshi_library['loaded'],
     );
@@ -76,7 +79,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#title' => t('Use text format specific tag settings.'),
         '#default_value' => $config->get('use_format_specific_options', FALSE),
-        '#description' => t('Enable seperate tag settings of the GeSHi filter for each <a href="!input_formats">text format</a> instead of global tag settings.', array('!input_formats' => url('admin/config/content/formats'))),
+        '#description' => t('Enable seperate tag settings of the GeSHi filter for each <a href="!input_formats">text format</a> instead of global tag settings.', array('!input_formats' => URL::fromRoute('filter.admin_overview')->toString())),
       );
       // Generic tags settings.
       // @todo: do this conditional form part showing/hiding in jQuery instead
@@ -166,9 +169,9 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           defaults</a>). (GeSHi documentation: <a href="!geshidoc">Using CSS
           Classes</a>).',
           array(
-            '!geshidoc' => 'http://qbnz.com/highlighter/geshi-doc.html#using-css-classes',
-            '!filesystem' => url('admin/config/media/file-system'),
-            '!cssdefaults' => url('admin/config/content/formats/geshifilter/generate_css'),
+            '!geshidoc' => URL::fromUri('http://qbnz.com/highlighter/geshi-doc.html#using-css-classes')->toString(),
+            '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
+            '!cssdefaults' => URL::fromRoute('geshifilter.generate_css')->toString(),
           )
         ),
       );

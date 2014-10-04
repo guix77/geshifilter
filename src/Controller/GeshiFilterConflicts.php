@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\example\Controller\ExampleController.
+ * Contains \Drupal\geshifilter\Controller\GeshiFilterConflicts.
  */
 
 namespace Drupal\geshifilter\Controller;

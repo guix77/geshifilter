@@ -5,6 +5,9 @@
  * Installation and uninstallation functions for the GeSHi filter.
  */
 
+// Necessary for URL.
+use Drupal\Core\Url;
+
 /**
  * Implements hook_install().
  */
@@ -13,8 +16,9 @@ function geshifilter_install() {
     <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the
     desired <a href="!input_formats">text formats</a>.',
     array(
-      '!geshi_admin' => url('admin/config/content/formats/geshifilter'),
-      '!input_formats' => url('admin/config/content/formats'),
+      // Can not use URL::fromRoute() because routes are not available here.
+      '!geshi_admin' => '/admin/config/content/formats/geshifilter',
+      '!input_formats' => '/admin/config/content/formats',
     )
   ));
 }
@@ -61,7 +65,11 @@ function geshifilter_requirements($phase) {
         'title' => 'GeSHi filter CSS mode',
         'value' => $t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.', array('!geshi' => url('admin/config/content/formats/geshifilter'), '!filesystem' => url('admin/config/content/file-system'))),
+        'description' => $t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.',
+          array(
+            '!geshi' => URL::fromRoute('geshifilter.settings')->toString(),
+            '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
+          )),
       );
     }
 
@@ -70,8 +78,8 @@ function geshifilter_requirements($phase) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => $t('Some filter conflicts were detected.'),
-        'description' => l(t('View and resolve the detected filter conflicts'),
-          'admin/config/content/formats/geshifilter/filterconflicts'),
+        'description' => \Drupal::l('View and resolve the detected filter conflicts',
+          URL::fromRoute('geshifilter.settings_filter_conflicts')),
         'severity' => REQUIREMENT_ERROR,
       );
     }

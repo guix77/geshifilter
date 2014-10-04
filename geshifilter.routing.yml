@@ -45,3 +45,14 @@ geshifilter.settings_languages_disabled:
     view: disabled
   requirements:
     _permission: 'administer site configuration'
+
+# The class is just a dummy class, but i need it now while working
+# on the update to beta 1. Will be fixed to a working class latter,
+# see https://www.drupal.org/node/2350669.
+geshifilter.generate_css:
+  path: 'admin/config/content/formats/geshifilter/generate_css'
+  defaults:
+    _controller: '\Drupal\geshifilter\GeshiFilterCss::generateCss'
+    _title: 'GeSHi Filter CSS'
+  requirements:
+    _permission: 'administer site configuration'

@@ -20,6 +20,9 @@ use Drupal\Core\Form\FormStateInterface;
 // Necessary for result of process().
 use Drupal\filter\FilterProcessResult;
 
+// Necessary for URL.
+use Drupal\Core\Url;
+
 // Need this for geshifilter_use_format_specifc_options().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
@@ -121,6 +124,7 @@ class GeshiFilterFilter extends FilterBase {
       // Prepare [foo]..[/foo] blocks.
       $pattern = '#((?<!\[)\[)(' . $tags_string . ')((\s+[^\]]*)*)(\])(.*?)
       ((?<!\[)\[/\2\s*\]|$)#s';
+      // $pattern = '((?<!\[)\[)(php|code)((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[\/\2\s*\]|$)/s';
       // $text = preg_replace_callback($pattern, create_function('$match',
       // "return \_geshifilter_prepare_callback(\$match, '$id');"), $text);
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
@@ -410,7 +414,7 @@ class GeshiFilterFilter extends FilterBase {
         '#markup' => '<p>' . t('GeSHi filter is configured to use global tag
           settings. For separate settings per text format, enable this option in
           the <a href="!geshi_admin_url">general GeSHi filter settings</a>.', array(
-            '!geshi_admin_url' => url('admin/config/content/formats/geshifilter'),
+            '!geshi_admin_url' => URL::fromRoute('geshifilter.settings')->toString(),
           )
         ) . '</p>',
       );

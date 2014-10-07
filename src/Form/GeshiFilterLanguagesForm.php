@@ -11,6 +11,8 @@ use Drupal\Core\Form\ConfigFormBase;
 
 use Drupal\Core\Form\FormStateInterface;
 
+use \Drupal\geshifilter\GeshiFilterCss;
+
 // Need this for _geshifilter_general_highlight_tags_settings().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
 
@@ -123,7 +125,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     $config->save();
     // Regenerate language_css.
     if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
-      _geshifilter_generate_languages_css_file();
+      GeshiFilterCss::generateLanguagesCssFile();
     }
     _geshifilter_clear_filter_cache();
   }

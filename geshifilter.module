@@ -40,6 +40,8 @@ define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20', 20);
 // Necessary for URL.
 use Drupal\Core\Url;
 
+use \Drupal\geshifilter\GeshiFilterCss;
+
 /**
  * Implements hook_help().
  */
@@ -94,21 +96,6 @@ function geshifilter_help($path, $arg) {
 }
 
 /**
- * Implements hook_page_build().
- *
- * This function does what hook_init does on drupal 7, use it to add css/js.
- */
-function geshifilter_page_build(&$page) {
-  $path = drupal_get_path('module', 'geshifilter');
-  $config = \Drupal::config('geshifilter.settings');
-  // Add JavaScript/CSS assets to all pages.
-  // @see drupal_process_attached()
-  if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
-    $page['#attached']['css'][_geshifilter_language_css_path()] = array('every_page' => TRUE);
-  }
-}
-
-/**
  * Prepare callback for the GeSHi filter.
  */
 function geshifilter_prepare_callback($text, $filter) {
@@ -139,38 +126,3 @@ function geshifilter_libraries_info() {
   );
 }
 
-/**
- * Helper for checking if an automatically managed style sheet is possible.
- *
- * @return bool
- *   Indicating if an automatically managed style sheet is possible.
- */
-function _geshifilter_managed_external_stylesheet_possible() {
-  $directory = _geshifilter_language_css_path(TRUE);
-  return file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-}
-
-/**
- * Callback function for generating the CSS rules for the syntax highlighting.
- */
-function geshifilter_generate_language_css_rules() {
-  require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
-  drupal_add_http_header("Content-type", "text/css");
-  $output = _geshifilter_generate_languages_css_rules();
-  print ($output);
-  exit();
-}
-
-/**
- * Get the path for css file.
- *
- * @param bool $dironly
- *   If wants only the dir, not the full path + file.
- *
- * @return string
- *   full path to css file.
- */
-function _geshifilter_language_css_path($dironly = FALSE) {
-  $directory = file_default_scheme() . '://geshi';
-  return $dironly ? $directory : $directory . '/geshifilter-languages.css';
-}

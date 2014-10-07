@@ -22,6 +22,7 @@ use Drupal\filter\FilterProcessResult;
 
 // Necessary for URL.
 use Drupal\Core\Url;
+use Drupal\geshifilter\GeshiFilterCss;
 
 // Need this for geshifilter_use_format_specifc_options().
 require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
@@ -89,8 +90,23 @@ class GeshiFilterFilter extends FilterBase {
     $tags_string = implode('|', $tags);
     // Pattern for matching the prepared "<code>...</code>" stuff.
     $pattern = '#\\[geshifilter-(' . $tags_string . ')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
-    $text = preg_replace_callback($pattern, array($this, 'replaceCallback'), $text);
-    return new FilterProcessResult($text);
+    $text = preg_replace_callback($pattern, array(
+        $this,
+        'replaceCallback'
+      ), $text);
+
+    // Create the object with result.
+    $result = new FilterProcessResult($text);
+
+    // Add the css file when necessary
+   if ($this->config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+      $assets = array();
+      $assets['css'][GeshiFilterCss::languageCssPath()] = array();
+      $assets['css'][drupal_get_path('module', 'geshifilter') . '/assets/css/geshifilter.css'] = array();
+      $result->addAssets($assets);
+    }
+
+    return $result;
   }
 
   /**

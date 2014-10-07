@@ -5,8 +5,12 @@
  * Installation and uninstallation functions for the GeSHi filter.
  */
 
+require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
+
 // Necessary for URL.
 use Drupal\Core\Url;
+
+use \Drupal\geshifilter\GeshiFilterCss;
 
 /**
  * Implements hook_install().
@@ -60,7 +64,8 @@ function geshifilter_requirements($phase) {
 
     // Warn if GeSHi filter is configured to automatically managed external
     // stylesheet when it's not possible.
-    if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
+    if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !GeshifilterCss::managedExternalStylesheetPossible()) {
+
       $requirements[] = array(
         'title' => 'GeSHi filter CSS mode',
         'value' => $t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),

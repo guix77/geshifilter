@@ -11,6 +11,8 @@ use Drupal\Core\Form\ConfigFormBase;
 
 use Drupal\Core\Form\FormStateInterface;
 
+use \Drupal\geshifilter\GeshiFilterCss;
+
 // Necessary for URL.
 use Drupal\Core\Url;
 
@@ -213,40 +215,44 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // Check if automatically managed style sheet is posible.
-    // if (isset($form_state['values']['css_mode']) && $form_state['values']
-    // ['css_mode'] == GESHIFILTER_CSS_CLASSES_AUTOMATIC &&
-    // !_geshifilter_managed_external_stylesheet_possible()) {
-    // form_set_error('css_mode', t('GeSHi filter can not automatically manage
-    // an external CSS style sheet when the download method is private.'));
-    // }
+    if ($form_state->hasValue('css_mode') &&
+      $form_state->getValue('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC &&
+      !GeshiFilterCss::managedExternalStylesheetPossible()) {
+      $form_state->setError('css_mode', $this->t('GeSHi filter can not
+        automatically manage an external CSS style sheet when the download method
+        is private.'));
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = \Drupal::config('geshifilter.settings');
-    $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
-           ->set('default_highlighting', $form_state->getValue('default_highlighting'))
-           ->set('default_line_numbering', $form_state->getValue('default_line_numbering'))
-           ->set('use_highlight_string_for_php', $form_state->getValue('use_highlight_string_for_php'))
-           ->set('enable_keyword_urls', $form_state->getValue('enable_keyword_urls'))
-           ->set('css_mode', $form_state->getValue('css_mode'))
-           ->set('code_container', $form_state->getValue('code_container'));
-    // These values are not always set, so this prevents a warning.
-    if ($form_state->hasValue('tags')) {
-      $config->set('tags', $form_state->getValue('tags'));
-      $config->set('tag_styles', $form_state->getValue('tag_styles'));
-    }
-    $config->save();
+    $errors = $form_state->getErrors();
+    if(count($errors) == 0) {
+      $config = \Drupal::config('geshifilter.settings');
+      $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
+        ->set('default_highlighting', $form_state->getValue('default_highlighting'))
+        ->set('default_line_numbering', $form_state->getValue('default_line_numbering'))
+        ->set('use_highlight_string_for_php', $form_state->getValue('use_highlight_string_for_php'))
+        ->set('enable_keyword_urls', $form_state->getValue('enable_keyword_urls'))
+        ->set('css_mode', $form_state->getValue('css_mode'))
+        ->set('code_container', $form_state->getValue('code_container'));
+      // These values are not always set, so this prevents a warning.
+      if ($form_state->hasValue('tags')) {
+        $config->set('tags', $form_state->getValue('tags'));
+        $config->set('tag_styles', $form_state->getValue('tag_styles'));
+      }
+      $config->save();
 
-    // Regenerate language css.
-    if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
-      _geshifilter_generate_languages_css_file();
+      // Regenerate language css.
+      if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+        GeshiFilterCss::generateLanguagesCssFile();
+      }
+      // Always clear the filter cache.
+      _geshifilter_clear_filter_cache();
+      parent::submitForm($form, $form_state);
     }
-    // Always clear the filter cache.
-    _geshifilter_clear_filter_cache();
-    parent::submitForm($form, $form_state);
   }
 
   /**
@@ -256,7 +262,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $config = \Drupal::config('geshifilter.settings');
     if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == $config->get('css_mode')) {
       // Forced regeneration of the CSS file.
-      _geshifilter_generate_languages_css_file(TRUE);
+      GeshiFilterCss::generateLanguagesCssFile(TRUE);
     }
     $cache = \Drupal::cache();
     $cache->delete('geshifilter_available_languages_cache');

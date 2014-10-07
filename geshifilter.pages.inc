@@ -240,7 +240,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $li
   $geshi = _geshifilter_geshi_factory($source_code, $lang);
 
   // CSS mode.
-  $ccs_mode = $config->get('geshifilter_css_mode', GESHIFILTER_CSS_INLINE);
+  $ccs_mode = $config->get('css_mode');
   if ($ccs_mode == GESHIFILTER_CSS_CLASSES_AUTOMATIC || $ccs_mode == GESHIFILTER_CSS_CLASSES_ONLY) {
     $geshi->enable_classes(TRUE);
   }

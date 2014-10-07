@@ -137,33 +137,22 @@ class GeshiFilterFilter extends FilterBase {
     if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
       // Prepare <foo>..</foo> blocks.
       $pattern = '#(<)(' . $tags_string . ')((\s+[^>]*)*)(>)(.*?)(</\2\s*>|$)#s';
-      // $text = preg_replace_callback($pattern, create_function('$match',
-      // "return \_geshifilter_prepare_callback(\$match, '$id');"), $text);
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
     if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
       // Prepare [foo]..[/foo] blocks.
-      $pattern = '#((?<!\[)\[)(' . $tags_string . ')((\s+[^\]]*)*)(\])(.*?)
-      ((?<!\[)\[/\2\s*\]|$)#s';
-      // $pattern = '((?<!\[)\[)(php|code)((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[\/\2\s*\]|$)/s';
-      // $text = preg_replace_callback($pattern, create_function('$match',
-      // "return \_geshifilter_prepare_callback(\$match, '$id');"), $text);
+      $pattern = '#((?<!\[)\[)(' . $tags_string . ')((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[/\2\s*\]|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
     if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
       // Prepare [[foo]]..[[/foo]] blocks.
-      $pattern = '#(\[\[)(' . $tags_string . ')((\s+[^\]]*)*)(\]\])(.*?)
-      (\[\[/\2\s*\]\]|$)#s';
-      // $text = preg_replace_callback($pattern, create_function('$match',
-      // "return \_geshifilter_prepare_callback(\$match, '$id');"), $text);
+      $pattern = '#(\[\[)(' . $tags_string . ')((\s+[^\]]*)*)(\]\])(.*?)(\[\[/\2\s*\]\]|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
     if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
       // Prepare < ?php ... ? > blocks.
       $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
-      // $text = preg_replace_callback($pattern,
-      // '\_geshifilter_prepare_php_callback', $text);
-      $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
+      $text = preg_replace_callback($pattern, array($this, 'preparePhpCallback'), $text);
     }
     return $text;
   }
@@ -863,6 +852,15 @@ class GeshiFilterFilter extends FilterBase {
     return '[geshifilter-' . $tag_name . $tag_attributes . ']'
       . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($content))
       . '[/geshifilter-' . $tag_name . ']';
+  }
+
+  /**
+   * Callback for _geshifilter_prepare for < ?php ... ? > blocks.
+   */
+  public function preparePhpCallback($match) {
+    return '[geshifilter-questionmarkphp]'
+    . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($match[2]))
+    . '[/geshifilter-questionmarkphp]';
   }
 
   /**

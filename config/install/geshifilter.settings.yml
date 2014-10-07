@@ -44,7 +44,10 @@ tag_styles:
 language:
   php:
     enabled: true
+    tags: 'php'
   cpp:
     enabled: true
+    tags: 'cpp'
   java:
     enabled: true
+    tags: 'java'

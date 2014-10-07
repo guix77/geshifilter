@@ -250,7 +250,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         GeshiFilterCss::generateLanguagesCssFile();
       }
       // Always clear the filter cache.
-      _geshifilter_clear_filter_cache();
+      \Drupal\Core\Cache\Cache::invalidateTags(array('geshifilter'));
       parent::submitForm($form, $form_state);
     }
   }

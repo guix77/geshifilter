@@ -98,13 +98,18 @@ class GeshiFilterFilter extends FilterBase {
     // Create the object with result.
     $result = new FilterProcessResult($text);
 
-    // Add the css file when necessary
-   if ($this->config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+    // Add the css file when necessary.
+    if ($this->config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
       $assets = array();
       $assets['css'][GeshiFilterCss::languageCssPath()] = array();
       $assets['css'][drupal_get_path('module', 'geshifilter') . '/assets/css/geshifilter.css'] = array();
       $result->addAssets($assets);
     }
+
+    // Add cache tags, so we can re-create the node when some geshifilter
+    // settings change.
+    $cache_tags = array('geshifilter');
+    $result->addCacheTags($cache_tags);
 
     return $result;
   }

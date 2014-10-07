@@ -127,6 +127,6 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     if ($config->get('css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
       GeshiFilterCss::generateLanguagesCssFile();
     }
-    _geshifilter_clear_filter_cache();
+    \Drupal\Core\Cache\Cache::invalidateTags(array('geshifilter'));
   }
 }

@@ -228,7 +228,16 @@ class GeshiFilterFilter extends FilterBase {
         $items[] = t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;, but additional options like line numbering are not possible here.');
       }
 
-      $output .= theme('item_list', array('items' => $items));
+      $render = array(
+        '#theme' => 'item_list',
+        '#items' => $items,
+        '#type' => 'ul',
+      );
+      $output .= render($render);
+      //$output .= theme('item_list', array('items' => $items));
+      $item_list = array(
+
+      );
 
       // Options and tips.
       $output .= '<p>' . t('Options and tips:') . '</p>';
@@ -288,12 +297,17 @@ class GeshiFilterFilter extends FilterBase {
         '%title' => GESHIFILTER_ATTRIBUTE_TITLE,
       ));
 
-      $output .= theme('item_list', array('items' => $items));
+      $render = array(
+        '#theme' => 'item_list',
+        '#items' => $items,
+        '#type' => 'ul',
+      );
+      $output .= render($render);
 
       // Defaults.
       $output .= '<p>' . t('Defaults:') . '</p>';
       $items = array();
-      $default_highlighting = $config->get('default_highlighting');
+      $default_highlighting = $this->config->get('default_highlighting');
       switch ($default_highlighting) {
         case GESHIFILTER_DEFAULT_DONOTHING:
           $description = t("when no language attribute is specified the code
@@ -312,7 +326,7 @@ class GeshiFilterFilter extends FilterBase {
       }
       $items[] = t('Default highlighting mode for generic syntax highlighting
         tags: !description.', array('!description' => $description));
-      $default_line_numbering = $config->get('default_line_numbering');
+      $default_line_numbering = $this->config->get('default_line_numbering');
       switch ($default_line_numbering) {
         case GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE:
           $description = t('no line numbers');
@@ -327,7 +341,12 @@ class GeshiFilterFilter extends FilterBase {
           break;
       }
       $items[] = t('Default line numbering: !description.', array('!description' => $description));
-      $output .= theme('item_list', array('items' => $items));
+      $render = array(
+        '#theme' => 'item_list',
+        '#items' => $items,
+        '#type' => 'ul',
+      );
+      $output .= render($render);
 
       // Examples.
       $output .= '<p>' . t('Examples:') . '</p>';
@@ -366,8 +385,12 @@ class GeshiFilterFilter extends FilterBase {
           t('Code block with syntax highlighting for @lang source code,<br />line numbers starting from 23<br /> and highlighted line numbers every 7<sup>th</sup> line.', array('@lang' => $languages[$tag_to_lang[$language_tag]])),
         );
       }
-      $output .= theme('table', array('header' => $header, 'rows' => $rows));
-      return $output;
+      $render = array(
+        '#type' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+      );
+      $output .= drupal_render($render);
     }
     else {
       // Get the available tags.
@@ -387,8 +410,8 @@ class GeshiFilterFilter extends FilterBase {
       if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
         $output .= ' ' . t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;.');
       }
-      return $output;
     }
+    return $output;
   }
 
   /**

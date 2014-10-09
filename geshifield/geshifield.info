@@ -1,6 +1,0 @@
-name = GeSHi field
-description = Provides a field for source code with GeSHI syntax highlighting.
-package = Filters
-core = 7.x
-dependencies[] = field
-dependencies[] = geshifilter

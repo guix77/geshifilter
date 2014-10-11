@@ -16,11 +16,12 @@ use \Drupal\geshifilter\GeshiFilterCss;
 // Necessary for URL.
 use Drupal\Core\Url;
 
-// Need this for _geshifilter_general_highlight_tags_settings().
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
+use Drupal\Core\Cache\Cache;
 
-// Need this for constants.
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
+// Necessary for String::checkPlain().
+use Drupal\Component\Utility\String;
+
+use \Drupal\geshifilter\GeshiFilter;
 
 /**
  * Form with the settings for the module.
@@ -48,7 +49,10 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $form['library'] = array(
       '#type' => 'fieldset',
       '#title' => defined('GESHI_VERSION') ? t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
-      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array('!geshi' => URL::fromUri('http://qbnz.com/highlighter/')->toString())),
+      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array(
+          '!geshi' => URL::fromUri('http://qbnz.com/highlighter/')
+            ->toString(),
+        )),
       '#collapsible' => TRUE,
       '#collapsed' => $geshi_library['loaded'],
     );
@@ -81,13 +85,15 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#title' => t('Use text format specific tag settings.'),
         '#default_value' => $config->get('use_format_specific_options', FALSE),
-        '#description' => t('Enable seperate tag settings of the GeSHi filter for each <a href="!input_formats">text format</a> instead of global tag settings.', array('!input_formats' => URL::fromRoute('filter.admin_overview')->toString())),
+        '#description' => t('Enable seperate tag settings of the GeSHi filter for each <a href="!input_formats">text format</a> instead of global tag settings.', array(
+            '!input_formats' => URL::fromRoute('filter.admin_overview')
+              ->toString(),
+          )),
       );
       // Generic tags settings.
-      // @todo: do this conditional form part showing/hiding in jQuery instead
-      // of in the form builder.
+      // @todo must validate the tag styles.
       if (!$config->get('use_format_specific_options', FALSE)) {
-        $form['tag_options']['general_tags'] = \_geshifilter_general_highlight_tags_settings();
+        $form['tag_options']['general_tags'] = $this->generalHighlightTagsSettings();
         // $form['#validate'][] = '_geshifilter_tag_styles_validate';
       }
 
@@ -98,15 +104,15 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#collapsible' => TRUE,
       );
       // Default language.
-      $languages = _geshifilter_get_enabled_languages();
+      $languages = GeshiFilter::getAvailableLanguages();
       $form['highlighting_options']['default_highlighting'] = array(
         '#type' => 'select',
         '#title' => t('Default highlighting mode'),
         '#default_value' => $config->get('default_highlighting'),
         '#options' => array(
           t('No highlighting') => array(
-            GESHIFILTER_DEFAULT_DONOTHING => t('Do nothing'),
-            GESHIFILTER_DEFAULT_PLAINTEXT => t('As plain text'),
+            GeshiFilter::DEFAULT_DONOTHING => t('Do nothing'),
+            GeshiFilter::DEFAULT_PLAINTEXT => t('As plain text'),
           ),
           t('Languages') => $languages,
         ),
@@ -118,11 +124,11 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#title' => t('Default line numbering'),
         '#default_value' => $config->get('default_line_numbering'),
         '#options' => array(
-          GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE => t('no line numbers'),
-          GESHIFILTER_LINE_NUMBERS_DEFAULT_NORMAL => t('normal line numbers'),
-          GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY5 => t('fancy line numbers (every @n lines)', array('@n' => GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY5)),
-          GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY10 => t('fancy line numbers (every @n lines)', array('@n' => GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY10)),
-          GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20 => t('fancy line numbers (every @n lines)', array('@n' => GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20)),
+          GeshiFilter::LINE_NUMBERS_DEFAULT_NONE => t('no line numbers'),
+          GeshiFilter::LINE_NUMBERS_DEFAULT_NORMAL => t('normal line numbers'),
+          GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY5 => t('fancy line numbers (every @n lines)', array('@n' => GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY5)),
+          GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY10 => t('fancy line numbers (every @n lines)', array('@n' => GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY10)),
+          GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY20 => t('fancy line numbers (every @n lines)', array('@n' => GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY20)),
         ),
         '#description' => t('Select the default line numbering scheme: no line numbers, normal line numbers or fancy line numbers. With fancy line numbers every n<sup>th</sup> line number is highlighted. (GeSHi documentation: <a href="!link">Line numbers</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#line-numbers')),
       );
@@ -153,11 +159,11 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'radios',
         '#title' => t('CSS mode for syntax highlighting'),
         '#options' => array(
-          GESHIFILTER_CSS_INLINE => t('Inline CSS style attributes.'),
-          GESHIFILTER_CSS_CLASSES_AUTOMATIC => t('Use CSS classes and an automatically managed external CSS style sheet.'),
-          GESHIFILTER_CSS_CLASSES_ONLY => t('Only add CSS classes to the markup.'),
+          GeshiFilter::CSS_INLINE => t('Inline CSS style attributes.'),
+          GeshiFilter::CSS_CLASSES_AUTOMATIC => t('Use CSS classes and an automatically managed external CSS style sheet.'),
+          GeshiFilter::CSS_CLASSES_ONLY => t('Only add CSS classes to the markup.'),
         ),
-        '#default_value' => $config->get('css_mode', GESHIFILTER_CSS_INLINE),
+        '#default_value' => $config->get('css_mode', GeshiFilter::CSS_INLINE),
         '#description' => t('Inline CSS is easier to set up, does not depend on
           an external style sheets and is consequently more robust to copy/paste
           operations like content aggregation. However, usage of CSS classes and
@@ -180,8 +186,14 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
 
       // Code container.
       $container_options = array(
-        GESHI_HEADER_PRE => t('%val: uses a @cnt wrapper, efficient whitespace coding, no automatic line wrapping, generates invalid HTML with line numbering.', array('%val' => 'GESHI_HEADER_PRE', '@cnt' => '<pre>')),
-        GESHI_HEADER_DIV => t('%val: uses a @cnt wrapper, enables automatic line wrapping.', array('%val' => 'GESHI_HEADER_DIV', '@cnt' => '<div>')),
+        GESHI_HEADER_PRE => t('%val: uses a @cnt wrapper, efficient whitespace coding, no automatic line wrapping, generates invalid HTML with line numbering.', array(
+            '%val' => 'GESHI_HEADER_PRE',
+            '@cnt' => '<pre>',
+          )),
+        GESHI_HEADER_DIV => t('%val: uses a @cnt wrapper, enables automatic line wrapping.', array(
+            '%val' => 'GESHI_HEADER_DIV',
+            '@cnt' => '<div>',
+          )),
       );
       if (version_compare(GESHI_VERSION, '1.0.8', '>=')) {
         $container_options[GESHI_HEADER_PRE_VALID] = t('%val: uses @pre
@@ -190,9 +202,13 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           array(
             '%val' => 'GESHI_HEADER_PRE_VALID',
             '@pre' => '<pre>',
-            '@li' => '<li>')
-          );
-        $container_options[GESHI_HEADER_PRE_TABLE] = t('%val: uses a @table construction for adding line numbers which avoids selection/copy/paste problems.', array('%val' => 'GESHI_HEADER_PRE_TABLE', '@table' => '<table>'));
+            '@li' => '<li>',
+          )
+        );
+        $container_options[GESHI_HEADER_PRE_TABLE] = t('%val: uses a @table construction for adding line numbers which avoids selection/copy/paste problems.', array(
+            '%val' => 'GESHI_HEADER_PRE_TABLE',
+            '@table' => '<table>',
+          ));
       }
       if (version_compare(GESHI_VERSION, '1.0.7.2', '>=')) {
         $container_options[GESHI_HEADER_NONE] = t('%val: uses no wrapper.', array('%val' => 'GESHI_HEADER_NONE'));
@@ -216,9 +232,10 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // Check if automatically managed style sheet is posible.
     if ($form_state->hasValue('css_mode') &&
-      $form_state->getValue('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC &&
-      !GeshiFilterCss::managedExternalStylesheetPossible()) {
-      $form_state->setError('css_mode', $this->t('GeSHi filter can not
+      $form_state->getValue('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC &&
+      !GeshiFilterCss::managedExternalStylesheetPossible()
+    ) {
+      $form_state->setErrorByName('css_mode', $this->t('GeSHi filter can not
         automatically manage an external CSS style sheet when the download method
         is private.'));
     }
@@ -229,7 +246,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $errors = $form_state->getErrors();
-    if(count($errors) == 0) {
+    if (count($errors) == 0) {
       $config = \Drupal::config('geshifilter.settings');
       $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
         ->set('default_highlighting', $form_state->getValue('default_highlighting'))
@@ -246,11 +263,11 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       $config->save();
 
       // Regenerate language css.
-      if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+      if ($config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
         GeshiFilterCss::generateLanguagesCssFile();
       }
       // Always clear the filter cache.
-      \Drupal\Core\Cache\Cache::invalidateTags(array('geshifilter'));
+      Cache::invalidateTags(array('geshifilter'));
       parent::submitForm($form, $form_state);
     }
   }
@@ -260,12 +277,78 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    */
   public function flushLanguageDefinitionCache() {
     $config = \Drupal::config('geshifilter.settings');
-    if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == $config->get('css_mode')) {
+    if (GeshiFilter::CSS_CLASSES_AUTOMATIC == $config->get('css_mode')) {
       // Forced regeneration of the CSS file.
       GeshiFilterCss::generateLanguagesCssFile(TRUE);
     }
     $cache = \Drupal::cache();
     $cache->delete('geshifilter_available_languages_cache');
     drupal_set_message(t('Flushed the GeSHi language definition cache.'));
+  }
+
+  /**
+   * Helper function for some settings form fields usable as general/specific.
+   *
+   * @return array
+   *   The form elements to choose tag settings.
+   */
+  private function generalHighlightTagsSettings() {
+    $form = array();
+
+    // Generic tags.
+    $form["tags"] = array(
+      '#type' => 'textfield',
+      '#title' => t('Generic syntax highlighting tags'),
+      '#default_value' => $this->tags(),
+      '#description' => t('Tags that should activate the GeSHi syntax highlighting. Specify a space-separated list of tagnames.'),
+    );
+
+    // Container tag styles.
+    $form["tag_styles"] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Container tag style'),
+      '#options' => array(
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
+        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
+          '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
+          '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
+        )),
+      ),
+      '#default_value' => $this->tagStyles(),
+      '#description' => t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
+    );
+    return $form;
+  }
+
+  /**
+   * Get the global common tags.
+   *
+   * Return the generic tags configured, as example, code blockcode.
+   *
+   * @return string
+   *   Return the generic tags.
+   */
+  private function tags() {
+    $config = \Drupal::config('geshifilter.settings');
+    return $config->get('tags');
+  }
+
+  /**
+   * Get the global tag styles.
+   *
+   * @return array
+   *   The global tag styles.
+   */
+  protected function tagStyles() {
+    $config = \Drupal::config('geshifilter.settings');
+    $tags = $config->get('tag_styles');
+    if ($tags) {
+      return $tags;
+    }
+    else {
+      return array();
+    }
   }
 }

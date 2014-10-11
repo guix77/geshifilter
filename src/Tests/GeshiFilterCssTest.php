@@ -13,8 +13,6 @@ use Drupal\simpletest\WebTestBase;
 /**
  * Test for css generation and use in GeshiFilter.
  *
- * Test if geshifilter creates and use the css file with stylesheet.
- *
  * @group geshifilter
  */
 class GeshiFilterCssTest extends WebTestBase {
@@ -32,10 +30,13 @@ class GeshiFilterCssTest extends WebTestBase {
   /**
    * List of modules to enable.
    */
-  public static $modules = array('node', 'libraries', 'geshifilter', 'filter', 'file');
+  public static $modules = array('node', 'libraries', 'geshifilter', 'filter',
+    'file');
 
   /**
    * Configuration object.
+   *
+   * @var \Drupal\Core\Config\Config
    */
   protected $config;
 
@@ -124,5 +125,3 @@ class GeshiFilterCssTest extends WebTestBase {
     $this->drupalGet('admin/config/content/formats');
   }
 }
-
-

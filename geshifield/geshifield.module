@@ -6,6 +6,7 @@
  * @todo: is the GeSHi CSS file always loaded when needed?
  */
 
+use \Drupal\geshifilter\GeshiFilterProcess;
 /**
  * Implements hook_theme().
  */
@@ -18,13 +19,24 @@ function geshifield_theme() {
   );
 }
 
-function geshifield_formatter_default($variables) {
+/**
+ * Format the field.
+ *
+ * This function get the sorcecode and language and format it using geshi.
+ *
+ * @param array $variables
+ *   Variables disponible for theme.
+ *
+ * @return string
+ *   The HTML to show the code formated with geshi.
+ */
+function geshifield_formatter_default(array $variables) {
   $language = $variables['geshifield']['#language'];
   $sourcecode = $variables['geshifield']['#sourcecode'];
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
   if ($sourcecode) {
-    $output .= geshifilter_geshi_process($sourcecode, $language);
+    $output .= GeshiFilterProcess::geshiProcess($sourcecode, $language);
   }
   $elements = array();
   $elements[] = array(

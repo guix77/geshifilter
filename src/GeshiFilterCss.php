@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Contains \Drupal\geshifilter\GeshiFilterCss.
+ */
 
 namespace Drupal\geshifilter;
 
@@ -8,6 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 // Necessary for URL.
 use Drupal\Core\Url;
 
+/**
+ * Helper functions to work with css.
+ *
+ * All function in this are static, they help with the css generation.
+ */
 class GeshiFilterCss {
   /**
    * Create the page that show the css in use.
@@ -38,14 +47,14 @@ class GeshiFilterCss {
    * Get the path for css file.
    *
    * @param bool $dironly
-   *   If wants only the dir, not the full path + file.
+   *   TRUE if wants only the dir, FALSE for the full path + file.
    *
    * @return string
-   *   full path to css file.
+   *   Full path to css file.
    */
   public static function languageCssPath($dironly = FALSE) {
     $directory = file_default_scheme() . '://geshi';
-    if(!$dironly) {
+    if (!$dironly) {
       $directory .= '/geshifilter-languages.css';
     }
     return $directory;
@@ -63,11 +72,11 @@ class GeshiFilterCss {
     $geshi_library = libraries_load('geshi');
     if ($geshi_library['loaded']) {
       require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
-      $languages = _geshifilter_get_enabled_languages();
+      $languages = GeshiFilter::getAvailableLanguages();
       foreach ($languages as $langcode => $language_full_name) {
         // Create GeSHi object.
-        $geshi = _geshifilter_GeSHi_factory('', $langcode);
-        _geshifilter_override_geshi_defaults($geshi, $langcode);
+        $geshi = GeshiFilterProcess::geshiFactory('', $langcode);
+        GeshiFilterProcess::overrideGeshiDefaults($geshi, $langcode);
         // Add CSS rules for current language.
         $output .= $geshi->get_stylesheet(FALSE) . "\n";
         // Release GeSHi object.
@@ -87,9 +96,8 @@ class GeshiFilterCss {
    *   Force the regeneration of the CSS file.
    */
   public static function generateLanguagesCssFile($force = FALSE) {
-    $force = true;
     $config = \Drupal::config('geshifilter.settings');
-    $languages = _geshifilter_get_enabled_languages();
+    $languages = GeshiFilter::getEnabledLanguages();
     // Serialize the array of enabled languages as sort of hash.
     $languages_hash = serialize($languages);
 
@@ -105,14 +113,14 @@ class GeshiFilterCss {
         drupal_set_message(t('(Re)generated external CSS style sheet %file.', array('%file' => $ret->getFilename())));
       }
       else {
-        drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.', array(
-              '!filesystem' => URL::fromRoute('system.file_system_settings')
-                ->toString()
-            )), 'error');
+        drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.',
+          array(
+            '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
+          )), 'error');
       }
       // Remember for which list of languages the CSS file was generated.
       $config->set('cssfile_languages', $languages_hash);
       $config->save();
     }
   }
-} 
+}

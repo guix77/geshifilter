@@ -5,42 +5,8 @@
  * An input filter for syntax highlighting using the GeSHi library.
  */
 
-define('GESHIFILTER_DEFAULT_PLAINTEXT', 'GESHIFILTER_DEFAULT_PLAINTEXT');
-define('GESHIFILTER_DEFAULT_DONOTHING', 'GESHIFILTER_DEFAULT_DONOTHING');
-
-// GeSHi CSS modes
-// Inline CSS.
-define('GESHIFILTER_CSS_INLINE', 1);
-// Usage of CSS classes and an automatically managaged external stylesheet.
-define('GESHIFILTER_CSS_CLASSES_AUTOMATIC', 2);
-// Only add CSS classes to markup, admin/themer is responsible for defining the
-// CSS rules.
-define('GESHIFILTER_CSS_CLASSES_ONLY', 3);
-
-define('GESHIFILTER_ATTRIBUTES_LANGUAGE', 'type lang language class');
-define('GESHIFILTER_ATTRIBUTE_LINE_NUMBERING', 'linenumbers');
-define('GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START', 'start');
-define('GESHIFILTER_ATTRIBUTE_FANCY_N', 'fancy');
-define('GESHIFILTER_ATTRIBUTE_TITLE', 'title');
-
-define('GESHIFILTER_BRACKETS_ANGLE', 1);
-define('GESHIFILTER_BRACKETS_SQUARE', 2);
-// Deprecated, only used in upgrade path.
-define('GESHIFILTER_BRACKETS_BOTH', 3);
-define('GESHIFILTER_BRACKETS_DOUBLESQUARE', 4);
-define('GESHIFILTER_BRACKETS_PHPBLOCK', 8);
-
-
-define('GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE', 0);
-define('GESHIFILTER_LINE_NUMBERS_DEFAULT_NORMAL', 1);
-define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY5', 5);
-define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY10', 10);
-define('GESHIFILTER_LINE_NUMBERS_DEFAULT_FANCY20', 20);
-
 // Necessary for URL.
 use Drupal\Core\Url;
-
-use \Drupal\geshifilter\GeshiFilterCss;
 
 /**
  * Implements hook_help().
@@ -96,14 +62,6 @@ function geshifilter_help($path, $arg) {
 }
 
 /**
- * Prepare callback for the GeSHi filter.
- */
-function geshifilter_prepare_callback($text, $filter) {
-  require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
-  return _geshifilter_prepare($filter->format, $text);
-}
-
-/**
  * Implements hook_libraries_info().
  */
 function geshifilter_libraries_info() {
@@ -125,4 +83,3 @@ function geshifilter_libraries_info() {
     ),
   );
 }
-

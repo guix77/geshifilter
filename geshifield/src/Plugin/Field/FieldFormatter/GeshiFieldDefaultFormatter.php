@@ -2,14 +2,13 @@
 
 /**
  * @file
- * Contains \Drupal\geshifield\Plugin\field\FieldFormatter\GeshiFilterDefaultFormatter.
+ * Class \Drupal\geshifield\Plugin\field\FieldFormatter\GeshiFilterDefaultFormatter.
  */
 
 namespace Drupal\geshifield\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Component\Utility\String;
 
 /**
  * Plugin implementation of the 'geshifield_default' formatter.

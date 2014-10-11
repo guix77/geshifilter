@@ -7,11 +7,10 @@
 
 namespace Drupal\geshifield\Plugin\Field\FieldWidget;
 
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
-
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use \Drupal\geshifilter\GeshiFilter;
 
 
 /**
@@ -31,7 +30,7 @@ class GeshiFieldDefaultWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $enabled_languages = \_geshifilter_get_enabled_languages();
+    $enabled_languages = GeshiFilter::getEnabledLanguages();
 
     $element['sourcecode'] = array(
       '#title' => t('Code'),

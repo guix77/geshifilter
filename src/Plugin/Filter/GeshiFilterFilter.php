@@ -23,15 +23,9 @@ use Drupal\filter\FilterProcessResult;
 // Necessary for URL.
 use Drupal\Core\Url;
 use Drupal\geshifilter\GeshiFilterCss;
+use \Drupal\geshifilter\GeshiFilter;
+use Drupal\geshifilter\GeshiFilterProcess;
 
-// Need this for geshifilter_use_format_specifc_options().
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
-
-// Need this for geshifilter_use_format_specifc_options().
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
-
-// Need this for _geshifilter_prepare_callback(0 and others like this.
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
 
 /**
  * Provides a base filter for Geshi Filter.
@@ -78,7 +72,7 @@ class GeshiFilterFilter extends FilterBase {
 
     // Get the available tags.
     list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
-    if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
+    if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
       $language_tags[] = 'questionmarkphp';
       $tag_to_lang['questionmarkphp'] = 'php';
     }
@@ -92,14 +86,14 @@ class GeshiFilterFilter extends FilterBase {
     $pattern = '#\\[geshifilter-(' . $tags_string . ')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
     $text = preg_replace_callback($pattern, array(
         $this,
-        'replaceCallback'
+        'replaceCallback',
       ), $text);
 
     // Create the object with result.
     $result = new FilterProcessResult($text);
 
     // Add the css file when necessary.
-    if ($this->config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+    if ($this->config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
       $assets = array();
       $assets['css'][GeshiFilterCss::languageCssPath()] = array();
       $assets['css'][drupal_get_path('module', 'geshifilter') . '/assets/css/geshifilter.css'] = array();
@@ -134,22 +128,22 @@ class GeshiFilterFilter extends FilterBase {
     // and prepare the container content (newline and angle bracket protection).
     // @todo: make sure that these replacements can be done in series.
     $tag_styles = array_filter($this->tagStyles());
-    if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_ANGLE, $tag_styles)) {
       // Prepare <foo>..</foo> blocks.
       $pattern = '#(<)(' . $tags_string . ')((\s+[^>]*)*)(>)(.*?)(</\2\s*>|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
-    if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_SQUARE, $tag_styles)) {
       // Prepare [foo]..[/foo] blocks.
       $pattern = '#((?<!\[)\[)(' . $tags_string . ')((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[/\2\s*\]|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
-    if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_DOUBLESQUARE, $tag_styles)) {
       // Prepare [[foo]]..[[/foo]] blocks.
       $pattern = '#(\[\[)(' . $tags_string . ')((\s+[^\]]*)*)(\]\])(.*?)(\[\[/\2\s*\]\]|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'prepareCallback'), $text);
     }
-    if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, $tag_styles)) {
       // Prepare < ?php ... ? > blocks.
       $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
       $text = preg_replace_callback($pattern, array($this, 'preparePhpCallback'), $text);
@@ -171,21 +165,22 @@ class GeshiFilterFilter extends FilterBase {
     $tag_styles = array_filter($this->tagStyles());
     $tag_style_examples = array();
     $bracket_open = NULL;
-    if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
+    $bracket_close = NULL;
+    if (in_array(GeshiFilter::BRACKETS_ANGLE, $tag_styles)) {
       if (!$bracket_open) {
         $bracket_open = String::checkPlain('<');
         $bracket_close = String::checkPlain('>');
       }
       $tag_style_examples[] = '<code>' . String::checkPlain('<foo>') . '</code>';
     }
-    if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_SQUARE, $tag_styles)) {
       if (!$bracket_open) {
         $bracket_open = String::checkPlain('[');
         $bracket_close = String::checkPlain(']');
       }
       $tag_style_examples[] = '<code>' . String::checkPlain('[foo]') . '</code>';
     }
-    if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
+    if (in_array(GeshiFilter::BRACKETS_DOUBLESQUARE, $tag_styles)) {
       if (!$bracket_open) {
         $bracket_open = String::checkPlain('[[');
         $bracket_close = String::checkPlain(']]');
@@ -202,8 +197,8 @@ class GeshiFilterFilter extends FilterBase {
       // Get the available tags.
       list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
       // Get the available languages.
-      $languages = _geshifilter_get_enabled_languages();
-      $lang_attributes = _geshifilter_whitespace_explode(GESHIFILTER_ATTRIBUTES_LANGUAGE);
+      $languages = GeshiFilter::getEnabledLanguages();
+      $lang_attributes = GeshiFilter::whitespaceExplode(GeshiFilter::ATTRIBUTES_LANGUAGE);
 
       // Syntax highlighting tags.
       $output = '<p>' . t('Syntax highlighting of source code can be enabled with the following tags:') . '</p>';
@@ -224,7 +219,7 @@ class GeshiFilterFilter extends FilterBase {
       }
       $items[] = t('Language specific syntax highlighting tags: !tags.', array('!tags' => implode(', ', $tags)));
       // PHP specific delimiters.
-      if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
+      if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, $tag_styles)) {
         $items[] = t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;, but additional options like line numbering are not possible here.');
       }
 
@@ -234,10 +229,6 @@ class GeshiFilterFilter extends FilterBase {
         '#type' => 'ul',
       );
       $output .= render($render);
-      //$output .= theme('item_list', array('items' => $items));
-      $item_list = array(
-
-      );
 
       // Options and tips.
       $output .= '<p>' . t('Options and tips:') . '</p>';
@@ -277,13 +268,13 @@ class GeshiFilterFilter extends FilterBase {
         number can be specified with the attribute "%start", which implicitly
         enables normal line numbering. For fancy line numbering the interval
         for the highlighted line numbers can be specified with the attribute
-        "%fancy", which implicitly enables fancy line numbering.', array(
-          '%linenumbers' => GESHIFILTER_ATTRIBUTE_LINE_NUMBERING,
+        "%interval", which implicitly enables fancy line numbering.', array(
+          '%linenumbers' => GeshiFilter::ATTRIBUTE_LINE_NUMBERING,
           '%off' => 'off',
           '%normal' => 'normal',
           '%fancy' => 'fancy',
-          '%start' => GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START,
-          '%fancy' => GESHIFILTER_ATTRIBUTE_FANCY_N,
+          '%start' => GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START,
+          '%interval' => GeshiFilter::ATTRIBUTE_FANCY_N,
         )
       );
 
@@ -294,7 +285,7 @@ class GeshiFilterFilter extends FilterBase {
 
       // Code block title.
       $items[] = t('A title can be added to a code block with the attribute "%title".', array(
-        '%title' => GESHIFILTER_ATTRIBUTE_TITLE,
+        '%title' => GeshiFilter::ATTRIBUTE_TITLE,
       ));
 
       $render = array(
@@ -309,12 +300,12 @@ class GeshiFilterFilter extends FilterBase {
       $items = array();
       $default_highlighting = $this->config->get('default_highlighting');
       switch ($default_highlighting) {
-        case GESHIFILTER_DEFAULT_DONOTHING:
+        case GeshiFilter::DEFAULT_DONOTHING:
           $description = t("when no language attribute is specified the code
             block won't be processed by the GeSHi filter");
           break;
 
-        case GESHIFILTER_DEFAULT_PLAINTEXT:
+        case GeshiFilter::DEFAULT_PLAINTEXT:
           $description = t('when no language attribute is specified, no syntax
            highlighting will be done');
           break;
@@ -328,11 +319,11 @@ class GeshiFilterFilter extends FilterBase {
         tags: !description.', array('!description' => $description));
       $default_line_numbering = $this->config->get('default_line_numbering');
       switch ($default_line_numbering) {
-        case GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE:
+        case GeshiFilter::LINE_NUMBERS_DEFAULT_NONE:
           $description = t('no line numbers');
           break;
 
-        case GESHIFILTER_LINE_NUMBERS_DEFAULT_NORMAL:
+        case GeshiFilter::LINE_NUMBERS_DEFAULT_NORMAL:
           $description = t('normal line numbers');
           break;
 
@@ -366,11 +357,11 @@ class GeshiFilterFilter extends FilterBase {
           t('Code block with the default syntax highlighting mode.'),
         );
         $rows[] = array(
-          '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[1 % count($lang_attributes)] . '="' . $lang . '" ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING . '="normal"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
+          '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[1 % count($lang_attributes)] . '="' . $lang . '" ' . GeshiFilter::ATTRIBUTE_LINE_NUMBERING . '="normal"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
           t('Code block with syntax highlighting for @lang source code<br /> and normal line numbers.', array('@lang' => $languages[$lang])),
         );
         $rows[] = array(
-          '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[2 % count($lang_attributes)] . '="' . $lang . '" ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GESHIFILTER_ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
+          '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[2 % count($lang_attributes)] . '="' . $lang . '" ' . GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GeshiFilter::ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
           t('Code block with syntax highlighting for @lang source code,<br />line numbers starting from 23<br /> and highlighted line numbers every 7<sup>th</sup> line.', array('@lang' => $languages[$lang])),
         );
       }
@@ -381,7 +372,7 @@ class GeshiFilterFilter extends FilterBase {
           t('Code block with syntax highlighting for @lang source code.', array('@lang' => $languages[$tag_to_lang[$language_tag]])),
         );
         $rows[] = array(
-          '<code>' . $bracket_open . $language_tag . ' ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GESHIFILTER_ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $bracket_open . $language_tag . $bracket_close . '</code>',
+          '<code>' . $bracket_open . $language_tag . ' ' . GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GeshiFilter::ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $bracket_open . $language_tag . $bracket_close . '</code>',
           t('Code block with syntax highlighting for @lang source code,<br />line numbers starting from 23<br /> and highlighted line numbers every 7<sup>th</sup> line.', array('@lang' => $languages[$tag_to_lang[$language_tag]])),
         );
       }
@@ -407,7 +398,7 @@ class GeshiFilterFilter extends FilterBase {
       if (count($tag_style_examples) > 1) {
         $output .= ' ' . t('The supported tag styles are: !tag_styles.', array('!tag_styles' => implode(', ', $tag_style_examples)));
       }
-      if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
+      if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, $tag_styles)) {
         $output .= ' ' . t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;.');
       }
     }
@@ -487,12 +478,12 @@ class GeshiFilterFilter extends FilterBase {
    * @todo: recreate a cache for this function.
    */
   protected function getTags() {
-    $generic_code_tags = \_geshifilter_tag_split($this->tags());
+    $generic_code_tags = GeshiFilter::tagSplit($this->tags());
     $language_tags = array();
     $tag_to_lang = array();
-    $enabled_languages = \_geshifilter_get_enabled_languages();
+    $enabled_languages = GeshiFilter::getEnabledLanguages();
     foreach ($enabled_languages as $language => $fullname) {
-      $lang_tags = \_geshifilter_tag_split($this->languageTags($language));
+      $lang_tags = GeshiFilter::tagSplit($this->languageTags($language));
       foreach ($lang_tags as $lang_tag) {
         $language_tags[] = $lang_tag;
         $tag_to_lang[$lang_tag] = $language;
@@ -524,10 +515,10 @@ class GeshiFilterFilter extends FilterBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GESHIFILTER_BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
-        GESHIFILTER_BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
-        GESHIFILTER_BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
-        GESHIFILTER_BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
+        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
           '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
           '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
         )),
@@ -540,6 +531,19 @@ class GeshiFilterFilter extends FilterBase {
 
   /**
    * Function for generating a form table for per language settings.
+   *
+   * @param string $view
+   *   Which languages to show:
+   *   - enabled Show only enabled languages.
+   *   - disabled Show only disabled languages.
+   *   - all Show all languages.
+   * @param bool $add_checkbox
+   *   When add(TRUE) or not a  checkbox to enable languages.
+   * @param bool $add_tag_option
+   *   When add(TRUE) or not a textbox to set the tags for a language.
+   *
+   * @return array
+   *   An array with form elements for languages.
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
     $form = array();
@@ -554,7 +558,7 @@ class GeshiFilterFilter extends FilterBase {
     }
     // Table body.
     $form['languages'] = array();
-    $languages = _geshifilter_get_available_languages();
+    $languages = GeshiFilter::getAvailableLanguages();
     foreach ($languages as $language => $language_data) {
       $enabled = $this->config->get("language_enabled_{$language}");
       // Skip items to hide.
@@ -623,11 +627,10 @@ class GeshiFilterFilter extends FilterBase {
   /**
    * Get the tag style.
    *
-   * @return int
+   * @return array
    *   Where to use [], <>, or both for tags.
    */
   protected function tagStyles() {
-    $styles = array();
     if ($this->config->get('use_format_specific_options') == FALSE) {
       // Get global tag styles.
       $styles = $this->config->get('tag_styles');
@@ -676,12 +679,8 @@ class GeshiFilterFilter extends FilterBase {
     $title = NULL;
 
     // Determine language based on tag name if possible.
-    // list($generic_code_tags, $language_tags, $tag_to_lang) =
-    // _geshifilter_get_tags($format);
-    // if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK,
-    // array_filter(_geshifilter_tag_styles($format)))) {
     list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
-    if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
+    if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
       $language_tags[] = 'questionmarkphp';
       $tag_to_lang['questionmarkphp'] = 'php';
     }
@@ -704,17 +703,17 @@ class GeshiFilterFilter extends FilterBase {
       $title = $settings['title'];
     }
 
-    if ($lang == GESHIFILTER_DEFAULT_DONOTHING) {
+    if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
       // Do nothing, and return the original.
       return $complete_match;
     }
-    if ($lang == GESHIFILTER_DEFAULT_PLAINTEXT) {
+    if ($lang == GeshiFilter::DEFAULT_PLAINTEXT) {
       // Use plain text 'highlighting'
       $lang = 'text';
     }
     $inline_mode = (strpos($source_code, "\n") === FALSE);
     // Process and return.
-    return \geshifilter_process_sourcecode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
+    return GeshiFilterProcess::processSourcecode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
   }
 
   /**
@@ -738,16 +737,16 @@ class GeshiFilterFilter extends FilterBase {
     // Get the possible tags and languages.
     list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
 
-    $language_attributes = _geshifilter_whitespace_explode(GESHIFILTER_ATTRIBUTES_LANGUAGE);
+    $language_attributes = GeshiFilter::whitespaceExplode(GeshiFilter::ATTRIBUTES_LANGUAGE);
     $attributes_preg_string = implode('|', array_merge(
       $language_attributes, array(
-        GESHIFILTER_ATTRIBUTE_LINE_NUMBERING,
-        GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START,
-        GESHIFILTER_ATTRIBUTE_FANCY_N,
-        GESHIFILTER_ATTRIBUTE_TITLE,
+        GeshiFilter::ATTRIBUTE_LINE_NUMBERING,
+        GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START,
+        GeshiFilter::ATTRIBUTE_FANCY_N,
+        GeshiFilter::ATTRIBUTE_TITLE,
       )
     ));
-    $enabled_languages = _geshifilter_get_enabled_languages();
+    $enabled_languages = GeshiFilter::getEnabledLanguages();
 
     // Parse $attributes to an array $attribute_matches with:
     // $attribute_matches[0][xx] fully matched string, e.g. 'language="python"'
@@ -776,7 +775,7 @@ class GeshiFilterFilter extends FilterBase {
       // 0: no line numbering.
       // 1: normal line numbering.
       // n>= 2: fancy line numbering every nth line.
-      elseif ($att_name == GESHIFILTER_ATTRIBUTE_LINE_NUMBERING) {
+      elseif ($att_name == GeshiFilter::ATTRIBUTE_LINE_NUMBERING) {
         switch (strtolower($att_value)) {
           case "off":
             $line_numbering = 0;
@@ -791,19 +790,19 @@ class GeshiFilterFilter extends FilterBase {
             break;
         }
       }
-      elseif ($att_name == GESHIFILTER_ATTRIBUTE_FANCY_N) {
+      elseif ($att_name == GeshiFilter::ATTRIBUTE_FANCY_N) {
         $att_value = (int) ($att_value);
         if ($att_value >= 2) {
           $line_numbering = $att_value;
         }
       }
-      elseif ($att_name == GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START) {
+      elseif ($att_name == GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START) {
         if ($line_numbering < 1) {
           $line_numbering = 1;
         }
         $linenumbers_start = (int) ($att_value);
       }
-      elseif ($att_name == GESHIFILTER_ATTRIBUTE_TITLE) {
+      elseif ($att_name == GeshiFilter::ATTRIBUTE_TITLE) {
         $title = $att_value;
       }
     }
@@ -847,12 +846,12 @@ class GeshiFilterFilter extends FilterBase {
 
     // Get the default highlighting mode.
     $lang = $this->config->get('default_highlighting');
-    if ($lang == GESHIFILTER_DEFAULT_DONOTHING) {
-      // If the default highlighting mode is GESHIFILTER_DEFAULT_DONOTHING
+    if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
+      // If the default highlighting mode is GeshiFilter::DEFAULT_DONOTHING
       // and there is no language set (with language tag or language attribute),
       // we should not do any escaping in this prepare phase,
       // so that other filters can do their thing.
-      $enabled_languages = \_geshifilter_get_enabled_languages();
+      $enabled_languages = GeshiFilter::getEnabledLanguages();
       // Usage of language tag?
       list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
       if (isset($tag_to_lang[$tag_name]) && isset($enabled_languages[$tag_to_lang[$tag_name]])) {
@@ -867,7 +866,7 @@ class GeshiFilterFilter extends FilterBase {
         }
       }
       // If no language was set: prevent escaping and return original string.
-      if ($lang == GESHIFILTER_DEFAULT_DONOTHING) {
+      if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
         return $match[0];
       }
     }
@@ -879,6 +878,9 @@ class GeshiFilterFilter extends FilterBase {
 
   /**
    * Callback for _geshifilter_prepare for < ?php ... ? > blocks.
+   *
+   * @param array $match
+   *   An array with the pieces from matched string.
    */
   public function preparePhpCallback($match) {
     return '[geshifilter-questionmarkphp]'

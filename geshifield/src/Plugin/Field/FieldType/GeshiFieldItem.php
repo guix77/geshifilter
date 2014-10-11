@@ -27,7 +27,7 @@ class GeshiFieldItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  static $propertyDefinitions;
+  protected static $propertyDefinitions;
 
   /**
    * {@inheritdoc}

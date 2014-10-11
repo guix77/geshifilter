@@ -8,6 +8,9 @@ namespace Drupal\geshifilter\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
+/**
+ * Show the filters tah conflic with GeshiFilter.
+ */
 class GeshiFilterConflicts extends ControllerBase  {
   /**
    * {@inheritdoc}
@@ -20,6 +23,9 @@ class GeshiFilterConflicts extends ControllerBase  {
         '#markup' => t('No conflicts found.'),
       );
       return $build;
+    }
+    else {
+      return array();
     }
   }
 }

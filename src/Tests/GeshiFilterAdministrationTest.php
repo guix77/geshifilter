@@ -10,6 +10,8 @@ namespace Drupal\geshifilter\Tests;
 // Use of base class for the tests.
 use Drupal\simpletest\WebTestBase;
 
+use \Drupal\geshifilter\GeshiFilter;
+
 /**
  * Test for administrative interface of GeshiFilter.
  *
@@ -34,6 +36,8 @@ class GeshiFilterAdministrationTest extends WebTestBase {
 
   /**
    * Configuration object.
+   *
+   * @var \Drupal\Core\Config\Config
    */
   protected $config;
 
@@ -59,13 +63,13 @@ class GeshiFilterAdministrationTest extends WebTestBase {
 
     // Set some default GeSHi filter admin settings.
     // Set default highlighting mode to "do nothing".
-    $this->config->set('default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
+    $this->config->set('default_highlighting', GeshiFilter::DEFAULT_PLAINTEXT);
     $this->config->set('format_specific_options', FALSE);
     $this->config->set('tag_styles', array(
-      GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
-      GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
+      GeshiFilter::BRACKETS_ANGLE => GeshiFilter::BRACKETS_ANGLE,
+      GeshiFilter::BRACKETS_SQUARE => GeshiFilter::BRACKETS_SQUARE,
     ));
-    $this->config->set('default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+    $this->config->set('default_line_numbering', GeshiFilter::LINE_NUMBERS_DEFAULT_NONE);
     $this->config->save();
   }
 
@@ -97,6 +101,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $form_values, t('Save configuration'));
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with generic tag options)'));
 
+    /* @todo Must uncoment this make make this test work. */
     // Second round: with format specific tag options.
     // Current format specific options are not working, so will uncoment and
     // fix this part of test latter.

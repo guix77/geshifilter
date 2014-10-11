@@ -8,8 +8,11 @@
 // Namespace for the module.
 namespace Drupal\geshifilter;
 
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
-
+/**
+ * Class to detect conflic with other filters.
+ *
+ * @todo Make this class work, see https://www.drupal.org/node/2354511.
+ */
 class GeshiFilterConflicts {
 
   /**
@@ -22,21 +25,4 @@ class GeshiFilterConflicts {
   public static function listConflicts() {
     return array();
   }
-
-  /**
-   * Conflict detection for html filter.
-   */
-  protected function htmlfilter($format, $cfilter, $geshifilter) {
-    $conflicts = array();
-    return $conflicts;
-  }
-
-  /**
-   * Conflict detection for codefilter.
-   */
-  protected function codefilter($format, $cfilter, $geshifilter) {
-    $conflicts = array();
-    return $conflicts;
-  }
-
 }

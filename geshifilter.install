@@ -5,12 +5,11 @@
  * Installation and uninstallation functions for the GeSHi filter.
  */
 
-require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.module';
-
 // Necessary for URL.
 use Drupal\Core\Url;
 
 use \Drupal\geshifilter\GeshiFilterCss;
+use \Drupal\geshifilter\GeshiFilter;
 
 /**
  * Implements hook_install().
@@ -48,7 +47,7 @@ function geshifilter_requirements($phase) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('GeSHi library invalid version.'),
-        'description' => $t('The detected version of GeSHi library (%version) is not supported. A version from the 1.0.x branch is required.', array('%version' => GESHI_VERSION)),
+        'description' => t('The detected version of GeSHi library (%version) is not supported. A version from the 1.0.x branch is required.', array('%version' => GESHI_VERSION)),
         'severity' => REQUIREMENT_ERROR,
       );
     }
@@ -64,13 +63,13 @@ function geshifilter_requirements($phase) {
 
     // Warn if GeSHi filter is configured to automatically managed external
     // stylesheet when it's not possible.
-    if ($config->get('css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !GeshifilterCss::managedExternalStylesheetPossible()) {
+    if ($config->get('css_mode') == Geshifilter::CSS_CLASSES_AUTOMATIC && !GeshifilterCss::managedExternalStylesheetPossible()) {
 
       $requirements[] = array(
         'title' => 'GeSHi filter CSS mode',
-        'value' => $t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
+        'value' => t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.',
+        'description' => t('Change the CSS mode of the <a href="!geshi">GeSHi filter</a> or change the <a href="!filesystem">download mode</a> to public.',
           array(
             '!geshi' => URL::fromRoute('geshifilter.settings')->toString(),
             '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
@@ -82,7 +81,7 @@ function geshifilter_requirements($phase) {
     if (count(\Drupal\geshifilter\GeshiFilterConflicts::listConflicts()) > 0) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
-        'value' => $t('Some filter conflicts were detected.'),
+        'value' => t('Some filter conflicts were detected.'),
         'description' => \Drupal::l('View and resolve the detected filter conflicts',
           URL::fromRoute('geshifilter.settings_filter_conflicts')),
         'severity' => REQUIREMENT_ERROR,

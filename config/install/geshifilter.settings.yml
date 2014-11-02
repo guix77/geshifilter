@@ -17,6 +17,10 @@ use_highlight_string_for_php: false
 # Create links for keywords in some languages
 enable_keyword_urls: true
 
+# Decode html entities.
+# Would be better use TRUE, but we use FALSE to keep as it work on Drupal 7.
+decode_entities: FALSE
+
 # Mode used for css
 # - 1 Inline CSS style attributes.
 # - 2 Use CSS classes and an automatically managed external CSS style sheet.

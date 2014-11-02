@@ -38,6 +38,9 @@ use Drupal\geshifilter\GeshiFilterProcess;
  *     source code using the GeSHi engine"),
  *   type = \Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  *   cache = FALSE,
+ *   settings = {
+ *     "decode_entities" = FALSE
+  *   },
  *   weight = 0
  * )
  */
@@ -526,6 +529,13 @@ class GeshiFilterFilter extends FilterBase {
       '#default_value' => $this->tagStyles(),
       '#description' => t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
     );
+    // Decode entities.
+    $form["decode_entities"] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Decode entities'),
+      '#default_value' => $this->settings['decode_entities'],
+      '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
+    );
     return $form;
   }
 
@@ -870,6 +880,9 @@ class GeshiFilterFilter extends FilterBase {
         return $match[0];
       }
     }
+    if ($this->decode_entities()) {
+      $content = $this->unencode($content);
+    }
     // Return escaped code block.
     return '[geshifilter-' . $tag_name . $tag_attributes . ']'
       . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($content))
@@ -883,6 +896,9 @@ class GeshiFilterFilter extends FilterBase {
    *   An array with the pieces from matched string.
    */
   public function preparePhpCallback($match) {
+    if ($this->decode_entities()) {
+      $match[2] = $this->unencode($match[2]);
+    }
     return '[geshifilter-questionmarkphp]'
     . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($match[2]))
     . '[/geshifilter-questionmarkphp]';
@@ -901,7 +917,16 @@ class GeshiFilterFilter extends FilterBase {
    *   The text unencoded.
    */
   public function unencode($text) {
+    $text = html_entity_decode($text, ENT_QUOTES);
     return $text;
   }
 
+  protected function decode_entities() {
+    if (!$this->config->get('use_format_specific_options')) {
+      // Return global value.
+      return $this->config->get('decode_entities');
+    }
+    // Return value for this filter.
+    return $this->settings['decode_entities'];
+  }
 }

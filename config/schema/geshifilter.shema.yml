@@ -14,6 +14,8 @@ geshifilter.settings:
       type: integer
     use_highlight_string_for_php:
       type: boolean
+    decode_entities:
+      type: boolean
     enable_keyword_urls:
       type: boolean
     css_mode:

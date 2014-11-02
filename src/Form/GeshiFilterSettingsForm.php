@@ -259,6 +259,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       if ($form_state->hasValue('tags')) {
         $config->set('tags', $form_state->getValue('tags'));
         $config->set('tag_styles', $form_state->getValue('tag_styles'));
+        $config->set('decode_entities', $form_state->getValue('decode_entities'));
       }
       $config->save();
 
@@ -319,6 +320,15 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       '#default_value' => $this->tagStyles(),
       '#description' => t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
     );
+
+    // Setting to decode entities, see https://www.drupal.org/node/2047021.
+    $config = \Drupal::config('geshifilter.settings');
+    $form["decode_entities"] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Decode entities'),
+      '#default_value' => $config->get('decode_entities'),
+      '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
+      );
     return $form;
   }
 

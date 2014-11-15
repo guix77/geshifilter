@@ -104,7 +104,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#collapsible' => TRUE,
       );
       // Default language.
-      $languages = GeshiFilter::getAvailableLanguages();
+      $languages = GeshiFilter::getEnabledLanguages();
       $form['highlighting_options']['default_highlighting'] = array(
         '#type' => 'select',
         '#title' => t('Default highlighting mode'),

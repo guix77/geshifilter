@@ -9,7 +9,7 @@ geshifilter.settings:
       type: boolean
       label: "When use options for each filter or use the same for all"
     default_highlighting:
-      type: integer
+      type: string
     default_line_numbering:
       type: integer
     use_highlight_string_for_php:

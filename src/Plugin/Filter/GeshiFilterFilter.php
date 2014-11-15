@@ -680,7 +680,7 @@ class GeshiFilterFilter extends FilterBase {
     $source_code = $match[3];
 
     // Undo linebreak and escaping from preparation phase.
-    $source_code = decode_entities($source_code);
+    $source_code = String::decodeEntities($source_code);
 
     // Initialize to default settings.
     $lang = $this->config->get('default_highlighting');

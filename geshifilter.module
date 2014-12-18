@@ -7,21 +7,22 @@
 
 // Necessary for URL.
 use Drupal\Core\Url;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
  */
-function geshifilter_help($path, $arg) {
+function geshifilter_help($route_name, RouteMatchInterface $route_match) {
   $config = \Drupal::config('geshifilter.settings');
-  switch ($path) {
-    case 'admin/config/content/formats/geshifilter':
-    case 'admin/help#geshifilter':
+  switch ($route_name) {
+    case 'geshifilter.settings':
+    case 'help.page.geshifilter':
       $output = '<p>' . t('The GeSHi filter module provides a filter for syntax
         highlighting of inline source code or blocks of source code based on the
         PHP library !GeSHi.', array(
           '!GeSHi' => \Drupal::l('GeSHi (Generic Syntax Highlighter)', URL::fromUri('http://qbnz.com/highlighter/'))))
         . '</p>';
-      if ($path == 'admin/help#geshifilter') {
+      if ($route_name == 'help.page.geshifilter') {
         $output .= '<p>' . t('The GeSHi filter module for Drupal requires the
           GeSHi library (version 1.0.x) to work. The GeSHi filter is actually
           just a Drupal wrapper module around the GeSHi library. Because of
@@ -43,10 +44,9 @@ function geshifilter_help($path, $arg) {
       }
       return $output;
 
-    case 'admin/config/content/formats/geshifilter/languages':
-    case 'admin/config/content/formats/geshifilter/languages/enabled':
-    case 'admin/config/content/formats/geshifilter/languages/all':
-    case 'admin/config/content/formats/geshifilter/languages/disabled':
+    case 'geshifilter.settings_languages':
+    case 'geshifilter.settings_languages_all':
+    case 'geshifilter.settings_languages_disabled':
       $output = '<p>' . t('Here you can enable/disable the desired languages to
         use. It is suggested to disable languages that are not relevant for you
         site not only to avoid unnecessary cluttering of the GeSHi filter

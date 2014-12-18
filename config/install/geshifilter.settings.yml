@@ -4,8 +4,8 @@
 use_format_specific_options: false
 
 # Default highlighting mode when no language is set
-# - 0 nothing.
-default_highlighting: 0
+# The default value is GeshiFilter::DEFAULT_DONOTHING
+default_highlighting: 'GESHIFILTER_DEFAULT_DONOTHING'
 
 # Default line numbering
 # - 0 no line numbers.

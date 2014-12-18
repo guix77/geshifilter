@@ -71,7 +71,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'button',
         '#value' => t("Flush the GeSHi language definition cache"),
         '#executes_submit_callback' => TRUE,
-        '#submit' => array($this, 'flushLanguageDefinitionCache'),
+        '#submit' => array('::flushLanguageDefinitionCache'),
       );
 
       // GeSHi filter tags and delimiters options.

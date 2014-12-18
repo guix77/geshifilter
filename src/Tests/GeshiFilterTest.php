@@ -98,7 +98,7 @@ class GeshiFilterTest extends WebTestBase {
     // Set some default GeSHi filter admin settings.
     // Set default highlighting mode to "do nothing".
     $this->config->set('default_highlighting', GeshiFilter::DEFAULT_PLAINTEXT);
-    $this->config->set('format_specific_options', FALSE);
+    $this->config->set('use_format_specific_options', FALSE);
     $this->config->set('tag_styles', array(
       GeshiFilter::BRACKETS_ANGLE => GeshiFilter::BRACKETS_ANGLE,
       GeshiFilter::BRACKETS_SQUARE => GeshiFilter::BRACKETS_SQUARE,

@@ -64,7 +64,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     // Set some default GeSHi filter admin settings.
     // Set default highlighting mode to "do nothing".
     $this->config->set('default_highlighting', GeshiFilter::DEFAULT_PLAINTEXT);
-    $this->config->set('format_specific_options', FALSE);
+    $this->config->set('use_format_specific_options', FALSE);
     $this->config->set('tag_styles', array(
       GeshiFilter::BRACKETS_ANGLE => GeshiFilter::BRACKETS_ANGLE,
       GeshiFilter::BRACKETS_SQUARE => GeshiFilter::BRACKETS_SQUARE,
@@ -82,7 +82,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->config->set('language.python.enabled', TRUE);
 
     // First round: without format specific tag options.
-    $this->config->set('format_specific_options', FALSE);
+    $this->config->set('use_format_specific_options', FALSE);
     $this->config->set('tags', 'code blockcode generictag');
     $this->config->save();
 
@@ -105,7 +105,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     // Second round: with format specific tag options.
     // Current format specific options are not working, so will uncoment and
     // fix this part of test latter.
-    // $this->config->set('format_specific_options', TRUE);
+    // $this->config->set('use_format_specific_options', TRUE);
     // $this->config->set('tags_' . $this->input_format_id,
     // 'code blockcode generictag');
     // A language tag should differ from the generic tags.

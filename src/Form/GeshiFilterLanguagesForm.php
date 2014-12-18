@@ -54,7 +54,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
       return array();
     }
     $add_checkbox = TRUE;
-    $add_tag_option = (!$config->get('format_specific_options'));
+    $add_tag_option = (!$config->get('use_format_specific_options'));
     $form['language_settings'] = $this->perLanguageSettings($view, $add_checkbox, $add_tag_option);
     return parent::buildForm($form, $form_state);
   }

@@ -96,13 +96,12 @@ class GeshiFilterCss {
    *   Force the regeneration of the CSS file.
    */
   public static function generateLanguagesCssFile($force = FALSE) {
-    $config = \Drupal::config('geshifilter.settings');
     $languages = GeshiFilter::getEnabledLanguages();
     // Serialize the array of enabled languages as sort of hash.
     $languages_hash = serialize($languages);
 
     // Check if generation of the CSS file is needed.
-    if ($force || $languages_hash != $config->get('cssfile_languages')) {
+    if ($force || $languages_hash != \Drupal::state()->get('geshifilter_cssfile_languages')) {
       // Build stylesheet.
       $stylesheet = self::generateLanguagesCssRules();
       // Save stylesheet.
@@ -119,8 +118,7 @@ class GeshiFilterCss {
           )), 'error');
       }
       // Remember for which list of languages the CSS file was generated.
-      $config->set('cssfile_languages', $languages_hash);
-      $config->save();
+      \Drupal::state()->set('cssfile_languages', $languages_hash);
     }
   }
 }

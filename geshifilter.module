@@ -54,7 +54,7 @@ function geshifilter_help($path, $arg) {
         filter processing lighter.', array(
           '!filtertips' => \Drupal::l('filter tips', URL::fromRoute('filter.tips_all'))))
         . '</p>';
-      if (!$config->get('format_specific_options', FALSE)) {
+      if (!$config->get('use_format_specific_options', FALSE)) {
         $output .= '<p>' . t('You can also define the language specific tags here.') . '</p>';
       }
       return $output;

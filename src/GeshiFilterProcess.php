@@ -157,7 +157,7 @@ class GeshiFilterProcess {
    * @return string
    *   The sourcecode after process by Geshi.
    */
-  public static function processSourcecode($source_code, $lang, $line_numbering = 0,
+  public static function processSourceCode($source_code, $lang, $line_numbering = 0,
                                           $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL) {
     $config = \Drupal::config('geshifilter.settings');
     // Process.

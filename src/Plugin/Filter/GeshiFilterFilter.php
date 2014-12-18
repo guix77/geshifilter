@@ -557,7 +557,7 @@ class GeshiFilterFilter extends FilterBase {
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
     $form = array();
-    $form['header'] = array(
+    /**$form['header'] = array(
       '#type' => 'value',
       '#value' => array(),
     );
@@ -604,7 +604,7 @@ class GeshiFilterFilter extends FilterBase {
           '#size' => 20,
         );
       }
-    }
+    }*/
     return $form;
   }
 
@@ -723,7 +723,7 @@ class GeshiFilterFilter extends FilterBase {
     }
     $inline_mode = (strpos($source_code, "\n") === FALSE);
     // Process and return.
-    return GeshiFilterProcess::processSourcecode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
+    return GeshiFilterProcess::processSourceCode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
   }
 
   /**

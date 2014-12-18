@@ -83,3 +83,15 @@ function geshifilter_libraries_info() {
     ),
   );
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function geshifilter_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'geshifilter') {
+    $css = drupal_realpath(\Drupal\geshifilter\GeshiFilterCss::languageCssPath());
+    $base = DRUPAL_ROOT;
+    $name = substr($css, strlen($base));
+    $libraries['geshifilter']['css']['component'][$name] = array();
+  }
+}

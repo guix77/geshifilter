@@ -97,10 +97,11 @@ class GeshiFilterFilter extends FilterBase {
 
     // Add the css file when necessary.
     if ($this->config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
-      $assets = array();
-      $assets['css'][GeshiFilterCss::languageCssPath()] = array();
-      $assets['css'][drupal_get_path('module', 'geshifilter') . '/assets/css/geshifilter.css'] = array();
-      $result->addAssets($assets);
+      $result->setAssets(array(
+        'library' => array(
+          'geshifilter/geshifilter',
+        ),
+      ));
     }
 
     // Add cache tags, so we can re-create the node when some geshifilter

@@ -54,12 +54,20 @@ class GeshiFilterFilter extends FilterBase {
   protected $config;
 
   /**
+   * Object with configuration for geshifilter, where we need editable..
+   *
+   * @var object
+   */
+  protected $configEditable;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, array $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->config = \Drupal::config('geshifilter.settings');
+    $this->configEditable = \Drupal::configFactory()->getEditable('geshifilter.settings');
   }
 
   /**
@@ -425,7 +433,7 @@ class GeshiFilterFilter extends FilterBase {
    *       drupal 7, must update it only.
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    if (!($this->config->get('use_format_specific_options'))) {
+    if (!($this->configEditable->get('use_format_specific_options'))) {
       // Tags and attributes.
       $form['general_tags'] = $this->generalHighlightTagsSettings();
       // $form['#validate'][] = '_geshifilter_tag_styles_validate';

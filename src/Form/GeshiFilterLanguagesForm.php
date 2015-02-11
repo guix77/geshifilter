@@ -45,8 +45,17 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return [
+      'geshifilter.settings',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state, $view = NULL) {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
     // Check if GeSHi library is available.
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
@@ -63,7 +72,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
 
     // Language tags should differ from each other.
     $languages = GeshiFilter::getAvailableLanguages();
@@ -107,7 +116,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
     $languages = $form_state->getValue('language');
     foreach ($languages as $key => $value) {
       if ($value["enabled"] == FALSE) {
@@ -151,7 +160,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    *   Return elements to a table with languages.
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
     $form = array();
     $header = array(
       t('Language'),

@@ -38,8 +38,17 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return [
+      'geshifilter.settings',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
 
     // Try to load GeSHi library and get version if successful.
     $geshi_library = libraries_load('geshi');
@@ -247,7 +256,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $errors = $form_state->getErrors();
     if (count($errors) == 0) {
-      $config = \Drupal::config('geshifilter.settings');
+      $config = $this->config('geshifilter.settings');
       $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
         ->set('default_highlighting', $form_state->getValue('default_highlighting'))
         ->set('default_line_numbering', $form_state->getValue('default_line_numbering'))
@@ -322,7 +331,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     );
 
     // Setting to decode entities, see https://www.drupal.org/node/2047021.
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
     $form["decode_entities"] = array(
       '#type' => 'checkbox',
       '#title' => t('Decode entities'),
@@ -341,7 +350,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
    *   Return the generic tags.
    */
   private function tags() {
-    $config = \Drupal::config('geshifilter.settings');
+    $config = $this->config('geshifilter.settings');
     return $config->get('tags');
   }
 

@@ -48,7 +48,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     parent::setUp();
 
     // Create object with configuration.
-    $this->config = \Drupal::config('geshifilter.settings');
+    $this->config = \Drupal::configFactory()->getEditable('geshifilter.settings');
 
     // Create a filter admin user.
     $permissions = array(

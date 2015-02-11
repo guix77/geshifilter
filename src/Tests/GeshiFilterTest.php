@@ -65,7 +65,7 @@ class GeshiFilterTest extends WebTestBase {
     $this->node = 1;
 
     // Create object with configuration.
-    $this->config = \Drupal::config('geshifilter.settings');
+    $this->config = \Drupal::configFactory()->getEditable('geshifilter.settings');
 
     // And set the path to the geshi library.
     $this->config->set('geshi_dir', '/libraries/geshi');

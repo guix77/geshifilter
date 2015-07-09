@@ -6,8 +6,8 @@
 
 namespace Drupal\geshifilter;
 
-// Necessary for String::checkPlain().
-use Drupal\Component\Utility\String;
+// Necessary for SafeMarkup::checkPlain().
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Helpers functions related to processing the source code with geshi.
@@ -92,7 +92,7 @@ class GeshiFilterProcess {
       // to mimic the 1.0.8 behavior, which is backward compatible.
       $code_class = "{$geshi->language} {$geshi->overall_class}";
       $source_code = '<span class="geshifilter"'
-        . (isset($title) ? ' title="' . String::checkPlain($title) . '"' : '')
+        . (isset($title) ? ' title="' . SafeMarkup::checkPlain($title) . '"' : '')
         . '><code class="' . $code_class . '">' . $geshi->parse_code() . '</code></span>';
     }
     else {
@@ -107,7 +107,7 @@ class GeshiFilterProcess {
         $geshi->start_line_numbers_at($linenumbers_start);
       }
       if (isset($title)) {
-        $source_code = '<div class="geshifilter-title">' . String::checkPlain($title) . '</div>';
+        $source_code = '<div class="geshifilter-title">' . SafeMarkup::checkPlain($title) . '</div>';
       }
       else {
         $source_code = '';

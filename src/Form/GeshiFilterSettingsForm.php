@@ -18,8 +18,8 @@ use Drupal\Core\Url;
 
 use Drupal\Core\Cache\Cache;
 
-// Necessary for String::checkPlain().
-use Drupal\Component\Utility\String;
+// Necessary for SafeMarkup::checkPlain().
+use Drupal\Component\Utility\SafeMarkup;
 
 use \Drupal\geshifilter\GeshiFilter;
 
@@ -318,12 +318,12 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GeshiFilter::BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
-        GeshiFilter::BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
-        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . SafeMarkup::checkPlain('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>' . SafeMarkup::checkPlain('[foo] ... [/foo]') . '</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . SafeMarkup::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
         GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-          '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
-          '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
+          '!php' => '<code>' . SafeMarkup::checkPlain('<?php ... ?>') . '</code>',
+          '!percent' => '<code>' . SafeMarkup::checkPlain('<% ... %>') . '</code>',
         )),
       ),
       '#default_value' => $this->tagStyles(),

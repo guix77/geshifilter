@@ -11,8 +11,11 @@ namespace Drupal\geshifilter\Plugin\Filter;
 // Base class for filters.
 use Drupal\filter\Plugin\FilterBase;
 
-// Necessary for String::checkPlain().
-use Drupal\Component\Utility\String;
+// Necessary for SafeMarkup::checkPlain().
+use Drupal\Component\Utility\SafeMarkup;
+
+// Necessary for Html::decodeEntities().
+use Drupal\Component\Utility\Html;
 
 // Necessary for forms.
 use Drupal\Core\Form\FormStateInterface;
@@ -180,29 +183,29 @@ class GeshiFilterFilter extends FilterBase {
     $bracket_close = NULL;
     if (in_array(GeshiFilter::BRACKETS_ANGLE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = String::checkPlain('<');
-        $bracket_close = String::checkPlain('>');
+        $bracket_open = SafeMarkup::checkPlain('<');
+        $bracket_close = SafeMarkup::checkPlain('>');
       }
-      $tag_style_examples[] = '<code>' . String::checkPlain('<foo>') . '</code>';
+      $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('<foo>') . '</code>';
     }
     if (in_array(GeshiFilter::BRACKETS_SQUARE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = String::checkPlain('[');
-        $bracket_close = String::checkPlain(']');
+        $bracket_open = SafeMarkup::checkPlain('[');
+        $bracket_close = SafeMarkup::checkPlain(']');
       }
-      $tag_style_examples[] = '<code>' . String::checkPlain('[foo]') . '</code>';
+      $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('[foo]') . '</code>';
     }
     if (in_array(GeshiFilter::BRACKETS_DOUBLESQUARE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = String::checkPlain('[[');
-        $bracket_close = String::checkPlain(']]');
+        $bracket_open = SafeMarkup::checkPlain('[[');
+        $bracket_close = SafeMarkup::checkPlain(']]');
       }
-      $tag_style_examples[] = '<code>' . String::checkPlain('[[foo]]') . '</code>';
+      $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('[[foo]]') . '</code>';
     }
     if (!$bracket_open) {
       drupal_set_message(t('Could not determine a valid tag style for GeSHi filtering.'), 'error');
-      $bracket_open = String::checkPlain('<');
-      $bracket_close = String::checkPlain('>');
+      $bracket_open = SafeMarkup::checkPlain('<');
+      $bracket_close = SafeMarkup::checkPlain('>');
     }
 
     if ($long) {
@@ -527,12 +530,12 @@ class GeshiFilterFilter extends FilterBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GeshiFilter::BRACKETS_ANGLE => '<code>' . String::checkPlain('<foo> ... </foo>') . '</code>',
-        GeshiFilter::BRACKETS_SQUARE => '<code>' . String::checkPlain('[foo] ... [/foo]') . '</code>',
-        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . String::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . SafeMarkup::checkPlain('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>' . SafeMarkup::checkPlain('[foo] ... [/foo]') . '</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . SafeMarkup::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
         GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-          '!php' => '<code>' . String::checkPlain('<?php ... ?>') . '</code>',
-          '!percent' => '<code>' . String::checkPlain('<% ... %>') . '</code>',
+          '!php' => '<code>' . SafeMarkup::checkPlain('<?php ... ?>') . '</code>',
+          '!percent' => '<code>' . SafeMarkup::checkPlain('<% ... %>') . '</code>',
         )),
       ),
       '#default_value' => $this->tagStyles(),
@@ -689,7 +692,7 @@ class GeshiFilterFilter extends FilterBase {
     $source_code = $match[3];
 
     // Undo linebreak and escaping from preparation phase.
-    $source_code = String::decodeEntities($source_code);
+    $source_code = Html::decodeEntities($source_code);
 
     // Initialize to default settings.
     $lang = $this->config->get('default_highlighting');
@@ -841,7 +844,7 @@ class GeshiFilterFilter extends FilterBase {
    * possible messing up by other filters, e.g.
    *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
    * Replaces newlines with "&#10;" to prevent issues with the line break filter
-   * Escapes the tricky characters like angle brackets with String::checkPlain()
+   * Escapes the tricky characters like angle brackets with SafeMarkup::checkPlain()
    * to prevent messing up by other filters like the HTML filter.
    *
    * @param array $match
@@ -894,7 +897,7 @@ class GeshiFilterFilter extends FilterBase {
     }
     // Return escaped code block.
     return '[geshifilter-' . $tag_name . $tag_attributes . ']'
-      . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($content))
+      . str_replace(array("\r", "\n"), array('', '&#10;'), SafeMarkup::checkPlain($content))
       . '[/geshifilter-' . $tag_name . ']';
   }
 
@@ -909,7 +912,7 @@ class GeshiFilterFilter extends FilterBase {
       $match[2] = $this->unencode($match[2]);
     }
     return '[geshifilter-questionmarkphp]'
-    . str_replace(array("\r", "\n"), array('', '&#10;'), String::checkPlain($match[2]))
+    . str_replace(array("\r", "\n"), array('', '&#10;'), SafeMarkup::checkPlain($match[2]))
     . '[/geshifilter-questionmarkphp]';
   }
 

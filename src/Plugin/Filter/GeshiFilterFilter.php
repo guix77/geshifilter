@@ -108,7 +108,7 @@ class GeshiFilterFilter extends FilterBase {
 
     // Add the css file when necessary.
     if ($this->config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
-      $result->setAssets(array(
+      $result->setAttachments(array(
         'library' => array(
           'geshifilter/geshifilter',
         ),

@@ -2,6 +2,9 @@ geshifilter.settings:
   type: mapping
   label: "Setting for geshifilter module"
   mapping:
+    langcode:
+      type: string
+      label: 'Default language'
     tags:
       type: string
       label: 'HTML tags for geshifilter blocks, like code, blockcode'

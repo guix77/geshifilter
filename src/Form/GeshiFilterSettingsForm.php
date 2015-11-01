@@ -119,11 +119,11 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#title' => t('Default highlighting mode'),
         '#default_value' => $config->get('default_highlighting'),
         '#options' => array(
-          t('No highlighting') => array(
+          (string) t('No highlighting') => array(
             GeshiFilter::DEFAULT_DONOTHING => t('Do nothing'),
             GeshiFilter::DEFAULT_PLAINTEXT => t('As plain text'),
           ),
-          t('Languages') => $languages,
+          (string) t('Languages') => $languages,
         ),
         '#description' => t('Select the default highlighting mode to use when no language is defined with a language attribute in the tag.'),
       );

@@ -58,10 +58,9 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $form['library'] = array(
       '#type' => 'fieldset',
       '#title' => defined('GESHI_VERSION') ? t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
-      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).', array(
-          '!geshi' => URL::fromUri('http://qbnz.com/highlighter/')
-            ->toString(),
-        )),
+      '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be @downloaded and installed seperately).', array(
+        '@downloaded' => \Drupal::l(t('downloaded'), Url::fromUri('http://qbnz.com/highlighter/')),
+      )),
       '#collapsible' => TRUE,
       '#collapsed' => $geshi_library['loaded'],
     );
@@ -94,10 +93,9 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#title' => t('Use text format specific tag settings.'),
         '#default_value' => $config->get('use_format_specific_options', FALSE),
-        '#description' => t('Enable seperate tag settings of the GeSHi filter for each <a href="!input_formats">text format</a> instead of global tag settings.', array(
-            '!input_formats' => URL::fromRoute('filter.admin_overview')
-              ->toString(),
-          )),
+        '#description' => t('Enable seperate tag settings of the GeSHi filter for each @text-format instead of global tag settings.', array(
+          '@text-format' =>  \Drupal::l(t('text format'),Url::fromRoute('filter.admin_overview'))
+        )),
       );
       // Generic tags settings.
       // @todo must validate the tag styles.
@@ -139,20 +137,26 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY10 => t('fancy line numbers (every @n lines)', array('@n' => GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY10)),
           GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY20 => t('fancy line numbers (every @n lines)', array('@n' => GeshiFilter::LINE_NUMBERS_DEFAULT_FANCY20)),
         ),
-        '#description' => t('Select the default line numbering scheme: no line numbers, normal line numbers or fancy line numbers. With fancy line numbers every n<sup>th</sup> line number is highlighted. (GeSHi documentation: <a href="!link">Line numbers</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#line-numbers')),
+        '#description' => t('Select the default line numbering scheme: no line numbers, normal line numbers or fancy line numbers. With fancy line numbers every n<sup>th</sup> line number is highlighted. (GeSHi documentation: @line-numbers).', array(
+          '@line-numbers' => \Drupal::l(t('Line numbers'), Url::fromUri('http://qbnz.com/highlighter/geshi-doc.html#line-numbers')),
+        )),
       );
       // Highlight_string usage option.
       $form['highlighting_options']['use_highlight_string_for_php'] = array(
         '#type' => 'checkbox',
         '#title' => t('Use built-in PHP function <code>highlight_string()</code> for PHP source code.'),
-        '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code><a href="!highlight_string">highlight_string()</a></code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.', array('!highlight_string' => 'http://php.net/manual/en/function.highlight-string.php')),
+        '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code>@highlight-string</code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.', array(
+          '@highlight-string' => \Drupal::l('highlight_string()', Url::fromUri('http://php.net/manual/en/function.highlight-string.php')),
+        )),
         '#default_value' => $config->get('use_highlight_string_for_php'),
       );
       // Option to disable Keyword URL's
       $form['highlighting_options']['enable_keyword_urls'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable GeSHi keyword URLs'),
-        '#description' => t('For some languages GeSHi can link language keywords (e.g. standard library functions) to their online documentation. (GeSHi documentation: <a href="!link">Keyword URLs</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#keyword-urls')),
+        '#description' => t('For some languages GeSHi can link language keywords (e.g. standard library functions) to their online documentation. (GeSHi documentation: @keyword-urls).', array(
+          '@keyword-urls' => \Drupal::l(t('Keyword URLs'), Url::fromUri('http://qbnz.com/highlighter/geshi-doc.html#keyword-urls')),
+        )),
         '#default_value' => $config->get('enable_keyword_urls'),
       );
 
@@ -179,16 +183,17 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           an external stylesheet requires much less markup code and bandwidth.
           The external style sheet can be managed automatically by the GeSHi
           filter module, but this feature requires the public
-          <a href="!filesystem">download method</a>. If the GeSHi filter is
+          @download-method. If the GeSHi filter is
           configured to only add the CSS classes to the markup, the
           administrator or themer is responsible for adding the appropriate CSS
-          rules to the pages (e.g. based on <a href="!cssdefaults">these
-          defaults</a>). (GeSHi documentation: <a href="!geshidoc">Using CSS
-          Classes</a>).',
+          rules to the pages (e.g. based on @css-defaults).
+          (GeSHi documentation: @css-classes).',
           array(
-            '!geshidoc' => URL::fromUri('http://qbnz.com/highlighter/geshi-doc.html#using-css-classes')->toString(),
-            '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
-            '!cssdefaults' => URL::fromRoute('geshifilter.generate_css')->toString(),
+            '@css-classes' => \Drupal::l(t('Using CSS Classes'),
+              Url::fromUri('http://qbnz.com/highlighter/geshi-doc.html#using-css-classes')
+            ),
+            '@download-method' => \Drupal::l(t('download method'), Url::fromRoute('system.file_system_settings')),
+            '@css-defaults' => \Drupal::l(t('these defaults'), Url::fromRoute('geshifilter.generate_css')),
           )
         ),
       );
@@ -226,7 +231,12 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       $form['styling']['code_container'] = array(
         '#type' => 'radios',
         '#title' => t('Code container, wrapping technique'),
-        '#description' => t('Define the wrapping technique to use for code blocks. (GeSHi documentation: <a href="!link">The Code Container</a>).', array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#the-code-container')
+        '#description' => t('Define the wrapping technique to use for code blocks. (GeSHi documentation: @code-container).',
+          array('@code-container' => \Drupal::l(t('The Code Container'),
+            Url::fromUri(
+              'http://qbnz.com/highlighter/geshi-doc.html#the-code-container'
+            )
+          ))
         ),
         '#options' => $container_options,
         '#default_value' => $config->get('code_container'),

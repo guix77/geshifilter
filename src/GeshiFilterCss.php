@@ -114,11 +114,12 @@ class GeshiFilterCss {
       else {
         drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.',
           array(
-            '!filesystem' => URL::fromRoute('system.file_system_settings')->toString(),
+            '!filesystem' => Url::fromRoute('system.file_system_settings')->toString(),
           )), 'error');
       }
       // Remember for which list of languages the CSS file was generated.
       \Drupal::state()->set('cssfile_languages', $languages_hash);
     }
   }
+
 }

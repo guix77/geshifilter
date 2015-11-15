@@ -25,7 +25,7 @@ class GeshiFilterProcess {
    *   The source code after being processed.
    */
   public static function highlightStringProcess($source_code, $inline_mode) {
-    // Make sure that the source code starts with < ?php and ends with ? >
+    // Make sure that the source code starts with < ?php and ends with ? >.
     $text = trim($source_code);
     if (substr($text, 0, 5) != '<?php') {
       $source_code = '<?php' . $source_code;
@@ -187,4 +187,5 @@ class GeshiFilterProcess {
     $geshi->set_language_path($available_languages[$language]['language_path']);
     return $geshi;
   }
+
 }

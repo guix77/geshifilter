@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 /**
  * Show the filters tah conflic with GeshiFilter.
  */
-class GeshiFilterConflicts extends ControllerBase  {
+class GeshiFilterConflicts extends ControllerBase {
   /**
    * {@inheritdoc}
    */
@@ -28,4 +28,5 @@ class GeshiFilterConflicts extends ControllerBase  {
       return array();
     }
   }
+
 }

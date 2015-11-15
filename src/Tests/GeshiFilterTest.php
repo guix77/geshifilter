@@ -125,7 +125,7 @@ class GeshiFilterTest extends WebTestBase {
       $edit['filters[' . $filter . '][status]'] = TRUE;
     }
     $this->drupalPostForm('admin/config/content/formats/add', $edit, t('Save configuration'));
-    $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
+    $this->assertRaw((string)t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
 
@@ -163,7 +163,7 @@ class GeshiFilterTest extends WebTestBase {
     $this->node++;
     // $format = entity_load('filter_format', 'geshifilter_text_format');
     // $filter = $format->filters('geshifilter');
-    // $format->settings['format'];
+    // $format->settings['format'];.
     foreach ($check_list as $fragment) {
       list($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode) = $fragment;
       if ($lang) {
@@ -319,7 +319,7 @@ class GeshiFilterTest extends WebTestBase {
   /**
    * Test with brackets only php code block.
    */
-  public function testBracketsOnlyPhpCodeBlock() {
+   public function testBracketsOnlyPhpCodeBlock() {
     $this->config->set('tags', 'code');
     $this->config->set('language.cpp.enabled', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
@@ -519,4 +519,5 @@ class GeshiFilterTest extends WebTestBase {
     // The same string must be on page, not double encoded.
     $this->assertRaw('&quot;&lt;b&gt;Hi&lt;/b&gt;&quot;', 'The code is not double encoded.');
   }
+
 }

@@ -25,4 +25,5 @@ class GeshiFilterConflicts {
   public static function listConflicts() {
     return array();
   }
+
 }

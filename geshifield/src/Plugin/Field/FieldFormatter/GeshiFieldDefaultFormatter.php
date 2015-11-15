@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Class \Drupal\geshifield\Plugin\field\FieldFormatter\GeshiFilterDefaultFormatter.
+ * Contains \Drupal\geshifield\Plugin\field\FieldFormatter\GeshiFilterDefaultFormatter.
  */
 
 namespace Drupal\geshifield\Plugin\Field\FieldFormatter;
@@ -39,4 +39,5 @@ class GeshiFieldDefaultFormatter extends FormatterBase {
 
     return $elements;
   }
+
 }

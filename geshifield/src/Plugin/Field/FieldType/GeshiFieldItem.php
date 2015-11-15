@@ -69,4 +69,5 @@ class GeshiFieldItem extends FieldItemBase {
     $value = $this->get('sourcecode')->getValue();
     return $value === NULL || $value === '';
   }
+
 }

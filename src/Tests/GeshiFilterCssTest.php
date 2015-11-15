@@ -31,7 +31,8 @@ class GeshiFilterCssTest extends WebTestBase {
    * List of modules to enable.
    */
   public static $modules = array('node', 'libraries', 'geshifilter', 'filter',
-    'file');
+    'file',
+  );
 
   /**
    * Configuration object.
@@ -124,4 +125,5 @@ class GeshiFilterCssTest extends WebTestBase {
     $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
+
 }

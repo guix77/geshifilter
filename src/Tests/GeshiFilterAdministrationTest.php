@@ -32,7 +32,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
   /**
    * List of modules to enable.
    */
-  public static $modules = array('libraries', 'geshifilter','filter');
+  public static $modules = array('libraries', 'geshifilter', 'filter');
 
   /**
    * Configuration object.
@@ -146,4 +146,5 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->assertFieldChecked('edit-language-xml-enabled', 'The language is enabled.');
     $this->assertRaw('&lt;xml&gt;', 'The tag is defined.');
   }
+
 }

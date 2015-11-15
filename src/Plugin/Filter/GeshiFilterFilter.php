@@ -25,7 +25,7 @@ use Drupal\filter\FilterProcessResult;
 
 // Necessary for URL.
 use Drupal\Core\Url;
-use Drupal\geshifilter\GeshiFilterCss;
+
 use \Drupal\geshifilter\GeshiFilter;
 use Drupal\geshifilter\GeshiFilterProcess;
 
@@ -43,7 +43,7 @@ use Drupal\geshifilter\GeshiFilterProcess;
  *   cache = FALSE,
  *   settings = {
  *     "decode_entities" = FALSE
-  *   },
+ *   },
  *   weight = 0
  * )
  */
@@ -229,8 +229,8 @@ class GeshiFilterFilter extends FilterBase {
       foreach ($language_tags as $tag) {
         $tags[] = t('"<code>!tag</code>" for @lang source code', array(
           '!tag' => $bracket_open . $tag . $bracket_close,
-          '@lang' => $languages[$tag_to_lang[$tag]])
-        );
+          '@lang' => $languages[$tag_to_lang[$tag]],
+        ));
       }
       $items[] = t('Language specific syntax highlighting tags: !tags.', array('!tags' => implode(', ', $tags)));
       // PHP specific delimiters.
@@ -453,7 +453,7 @@ class GeshiFilterFilter extends FilterBase {
         '#markup' => '<p>' . t('GeSHi filter is configured to use global tag
           settings. For separate settings per text format, enable this option in
           the <a href="!geshi_admin_url">general GeSHi filter settings</a>.', array(
-            '!geshi_admin_url' => URL::fromRoute('geshifilter.settings')->toString(),
+            '!geshi_admin_url' => Url::fromRoute('geshifilter.settings')->toString(),
           )
         ) . '</p>',
       );
@@ -569,6 +569,9 @@ class GeshiFilterFilter extends FilterBase {
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
     $form = array();
+    // @codingStandardsIgnoreStart
+    // Just ignoring it for coding standart until it is fixed in
+    // https://www.drupal.org/node/2615630.
     /**$form['header'] = array(
       '#type' => 'value',
       '#value' => array(),
@@ -617,6 +620,7 @@ class GeshiFilterFilter extends FilterBase {
         );
       }
     }*/
+    // @codingStandardsIgnoreEnd
     return $form;
   }
 
@@ -730,7 +734,7 @@ class GeshiFilterFilter extends FilterBase {
       return $complete_match;
     }
     if ($lang == GeshiFilter::DEFAULT_PLAINTEXT) {
-      // Use plain text 'highlighting'
+      // Use plain text 'highlighting'.
       $lang = 'text';
     }
     $inline_mode = (strpos($source_code, "\n") === FALSE);
@@ -773,7 +777,7 @@ class GeshiFilterFilter extends FilterBase {
     // Parse $attributes to an array $attribute_matches with:
     // $attribute_matches[0][xx] fully matched string, e.g. 'language="python"'
     // $attribute_matches[1][xx] param name, e.g. 'language'
-    // $attribute_matches[2][xx] param value, e.g. 'python'
+    // $attribute_matches[2][xx] param value, e.g. 'python'.
     preg_match_all('#(' . $attributes_preg_string . ')="?([^"]*)"?#', $attributes, $attribute_matches);
 
     foreach ($attribute_matches[1] as $a_key => $att_name) {
@@ -844,8 +848,9 @@ class GeshiFilterFilter extends FilterBase {
    * possible messing up by other filters, e.g.
    *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
    * Replaces newlines with "&#10;" to prevent issues with the line break filter
-   * Escapes the tricky characters like angle brackets with SafeMarkup::checkPlain()
-   * to prevent messing up by other filters like the HTML filter.
+   * Escapes the tricky characters like angle brackets with
+   * SafeMarkup::checkPlain() to prevent messing up by other filters like the
+   * HTML filter.
    *
    * @param array $match
    *   An array with the pieces from matched string.
@@ -892,7 +897,7 @@ class GeshiFilterFilter extends FilterBase {
         return $match[0];
       }
     }
-    if ($this->decode_entities()) {
+    if ($this->decodeEntities()) {
       $content = $this->unencode($content);
     }
     // Return escaped code block.
@@ -908,7 +913,7 @@ class GeshiFilterFilter extends FilterBase {
    *   An array with the pieces from matched string.
    */
   public function preparePhpCallback($match) {
-    if ($this->decode_entities()) {
+    if ($this->decodeEntities()) {
       $match[2] = $this->unencode($match[2]);
     }
     return '[geshifilter-questionmarkphp]'
@@ -933,7 +938,13 @@ class GeshiFilterFilter extends FilterBase {
     return $text;
   }
 
-  protected function decode_entities() {
+  /**
+   * Return when we need to decode html entities for this filter.
+   *
+   * @return bool
+   *   Return TRUE if we need to decode the entities.
+   */
+  protected function decodeEntities() {
     if (!$this->config->get('use_format_specific_options')) {
       // Return global value.
       return $this->config->get('decode_entities');
@@ -941,4 +952,5 @@ class GeshiFilterFilter extends FilterBase {
     // Return value for this filter.
     return $this->settings['decode_entities'];
   }
+
 }

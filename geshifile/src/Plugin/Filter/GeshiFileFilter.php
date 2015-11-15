@@ -60,6 +60,15 @@ class GeshiFileFilter extends FilterBase {
     return $result;
   }
 
+  /**
+   * Replace the tag with the file content.
+   *
+   * @param array $match
+   *   An array with matched text.
+   *
+   * @return string
+   *   The content of the file after being processed by geshi.
+   */
   private function replace($match) {
     $attr = array(
       'file' => '',
@@ -68,12 +77,12 @@ class GeshiFileFilter extends FilterBase {
       'fancy' => 0,
       'language' => 'text',
     );
-    $start = true;
+    $start = TRUE;
     $pieces = explode("=", $match[1]);
-    foreach($pieces as $piece)  {
+    foreach ($pieces as $piece) {
       if ($start) {
         $key = $piece;
-        $start = false;
+        $start = FALSE;
       }
       else {
         $p = explode('"', $piece);
@@ -87,12 +96,13 @@ class GeshiFileFilter extends FilterBase {
     }
 
     $filename = drupal_realpath('public://' . $attr['file']);
-    $dirname =  drupal_realpath('public://');
-    if((strpos($filename, $dirname) === 0) && file_exists($filename)) {
+    $dirname = drupal_realpath('public://');
+    if ((strpos($filename, $dirname) === 0) && file_exists($filename)) {
       $file = file_get_contents($filename);
       return GeshiFilterProcess::geshiProcess($file, $attr['language']);
     }
-    drupal_set_message($this->t('file do not exist in geshifile !filename', array('!filename' => $filename)));
+    drupal_set_message($this->t('File do not exist in geshifile !filename', array('!filename' => $filename)));
     return '';
   }
+
 }

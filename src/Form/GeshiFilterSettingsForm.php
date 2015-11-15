@@ -94,14 +94,14 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#title' => t('Use text format specific tag settings.'),
         '#default_value' => $config->get('use_format_specific_options', FALSE),
         '#description' => t('Enable seperate tag settings of the GeSHi filter for each @text-format instead of global tag settings.', array(
-          '@text-format' =>  \Drupal::l(t('text format'),Url::fromRoute('filter.admin_overview'))
+          '@text-format' => \Drupal::l(t('text format'), Url::fromRoute('filter.admin_overview')),
         )),
       );
       // Generic tags settings.
       // @todo must validate the tag styles.
       if (!$config->get('use_format_specific_options', FALSE)) {
         $form['tag_options']['general_tags'] = $this->generalHighlightTagsSettings();
-        // $form['#validate'][] = '_geshifilter_tag_styles_validate';
+        // $form['#validate'][] = '_geshifilter_tag_styles_validate';.
       }
 
       // GeSHi filter highlighting options.
@@ -150,7 +150,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         )),
         '#default_value' => $config->get('use_highlight_string_for_php'),
       );
-      // Option to disable Keyword URL's
+      // Option to disable Keyword URL's.
       $form['highlighting_options']['enable_keyword_urls'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enable GeSHi keyword URLs'),
@@ -232,11 +232,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
         '#type' => 'radios',
         '#title' => t('Code container, wrapping technique'),
         '#description' => t('Define the wrapping technique to use for code blocks. (GeSHi documentation: @code-container).',
-          array('@code-container' => \Drupal::l(t('The Code Container'),
-            Url::fromUri(
-              'http://qbnz.com/highlighter/geshi-doc.html#the-code-container'
-            )
-          ))
+          array('@code-container' => \Drupal::l(t('The Code Container'), Url::fromUri('http://qbnz.com/highlighter/geshi-doc.html#the-code-container')))
         ),
         '#options' => $container_options,
         '#default_value' => $config->get('code_container'),
@@ -347,7 +343,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       '#title' => t('Decode entities'),
       '#default_value' => $config->get('decode_entities'),
       '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
-      );
+    );
     return $form;
   }
 
@@ -380,4 +376,5 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       return array();
     }
   }
+
 }

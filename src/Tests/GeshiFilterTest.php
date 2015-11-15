@@ -46,7 +46,7 @@ class GeshiFilterTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('node', 'libraries', 'geshifilter','filter');
+  public static $modules = array('node', 'libraries', 'geshifilter', 'filter');
 
   /**
    * The number of current node.
@@ -125,7 +125,7 @@ class GeshiFilterTest extends WebTestBase {
       $edit['filters[' . $filter . '][status]'] = TRUE;
     }
     $this->drupalPostForm('admin/config/content/formats/add', $edit, t('Save configuration'));
-    $this->assertRaw((string)t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
+    $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
 
@@ -319,7 +319,7 @@ class GeshiFilterTest extends WebTestBase {
   /**
    * Test with brackets only php code block.
    */
-   public function testBracketsOnlyPhpCodeBlock() {
+  public function testBracketsOnlyPhpCodeBlock() {
     $this->config->set('tags', 'code');
     $this->config->set('language.cpp.enabled', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
@@ -344,7 +344,6 @@ class GeshiFilterTest extends WebTestBase {
       array(array($source_code, NULL, 0, 1, FALSE)),
       t('Checking [[foo]] brackets style in GeshiFilter::BRACKETS_PHPBLOCK mode'));
   }
-
 
   /**
    * Check if tags like [c++] and [c#] work.

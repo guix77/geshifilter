@@ -15,13 +15,12 @@ use \Drupal\geshifilter\GeshiFilter;
  * Implements hook_install().
  */
 function geshifilter_install() {
-  drupal_set_message(t('GeSHi filter is installed. You should now
-    <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the
-    desired <a href="!input_formats">text formats</a>.',
+  drupal_set_message(t('GeSHi filter is installed. You should now @configure-geshi
+    and enable it in the desired @text-formats.',
     array(
-      // Can not use URL::fromRoute() because routes are not available here.
-      '!geshi_admin' => '/admin/config/content/formats/geshifilter',
-      '!input_formats' => '/admin/config/content/formats',
+      // Geshifilter`s route seems to be unknown at this point, so use  Url::fromUri() with base: scheme instead Url::fromRoute().
+      '@configure-geshi' => \Drupal::l(t('configure the GeSHi filter'), Url::fromUri('base:admin/config/content/formats/geshifilter')),
+      '@text-formats' =>  \Drupal::l(t('text formats'), Url::fromRoute('filter.admin_overview'))
     )
   ));
 }

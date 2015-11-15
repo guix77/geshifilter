@@ -71,7 +71,6 @@ class GeshiFilterCss {
     $output = '';
     $geshi_library = libraries_load('geshi');
     if ($geshi_library['loaded']) {
-      require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
       $languages = GeshiFilter::getAvailableLanguages();
       foreach ($languages as $langcode => $language_full_name) {
         // Create GeSHi object.

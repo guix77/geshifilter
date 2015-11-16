@@ -20,7 +20,7 @@ function geshifilter_install() {
     array(
       // Geshifilter`s route seems to be unknown at this point, so use  Url::fromUri() with base: scheme instead Url::fromRoute().
       '@configure-geshi' => \Drupal::l(t('configure the GeSHi filter'), Url::fromUri('base:admin/config/content/formats/geshifilter')),
-      '@text-formats' =>  \Drupal::l(t('text formats'), Url::fromRoute('filter.admin_overview'))
+      '@text-formats' =>  \Drupal::l(t('text formats'), Url::fromUri('base:admin/config/content/formats'))
     )
   ));
 }

@@ -32,7 +32,6 @@ function geshifilter_requirements($phase) {
   $config = \Drupal::config('geshifilter.settings');
   $requirements = array();
   if ($phase == 'runtime') {
-    require_once drupal_get_path('module', 'geshifilter') . '/geshifilter.inc';
     // Check if GeSHi library is available.
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {

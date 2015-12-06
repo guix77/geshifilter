@@ -42,7 +42,8 @@ use Drupal\geshifilter\GeshiFilterProcess;
  *   type = \Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  *   cache = FALSE,
  *   settings = {
- *     "decode_entities" = FALSE
+ *     "general_tags" = {},
+ *     "per_language_settings" = {}
  *   },
  *   weight = 0
  * )
@@ -436,10 +437,9 @@ class GeshiFilterFilter extends FilterBase {
    *       drupal 7, must update it only.
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    if (!($this->configEditable->get('use_format_specific_options'))) {
+    if ($this->configEditable->get('use_format_specific_options')) {
       // Tags and attributes.
       $form['general_tags'] = $this->generalHighlightTagsSettings();
-      // $form['#validate'][] = '_geshifilter_tag_styles_validate';
       // Per language tags.
       $form['per_language_settings'] = array(
         '#type' => 'fieldset',
@@ -447,6 +447,8 @@ class GeshiFilterFilter extends FilterBase {
         '#collapsible' => TRUE,
         'table' => $this->perLanguageSettings('enabled', FALSE, TRUE),
       );
+      // Validate the tags
+      //$form['#validate'][] = '::validateForm';
     }
     else {
       $form['info'] = array(
@@ -458,9 +460,50 @@ class GeshiFilterFilter extends FilterBase {
         ) . '</p>',
       );
     }
-    $form['#validate'][] = 'geshifilter_per_language_settings_validate';
     return $form;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  /*public function validateForm(array &$form, FormStateInterface $form_state) {
+    // Language tags should differ from each other.
+    $languages = GeshiFilter::getAvailableLanguages();
+
+    $values = $form_state->getValue('language');
+    foreach ($languages as $language1 => $language_data1) {
+
+      if ($values[$language1]['enabled'] == FALSE) {
+        continue;
+      }
+
+      $tags1 = GeshiFilter::tagSplit($values[$language1]['tags']);
+
+      // Check that other languages do not use these tags.
+      foreach ($languages as $language2 => $language_data2) {
+        // Check these tags against the tags of other enabled languages.
+        if ($language1 == $language2) {
+          continue;
+        }
+        // Get tags for $language2.
+        $tags2 = GeshiFilter::tagSplit($values[$language2]['tags']);
+
+        // Get generic tags.
+        $generics = GeshiFilter::tagSplit($this->config->get('tags'));
+        $tags2 = array_merge($tags2, $generics);
+
+        // And now we can check tags1 against tags2.
+        foreach ($tags1 as $tag1) {
+          foreach ($tags2 as $tag2) {
+            if ($tag1 == $tag2) {
+              $name = "language[{$language2}][tags]";
+              $form_state->setErrorByName($name, t('The language tags should differ between languages and from the generic tags.'));
+            }
+          }
+        }
+      }
+    }
+  }*/
 
   /**
    * Get the tags for this filter.
@@ -569,58 +612,57 @@ class GeshiFilterFilter extends FilterBase {
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
     $form = array();
-    // @codingStandardsIgnoreStart
-    // Just ignoring it for coding standart until it is fixed in
-    // https://www.drupal.org/node/2615630.
-    /**$form['header'] = array(
-      '#type' => 'value',
-      '#value' => array(),
+    $header = array(
+      t('Language'),
+      t('GeSHi language code'),
     );
-    $form['header']['#value'][] = t('Language');
-    $form['header']['#value'][] = t('GeSHi language code');
     if ($add_tag_option) {
-      $form['header']['#value'][] = t('Tag/language attribute value');
+      $header[] = t('Tag/language attribute value');
     }
+    $form['language'] = array(
+      '#type' => 'table',
+      '#header' => $header,
+      '#empty' => t('Nome language is available.'),
+    );
+
     // Table body.
-    $form['languages'] = array();
     $languages = GeshiFilter::getAvailableLanguages();
     foreach ($languages as $language => $language_data) {
-      $enabled = $this->config->get("language_enabled_{$language}");
+      $enabled = $this->config->get("language.{$language}.enabled", FALSE);
       // Skip items to hide.
       if (($view == 'enabled' && !$enabled) || ($view == 'disabled' && $enabled)) {
         continue;
       }
       // Build language row.
-      $form['languages'][$language] = array();
+      $form['language'][$language] = array();
       // Add enable/disable checkbox.
       if ($add_checkbox) {
-        $form['languages'][$language]["language_enabled_{$language}"] = array(
+        $form['language'][$language]['enabled'] = array(
           '#type' => 'checkbox',
           '#default_value' => $enabled,
           '#title' => $language_data['fullname'],
         );
       }
       else {
-        $form['languages'][$language]['fullname'] = array(
+        $form['language'][$language]['fullname'] = array(
           '#type' => 'markup',
           '#markup' => $language_data['fullname'],
         );
       }
       // Language code.
-      $form['languages'][$language]['name'] = array(
+      $form['language'][$language]['name'] = array(
         '#type' => 'markup',
         '#markup' => $language,
       );
       // Add a textfield for tags.
       if ($add_tag_option) {
-        $form['languages'][$language]["language_tags_{$language}"] = array(
+        $form['language'][$language]['tags'] = array(
           '#type' => 'textfield',
-          '#default_value' => $this->languageTags($language),
+          '#default_value' => $this->settings['per_language_settings']['table']['language'][$language]['tags'],
           '#size' => 20,
         );
       }
-    }*/
-    // @codingStandardsIgnoreEnd
+    }
     return $form;
   }
 
@@ -638,10 +680,10 @@ class GeshiFilterFilter extends FilterBase {
       return $this->config->get("language.{$language}.tags");
     }
     else {
-      $settings = $this->settings["per_language_settings"]['table']['languages'];
-      if (isset($settings[$language]["language.{$language}.tags"])) {
+      $settings = $this->settings["per_language_settings"]['table']['language'];
+      if (isset($settings[$language]["tags"])) {
         // Tags are set for this language.
-        return $settings[$language]["language.{$language}.tags"];
+        return $settings[$language]["tags"];
       }
       else {
         // Tags are not set for this language, so use the global ones.

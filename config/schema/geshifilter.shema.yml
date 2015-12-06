@@ -62,6 +62,3 @@ filter_settings.filter_geshifilter:
           label: "When decode html entities before processing by geshi."
     per_language_settings:
       type: sequence
-      sequence:
-        - type: integer
-

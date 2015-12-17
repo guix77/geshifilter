@@ -7,14 +7,15 @@ geshifilter.settings:
   requirements:
     _permission: 'administer site configuration'
 
+# Disabled now, see https://www.drupal.org/node/2619612.
 # Settings for filter conflicts
-geshifilter.settings_filter_conflicts:
-  path: 'admin/config/content/formats/geshifilter/filterconflicts'
-  defaults:
-    _content: '\Drupal\geshifilter\Controller\GeshiFilterConflicts::content'
-    _title: 'Filter conflicts'
-  requirements:
-    _permission: 'administer site configuration'
+# geshifilter.settings_filter_conflicts:
+#  path: 'admin/config/content/formats/geshifilter/filterconflicts'
+#  defaults:
+#    _content: '\Drupal\geshifilter\Controller\GeshiFilterConflicts::content'
+#    _title: 'Filter conflicts'
+#  requirements:
+#    _permission: 'administer site configuration'
 
 # Route for enabled languages
 geshifilter.settings_languages:

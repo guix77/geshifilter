@@ -5,11 +5,12 @@ geshifilter.settings_tab:
   base_route: geshifilter.settings_tab
   weight: -1
 
+# Disabled now, see https://www.drupal.org/node/2619612.
 # Filter Conflicts: admin/config/content/formats/geshifilter/filterconflicts
-geshifilter.settings_filter_conflicts:
-  route_name: geshifilter.settings_filter_conflicts
-  title: 'Filter conflicts'
-  base_route: geshifilter.settings_tab
+# geshifilter.settings_filter_conflicts:
+#  route_name: geshifilter.settings_filter_conflicts
+#  title: 'Filter conflicts'
+#  base_route: geshifilter.settings_tab
 
 # Enabled languages: admin/config/content/formats/geshifilter/languages
 geshifilter.settings_languages_tab:

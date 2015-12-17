@@ -454,8 +454,8 @@ class GeshiFilterFilter extends FilterBase {
       $form['info'] = array(
         '#markup' => '<p>' . t('GeSHi filter is configured to use global tag
           settings. For separate settings per text format, enable this option in
-          the <a href="!geshi_admin_url">general GeSHi filter settings</a>.', array(
-            '!geshi_admin_url' => Url::fromRoute('geshifilter.settings')->toString(),
+          the <a href=":geshi_admin_url">general GeSHi filter settings</a>.', array(
+            ':geshi_admin_url' => Url::fromRoute('geshifilter.settings')->toString(),
           )
         ) . '</p>',
       );
@@ -573,12 +573,12 @@ class GeshiFilterFilter extends FilterBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GeshiFilter::BRACKETS_ANGLE => '<code>' . SafeMarkup::checkPlain('<foo> ... </foo>') . '</code>',
-        GeshiFilter::BRACKETS_SQUARE => '<code>' . SafeMarkup::checkPlain('[foo] ... [/foo]') . '</code>',
-        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . SafeMarkup::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
-        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-          '!php' => '<code>' . SafeMarkup::checkPlain('<?php ... ?>') . '</code>',
-          '!percent' => '<code>' . SafeMarkup::checkPlain('<% ... %>') . '</code>',
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . htmlentities('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>' . htmlentities('[foo] ... [/foo]') . '</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . htmlentities('[[foo]] ... [[/foo]]') . '</code>',
+        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: <code>@php</code> and <code>@percent</code>', array(
+          '@php' => '<?php ... ?>',
+          '@percent' => '<% ... %>',
         )),
       ),
       '#default_value' => $this->tagStyles(),

@@ -324,12 +324,12 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       '#type' => 'checkboxes',
       '#title' => t('Container tag style'),
       '#options' => array(
-        GeshiFilter::BRACKETS_ANGLE => '<code>' . SafeMarkup::checkPlain('<foo> ... </foo>') . '</code>',
-        GeshiFilter::BRACKETS_SQUARE => '<code>' . SafeMarkup::checkPlain('[foo] ... [/foo]') . '</code>',
-        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>' . SafeMarkup::checkPlain('[[foo]] ... [[/foo]]') . '</code>',
-        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: !php and !percent', array(
-          '!php' => '<code>' . SafeMarkup::checkPlain('<?php ... ?>') . '</code>',
-          '!percent' => '<code>' . SafeMarkup::checkPlain('<% ... %>') . '</code>',
+        GeshiFilter::BRACKETS_ANGLE => '<code>' . htmlentities('<foo> ... </foo>') . '</code>',
+        GeshiFilter::BRACKETS_SQUARE => '<code>[foo] ... [/foo]</code>',
+        GeshiFilter::BRACKETS_DOUBLESQUARE => '<code>[[foo]] ... [[/foo]]</code>',
+        GeshiFilter::BRACKETS_PHPBLOCK => t('PHP style source code blocks: <code>@php</code> and <code>@percent</code>', array(
+          '@php' => '<?php ... ?>',
+          '@percent' => '<% ... %>',
         )),
       ),
       '#default_value' => $this->tagStyles(),

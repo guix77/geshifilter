@@ -42,5 +42,5 @@ function geshifield_formatter_default(array $variables) {
   $elements[] = array(
     '#markup' => $output,
   );
-  return render($elements);
+  return $output;
 }

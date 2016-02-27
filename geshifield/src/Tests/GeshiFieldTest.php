@@ -104,13 +104,23 @@ class GeshiFieldTest extends WebTestBase {
   }
 
   public function testAddField() {
-
     $this->addField('geshifield', 'geshi', 'GeshiFilter Field');
-    $this->createNode('title','body','<?php echo("hi"); ?>', 'php');
-
+    $this->addNode('title','body','<?php echo("hi"); ?>', 'php');
   }
 
-  private function createNode($title, $body, $sourcecode, $language) {
+  /**
+   * Add a new node.
+   *
+   * @param string $title
+   *   Title of node.
+   * @param string $body
+   *   Body content of node.
+   * @param $sourcecode
+   *   The content of geshifield in node.
+   * @param $language
+   *   The language used in geshifield.
+   */
+  protected function addNode($title, $body, $sourcecode, $language) {
     // Create a node.
     $node = array(
       'title[0][value]' => $title,

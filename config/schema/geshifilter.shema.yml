@@ -1,5 +1,5 @@
 geshifilter.settings:
-  type: mapping
+  type: config_object
   label: "Setting for geshifilter module"
   mapping:
     langcode:

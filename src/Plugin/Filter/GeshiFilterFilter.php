@@ -78,48 +78,55 @@ class GeshiFilterFilter extends FilterBase {
    * {@inheritdoc}
    */
   public function process($text, $langcode) {
-    // Load GeSHi library (if not already).
-    $geshi_library = libraries_load('geshi');
-    if (!$geshi_library['loaded']) {
-      drupal_set_message($geshi_library['error message'], 'error');
-      return $text;
-    }
 
-    // Get the available tags.
-    list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
-    if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
-      $language_tags[] = 'questionmarkphp';
-      $tag_to_lang['questionmarkphp'] = 'php';
-    }
-    $tags = array_merge($generic_code_tags, $language_tags);
-    // Escape special (regular expression) characters in tags (for tags like
-    // 'c++' and 'c#').
-    $tags = preg_replace('#(\\+|\\#)#', '\\\\$1', $tags);
+    $result = new FilterProcessResult($text);
 
-    $tags_string = implode('|', $tags);
-    // Pattern for matching the prepared "<code>...</code>" stuff.
-    $pattern = '#\\[geshifilter-(' . $tags_string . ')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
-    $text = preg_replace_callback($pattern, array(
+    try {
+      // Load GeSHi library (if not already).
+      $geshi_library = libraries_load('geshi');
+      if (!$geshi_library['loaded']) {
+        throw new \Exception($geshi_library['error message']);
+      }
+
+      // Get the available tags.
+      list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
+      if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, array_filter($this->tagStyles()))) {
+        $language_tags[] = 'questionmarkphp';
+        $tag_to_lang['questionmarkphp'] = 'php';
+      }
+      $tags = array_merge($generic_code_tags, $language_tags);
+      // Escape special (regular expression) characters in tags (for tags like
+      // 'c++' and 'c#').
+      $tags = preg_replace('#(\\+|\\#)#', '\\\\$1', $tags);
+
+      $tags_string = implode('|', $tags);
+      // Pattern for matching the prepared "<code>...</code>" stuff.
+      $pattern = '#\\[geshifilter-(' . $tags_string . ')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
+      $text = preg_replace_callback($pattern, array(
         $this,
         'replaceCallback',
       ), $text);
 
-    // Create the object with result.
-    $result = new FilterProcessResult($text);
+      // Create the object with result.
+      $result = new FilterProcessResult($text);
 
-    // Add the css file when necessary.
-    if ($this->config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
-      $result->setAttachments(array(
-        'library' => array(
-          'geshifilter/geshifilter',
-        ),
-      ));
+      // Add the css file when necessary.
+      if ($this->config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
+        $result->setAttachments(array(
+          'library' => array(
+            'geshifilter/geshifilter',
+          ),
+        ));
+      }
+
+      // Add cache tags, so we can re-create the node when some geshifilter
+      // settings change.
+      $cache_tags = array('geshifilter');
+      $result->addCacheTags($cache_tags);
+    } catch (\Exception $e) {
+      watchdog_exception('geshifilter', $e);
+      drupal_set_message($geshi_library['error message'], 'error');
     }
-
-    // Add cache tags, so we can re-create the node when some geshifilter
-    // settings change.
-    $cache_tags = array('geshifilter');
-    $result->addCacheTags($cache_tags);
 
     return $result;
   }

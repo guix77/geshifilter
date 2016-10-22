@@ -14,6 +14,9 @@ use Drupal\filter\Plugin\FilterBase;
 // Necessary for SafeMarkup::checkPlain().
 use Drupal\Component\Utility\SafeMarkup;
 
+// Necessary for passing HTML into t().
+use Drupal\Core\Render\Markup;
+
 // Necessary for Html::decodeEntities().
 use Drupal\Component\Utility\Html;
 
@@ -191,8 +194,8 @@ class GeshiFilterFilter extends FilterBase {
     $bracket_close = NULL;
     if (in_array(GeshiFilter::BRACKETS_ANGLE, $tag_styles)) {
       if (!$bracket_open) {
-        $bracket_open = '<';
-        $bracket_close = '>';
+        $bracket_open = SafeMarkup::checkPlain('<');
+        $bracket_close = SafeMarkup::checkPlain('>');
       }
       $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('<foo>') . '</code>';
     }
@@ -231,12 +234,12 @@ class GeshiFilterFilter extends FilterBase {
       foreach ($generic_code_tags as $tag) {
         $tags[] = $bracket_open . $tag . $bracket_close;
       }
-      $items[] = t('Generic syntax highlighting tags: <code>@tags</code>.', array('@tags' => implode(', ', $tags)));
+      $items[] = t('Generic syntax highlighting tags: <code>@tags</code>.', array('@tags' => Markup::create(implode(', ', $tags))));
       // Language tags.
       $tags = array();
       foreach ($language_tags as $tag) {
         $tags[] = t('<code>@tag</code> for @lang source code', array(
-          '@tag' => $bracket_open . $tag . $bracket_close,
+          '@tag' => Markup::create($bracket_open . $tag . $bracket_close),
           '@lang' => $languages[$tag_to_lang[$tag]],
         ));
       }
@@ -267,15 +270,15 @@ class GeshiFilterFilter extends FilterBase {
       }
       $items[] = t('The language for the generic syntax highlighting tags can be
         specified with one of the attribute(s): %attributes. The possible values
-        are: !languages.', array(
+        are: @languages.', array(
           '%attributes' => implode(', ', $lang_attributes),
-          '!languages' => implode(', ', $att_for_full),
+          '@languages' => Markup::create(implode(', ', $att_for_full)),
         )
       );
 
       // Tag style options.
       if (count($tag_style_examples) > 1) {
-        $items[] = t('The supported tag styles are: !tag_styles.', array('!tag_styles' => implode(', ', $tag_style_examples)));
+        $items[] = t('The supported tag styles are: @tag_styles.', array('@tag_styles' => Markup::create(implode(', ', $tag_style_examples))));
       }
 
       // Line numbering options.
@@ -334,7 +337,7 @@ class GeshiFilterFilter extends FilterBase {
           break;
       }
       $items[] = t('Default highlighting mode for generic syntax highlighting
-        tags: !description.', array('!description' => $description));
+        tags: @description.', array('@description' => $description));
       $default_line_numbering = $this->config->get('default_line_numbering');
       switch ($default_line_numbering) {
         case GeshiFilter::LINE_NUMBERS_DEFAULT_NONE:
@@ -349,7 +352,7 @@ class GeshiFilterFilter extends FilterBase {
           $description = t('fancy line numbers (every @n lines)', array('@n' => $default_line_numbering));
           break;
       }
-      $items[] = t('Default line numbering: !description.', array('!description' => $description));
+      $items[] = t('Default line numbering: @description.', array('@description' => $description));
       $render = array(
         '#theme' => 'item_list',
         '#items' => $items,
@@ -362,15 +365,15 @@ class GeshiFilterFilter extends FilterBase {
       list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
       $tags = array();
       foreach ($generic_code_tags as $tag) {
-        $tags[] = '<code>' . $bracket_open . $tag . $bracket_close . '</code>';
+        $tags[] = '<code>' . $bracket_open . SafeMarkup::checkPlain($tag) . $bracket_close . '</code>';
       }
       foreach ($language_tags as $tag) {
-        $tags[] = '<code>' . $bracket_open . $tag . $bracket_close . '</code>';
+        $tags[] = '<code>' . $bracket_open . SafeMarkup::checkPlain($tag) . $bracket_close . '</code>';
       }
-      $output = t('You can enable syntax highlighting of source code with the following tags: @tags.', array('@tags' => implode(', ', $tags)));
+      $output = t('You can enable syntax highlighting of source code with the following tags: @tags.', array('@tags' => Markup::create(implode(', ', $tags))));
       // Tag style options.
       if (count($tag_style_examples) > 1) {
-        $output .= ' ' . t('The supported tag styles are: @tag_styles.', array('@tag_styles' => implode(', ', $tag_style_examples)));
+        $output .= ' ' . t('The supported tag styles are: @tag_styles.', array('@tag_styles' => Markup::create(implode(', ', $tag_style_examples))));
       }
       if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, $tag_styles)) {
         $output .= ' ' . t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;.');

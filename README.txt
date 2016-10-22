@@ -22,26 +22,35 @@ See installation procedure below for more information.
 INSTALLATION
 ------------
 1. Extract the GeSHi Filter module tarball and place the entire geshifilter
-  directory into your Drupal setup (e.g. in sites/all/modules).
+  directory into your Drupal 8 setup, /modules or /modules/contrib
 
 2. Download the GeSHi library from
   http://sourceforge.net/projects/geshi/files/geshi
   Make sure you download a version of the branch 1.0.x and not a version
   from the branch 1.1.x (also described as geshi-dev), which is not yet
   supported by the GeSHi filter module.
-  Place the entire extracted 'geshi' folder (which contains geshi.php)
-  in a libraries directory (e.g. as sites/all/libraries/geshi).
 
-3. Enable this module as any other Drupal module by navigating to
-  administer > site building > modules
+  Place the entire extracted 'geshi' folder (which contains geshi.php)
+  in a libraries directory, /libraries.
+
+  The path to geshi.php should be, <drupal root>/libraries/geshi/geshi.php
+
+3. You will need the libraries module, download if you don't have it.
+
+4. Enable this module as any other Drupal module by navigating to Extend link 
+  in the admin bar.
+
 
 
 CONFIGURATION
 -------------
 1. The general GeSHi Filter settings can be found by navigating to:
-  administer > site configuration > geshifilter.
-  Set the path to the GeSHi library on that page, if it is not detected
-  automatically already.
+  Configuration > Content authoring > Geshifilter 
+  OR admin/config/content/formats/geshifilter
+
+  If your library is detected, it should show something like below,
+  GESHI LIBRARY VERSION 1.0.8.11 DETECTED
+
 2. Further configuration instructions can be found by following the
   "more help..." link at the top of that general settings page, which leads
   to www.example.com/?q=admin/help/geshifilter . This requires you have the

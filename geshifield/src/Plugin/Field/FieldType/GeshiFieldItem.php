@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\geshifield\Plugin\Field\FieldType\SnippetsItem.
- */
-
 namespace Drupal\geshifield\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldItemBase;

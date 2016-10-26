@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Definition of Drupal\geshifilter\GeshiFilter.
- */
 
 namespace Drupal\geshifilter;
 
@@ -140,6 +136,7 @@ class GeshiFilter {
   public static function tagSplit($string) {
     return preg_split('/\s+|<|>|\[|\]/', $string, -1, PREG_SPLIT_NO_EMPTY);
   }
+
   /**
    * List of available languages.
    *

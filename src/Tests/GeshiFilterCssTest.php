@@ -1,10 +1,5 @@
 <?php
-/**
- * @file
- * Definition of Drupal\geshifilter\Tests\GeshiFilterCssTest.
- */
 
-// Namespace of tests.
 namespace Drupal\geshifilter\Tests;
 
 // Use of base class for the tests.
@@ -19,16 +14,22 @@ class GeshiFilterCssTest extends WebTestBase {
 
   /**
    * A global filter adminstrator.
+   *
+   * @var object
    */
   protected $filterAdminUser;
 
   /**
    * The id of the text format with only GeSHi filter in it.
+   *
+   * @var object
    */
   protected $inputFormatIid;
 
   /**
    * List of modules to enable.
+   *
+   * @var object
    */
   public static $modules = array('node', 'libraries', 'geshifilter', 'filter',
     'file',

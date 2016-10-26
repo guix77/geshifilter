@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Drupal 6 language definition file for GeSHi.

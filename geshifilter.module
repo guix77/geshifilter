@@ -6,6 +6,7 @@
  */
 
 // Necessary for URL.
+use Drupal\geshifilter\GeshiFilterCss;
 use Drupal\Core\Url;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -21,7 +22,7 @@ function geshifilter_help($route_name, RouteMatchInterface $route_match) {
         highlighting of inline source code or blocks of source code based on the
         PHP library <a href=":GeSHi">GeSHi (Generic Syntax Highlighter)</a>.</p>',
           array(
-          ':GeSHi' => URL::fromUri('http://qbnz.com/highlighter/')->toString(),
+            ':GeSHi' => URL::fromUri('http://qbnz.com/highlighter/')->toString(),
           ));
       if ($route_name == 'help.page.geshifilter') {
         $output .= '<p>' . t('The GeSHi filter module for Drupal requires the
@@ -90,7 +91,7 @@ function geshifilter_libraries_info() {
  */
 function geshifilter_library_info_alter(&$libraries, $extension) {
   if ($extension == 'geshifilter') {
-    $css = drupal_realpath(\Drupal\geshifilter\GeshiFilterCss::languageCssPath());
+    $css = drupal_realpath(GeshiFilterCss::languageCssPath());
     $base = DRUPAL_ROOT;
     $name = substr($css, strlen($base));
     $libraries['geshifilter']['css']['component'][$name] = array();

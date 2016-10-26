@@ -1,10 +1,5 @@
 <?php
-/**
- * @file
- * Definition of Drupal\geshifilter\Tests\GeshiFilterTest.
- */
 
-// Namespace of tests.
 namespace Drupal\geshifilter\Tests;
 
 // Use of base class for the tests.
@@ -26,11 +21,15 @@ class GeshiFilterTest extends WebTestBase {
 
   /**
    * A global filter adminstrator.
+   *
+   * @var object
    */
   protected $filterAdminUser;
 
   /**
    * A global user for adding pages.
+   *
+   * @var object
    */
   protected $normalUser;
 
@@ -468,7 +467,6 @@ class GeshiFilterTest extends WebTestBase {
       t('Setting the title attritbute on inline code.')
     );
   }
-
 
   /**
    * Issue http://drupal.org/node/1010216.

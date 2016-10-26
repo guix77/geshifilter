@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @file
- * Implementation of the conflict detection feature of the GeSHi filter.
- */
-
-// Namespace for the module.
 namespace Drupal\geshifilter;
 
 /**

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\geshifilter\Form\GeshiFilterSettingsForm.
- */
 
 namespace Drupal\geshifilter\Form;
 
@@ -19,8 +15,6 @@ use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
 
 // Necessary for SafeMarkup::checkPlain().
-use Drupal\Component\Utility\SafeMarkup;
-
 use \Drupal\geshifilter\GeshiFilter;
 
 /**
@@ -201,13 +195,13 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       // Code container.
       $container_options = array(
         GESHI_HEADER_PRE => t('%val: uses a @cnt wrapper, efficient whitespace coding, no automatic line wrapping, generates invalid HTML with line numbering.', array(
-            '%val' => 'GESHI_HEADER_PRE',
-            '@cnt' => '<pre>',
-          )),
+          '%val' => 'GESHI_HEADER_PRE',
+          '@cnt' => '<pre>',
+        )),
         GESHI_HEADER_DIV => t('%val: uses a @cnt wrapper, enables automatic line wrapping.', array(
-            '%val' => 'GESHI_HEADER_DIV',
-            '@cnt' => '<div>',
-          )),
+          '%val' => 'GESHI_HEADER_DIV',
+          '@cnt' => '<div>',
+        )),
       );
       if (version_compare(GESHI_VERSION, '1.0.8', '>=')) {
         $container_options[GESHI_HEADER_PRE_VALID] = t('%val: uses @pre
@@ -220,9 +214,9 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           )
         );
         $container_options[GESHI_HEADER_PRE_TABLE] = t('%val: uses a @table construction for adding line numbers which avoids selection/copy/paste problems.', array(
-            '%val' => 'GESHI_HEADER_PRE_TABLE',
-            '@table' => '<table>',
-          ));
+          '%val' => 'GESHI_HEADER_PRE_TABLE',
+          '@table' => '<table>',
+        ));
       }
       if (version_compare(GESHI_VERSION, '1.0.7.2', '>=')) {
         $container_options[GESHI_HEADER_NONE] = t('%val: uses no wrapper.', array('%val' => 'GESHI_HEADER_NONE'));

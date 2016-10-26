@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\geshifilter\Plugin\Filter\GeshiFilterFilter.
- */
-
-// Namespace for filter.
 namespace Drupal\geshifilter\Plugin\Filter;
 
 // Base class for filters.
@@ -31,7 +25,6 @@ use Drupal\Core\Url;
 
 use \Drupal\geshifilter\GeshiFilter;
 use Drupal\geshifilter\GeshiFilterProcess;
-
 
 /**
  * Provides a base filter for Geshi Filter.
@@ -126,7 +119,8 @@ class GeshiFilterFilter extends FilterBase {
       // settings change.
       $cache_tags = array('geshifilter');
       $result->addCacheTags($cache_tags);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       watchdog_exception('geshifilter', $e);
       drupal_set_message($geshi_library['error message'], 'error');
     }
@@ -243,7 +237,7 @@ class GeshiFilterFilter extends FilterBase {
           '@lang' => $languages[$tag_to_lang[$tag]],
         ));
       }
-      $items[] = '<li>' . t('Language specific syntax highlighting tags: ') .  implode(', ', $tags) . '</li>';
+      $items[] = '<li>' . t('Language specific syntax highlighting tags:') . implode(', ', $tags) . '</li>';
       // PHP specific delimiters.
       if (in_array(GeshiFilter::BRACKETS_PHPBLOCK, $tag_styles)) {
         $items[] = t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;, but additional options like line numbering are not possible here.');
@@ -409,7 +403,7 @@ class GeshiFilterFilter extends FilterBase {
         'table' => $this->perLanguageSettings('enabled', FALSE, TRUE),
       );
       // Validate the tags
-      //$form['#validate'][] = '::validateForm';
+      // $form['#validate'][] = '::validateForm';.
     }
     else {
       $form['info'] = array(
@@ -428,42 +422,43 @@ class GeshiFilterFilter extends FilterBase {
    * {@inheritdoc}
    */
   /*public function validateForm(array &$form, FormStateInterface $form_state) {
-    // Language tags should differ from each other.
-    $languages = GeshiFilter::getAvailableLanguages();
+  // Language tags should differ from each other.
+  $languages = GeshiFilter::getAvailableLanguages();
 
-    $values = $form_state->getValue('language');
-    foreach ($languages as $language1 => $language_data1) {
+  $values = $form_state->getValue('language');
+  foreach ($languages as $language1 => $language_data1) {
 
-      if ($values[$language1]['enabled'] == FALSE) {
-        continue;
-      }
+  if ($values[$language1]['enabled'] == FALSE) {
+  continue;
+  }
 
-      $tags1 = GeshiFilter::tagSplit($values[$language1]['tags']);
+  $tags1 = GeshiFilter::tagSplit($values[$language1]['tags']);
 
-      // Check that other languages do not use these tags.
-      foreach ($languages as $language2 => $language_data2) {
-        // Check these tags against the tags of other enabled languages.
-        if ($language1 == $language2) {
-          continue;
-        }
-        // Get tags for $language2.
-        $tags2 = GeshiFilter::tagSplit($values[$language2]['tags']);
+  // Check that other languages do not use these tags.
+  foreach ($languages as $language2 => $language_data2) {
+  // Check these tags against the tags of other enabled languages.
+  if ($language1 == $language2) {
+  continue;
+  }
+  // Get tags for $language2.
+  $tags2 = GeshiFilter::tagSplit($values[$language2]['tags']);
 
-        // Get generic tags.
-        $generics = GeshiFilter::tagSplit($this->config->get('tags'));
-        $tags2 = array_merge($tags2, $generics);
+  // Get generic tags.
+  $generics = GeshiFilter::tagSplit($this->config->get('tags'));
+  $tags2 = array_merge($tags2, $generics);
 
-        // And now we can check tags1 against tags2.
-        foreach ($tags1 as $tag1) {
-          foreach ($tags2 as $tag2) {
-            if ($tag1 == $tag2) {
-              $name = "language[{$language2}][tags]";
-              $form_state->setErrorByName($name, t('The language tags should differ between languages and from the generic tags.'));
-            }
-          }
-        }
-      }
-    }
+  // And now we can check tags1 against tags2.
+  foreach ($tags1 as $tag1) {
+  foreach ($tags2 as $tag2) {
+  if ($tag1 == $tag2) {
+  $name = "language[{$language2}][tags]";
+  $form_state->setErrorByName($name, t('The language tags should differ between
+  languages and from the generic tags.'));
+  }
+  }
+  }
+  }
+  }
   }*/
 
   /**
@@ -753,7 +748,8 @@ class GeshiFilterFilter extends FilterBase {
    * @param string $attributes
    *   String with the attributes.
    *
-   * @return array of settings with fields 'language', 'line_numbering',
+   * @return array
+   *   An array of settings with fields 'language', 'line_numbering',
    *   'linenumbers_start' and 'title'.
    */
   public function parseAttributes($attributes) {

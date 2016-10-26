@@ -6,6 +6,7 @@
  */
 
 // Necessary for URL.
+use Drupal\geshifilter\GeshiFilterConflicts;
 use Drupal\Core\Url;
 
 use \Drupal\geshifilter\GeshiFilterCss;
@@ -18,9 +19,10 @@ function geshifilter_install() {
   drupal_set_message(t('GeSHi filter is installed. You should now @configure-geshi
     and enable it in the desired @text-formats.',
     array(
-      // Geshifilter`s route seems to be unknown at this point, so use  Url::fromUri() with base: scheme instead Url::fromRoute().
+      // Geshifilter`s route seems to be unknown at this point, so use
+      // Url::fromUri() with base: scheme instead Url::fromRoute().
       '@configure-geshi' => \Drupal::l(t('configure the GeSHi filter'), Url::fromUri('base:admin/config/content/formats/geshifilter')),
-      '@text-formats' =>  \Drupal::l(t('text formats'), Url::fromUri('base:admin/config/content/formats'))
+      '@text-formats' => \Drupal::l(t('text formats'), Url::fromUri('base:admin/config/content/formats')),
     )
   ));
 }
@@ -76,7 +78,7 @@ function geshifilter_requirements($phase) {
     }
 
     // Check for filter conflicts.
-    if (count(\Drupal\geshifilter\GeshiFilterConflicts::listConflicts()) > 0) {
+    if (count(GeshiFilterConflicts::listConflicts()) > 0) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('Some filter conflicts were detected.'),

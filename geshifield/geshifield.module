@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Defines a CCK field for source code with GeSHi syntax highlighting.
@@ -7,6 +8,7 @@
  */
 
 use \Drupal\geshifilter\GeshiFilterProcess;
+
 /**
  * Implements hook_theme().
  */

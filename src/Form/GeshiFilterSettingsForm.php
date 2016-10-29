@@ -45,7 +45,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $config = $this->config('geshifilter.settings');
 
     // Try to load GeSHi library and get version if successful.
-    $geshi_library = libraries_load('geshi');
+    $geshi_library = GeshiFilter::loadGeshi();
 
     // GeSHi library settings (constant GESHI_VERSION is defined in GeSHi
     // library).

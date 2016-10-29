@@ -62,7 +62,7 @@ class GeshiFilterProcess {
   public static function geshiProcess($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL) {
     $config = \Drupal::config('geshifilter.settings');
     // Load GeSHi library (if not already).
-    $geshi_library = libraries_load('geshi');
+    $geshi_library = GeshiFilter::loadGeshi();
     if (!$geshi_library['loaded']) {
       drupal_set_message($geshi_library['error message'], 'error');
       return $source_code;

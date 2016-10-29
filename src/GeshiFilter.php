@@ -150,7 +150,7 @@ class GeshiFilter {
     $available_languages = $cache->get('geshifilter_available_languages_cache');
     if (!$available_languages) {
       // Not in cache: build the array of available_languages.
-      $geshi_library = libraries_load('geshi');
+      $geshi_library = GeshiFilter::loadGeshi();
       $available_languages = array();
       if ($geshi_library['loaded']) {
         $dirs = array(
@@ -200,6 +200,38 @@ class GeshiFilter {
       }
     }
     return $enabled_languages;
+  }
+
+  /**
+   * Load geshi library.
+   *
+   * If the geshi library is installed with composer, we use it, if not, we
+   * try to use it with libraries module(same way as drupal 7).
+   *
+   * @return array
+   *   Return an array with the same keys(the ones we use) from
+   *   libraries_load().
+   */
+  public static function loadGeshi() {
+    $library = array();
+    // Try include geshi from composer.
+    if (file_exists(DRUPAL_ROOT . '/vendor/geshi/geshi/src/geshi.php')) {
+      include_once DRUPAL_ROOT . '/vendor/geshi/geshi/src/geshi.php';
+      $library['loaded'] = TRUE;
+      $library['library path'] = GESHI_ROOT;
+    }
+    // Try include geshi using libraries module.
+    elseif (\Drupal::moduleHandler()->moduleExists('libraries')) {
+      $library = libraries_load('geshi');
+    }
+    // Geshi is not available from composer and libraries module is not
+    // available, so we return the same as libraries when the geshi do not
+    // exist.
+    else {
+      $library['loaded'] = FALSE;
+      $library['library path'] = '';
+    }
+    return $library;
   }
 
 }

@@ -35,7 +35,7 @@ function geshifilter_requirements($phase) {
   $requirements = array();
   if ($phase == 'runtime') {
     // Check if GeSHi library is available.
-    $geshi_library = libraries_load('geshi');
+    $geshi_library = GeshiFilter::loadGeshi();
     if (!$geshi_library['loaded']) {
       $requirements[] = array(
         'title' => 'GeSHi filter',

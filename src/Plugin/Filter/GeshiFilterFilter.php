@@ -79,7 +79,7 @@ class GeshiFilterFilter extends FilterBase {
 
     try {
       // Load GeSHi library (if not already).
-      $geshi_library = libraries_load('geshi');
+      $geshi_library = GeshiFilter::loadGeshi();
       if (!$geshi_library['loaded']) {
         throw new \Exception($geshi_library['error message']);
       }

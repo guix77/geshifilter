@@ -53,7 +53,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $view = NULL) {
     $config = $this->config('geshifilter.settings');
     // Check if GeSHi library is available.
-    $geshi_library = libraries_load('geshi');
+    $geshi_library = GeshiFilter::loadGeshi();
     if (!$geshi_library['loaded']) {
       drupal_set_message($geshi_library['error message'], 'error');
       return array();

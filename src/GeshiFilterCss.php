@@ -65,7 +65,7 @@ class GeshiFilterCss {
    */
   public static function generateLanguagesCssRules() {
     $output = '';
-    $geshi_library = libraries_load('geshi');
+    $geshi_library = GeshiFilter::loadGeshi();
     if ($geshi_library['loaded']) {
       $languages = GeshiFilter::getAvailableLanguages();
       foreach ($languages as $langcode => $language_full_name) {

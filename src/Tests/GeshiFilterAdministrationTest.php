@@ -33,7 +33,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('libraries', 'geshifilter', 'filter');
+  public static $modules = array('geshifilter', 'filter');
 
   /**
    * Configuration object.

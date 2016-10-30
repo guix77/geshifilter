@@ -31,7 +31,7 @@ class GeshiFilterCssTest extends WebTestBase {
    *
    * @var object
    */
-  public static $modules = array('node', 'libraries', 'geshifilter', 'filter',
+  public static $modules = array('node', 'geshifilter', 'filter',
     'file',
   );
 

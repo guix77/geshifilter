@@ -45,7 +45,7 @@ class GeshiFilterTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('node', 'libraries', 'geshifilter', 'filter');
+  public static $modules = array('node', 'geshifilter', 'filter');
 
   /**
    * The number of current node.

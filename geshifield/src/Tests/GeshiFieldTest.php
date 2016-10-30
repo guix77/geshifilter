@@ -38,7 +38,6 @@ class GeshiFieldTest extends WebTestBase {
    */
   public static $modules = array(
     'node',
-    'libraries',
     'geshifilter',
     'filter',
     'geshifield',

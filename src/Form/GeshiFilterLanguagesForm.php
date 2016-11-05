@@ -74,6 +74,8 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     $languages = GeshiFilter::getAvailableLanguages();
 
     $values = $form_state->getValue('language');
+    $config = $this->config('geshifilter.settings');
+    $values = array_merge($config->get('language'), $values);
     foreach ($languages as $language1 => $language_data1) {
 
       if ($values[$language1]['enabled'] == FALSE) {

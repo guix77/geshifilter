@@ -544,7 +544,7 @@ class GeshiFilterFilter extends FilterBase {
     $form["decode_entities"] = array(
       '#type' => 'checkbox',
       '#title' => t('Decode entities'),
-      '#default_value' => $this->settings['decode_entities'],
+      '#default_value' => $this->settings['general_tags']['decode_entities'],
       '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
     );
     return $form;
@@ -949,7 +949,7 @@ class GeshiFilterFilter extends FilterBase {
       return $this->config->get('decode_entities');
     }
     // Return value for this filter.
-    return $this->settings['decode_entities'];
+    return $this->settings['general_tags']['decode_entities'];
   }
 
 }

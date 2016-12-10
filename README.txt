@@ -40,6 +40,10 @@ INSTALLATION
 4. Enable this module as any other Drupal module by navigating to Extend link 
   in the admin bar.
 
+If you want, you can use composer to download the Geshi Library, this will
+replace the steps 2 and 3. Just use on command line in drupal root folder:
+
+composer require geshi/geshi
 
 
 CONFIGURATION

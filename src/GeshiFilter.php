@@ -2,6 +2,8 @@
 
 namespace Drupal\geshifilter;
 
+use GeSHi;
+
 /**
  * Contains constantas and some helper functions.
  */
@@ -215,8 +217,7 @@ class GeshiFilter {
   public static function loadGeshi() {
     $library = array();
     // Try include geshi from composer.
-    if (file_exists(DRUPAL_ROOT . '/vendor/geshi/geshi/src/geshi.php')) {
-      include_once DRUPAL_ROOT . '/vendor/geshi/geshi/src/geshi.php';
+    if (class_exists('GeSHi')) {
       $library['loaded'] = TRUE;
       $library['library path'] = GESHI_ROOT;
     }

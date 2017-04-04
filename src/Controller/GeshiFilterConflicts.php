@@ -2,7 +2,6 @@
 
 namespace Drupal\geshifilter\Controller;
 
-use Drupal\geshifilter\GeshiFilterConflicts;
 use Drupal\Core\Controller\ControllerBase;
 
 /**

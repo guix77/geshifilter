@@ -79,7 +79,7 @@ class GeshiFilterCss {
       }
     }
     else {
-      drupal_set_message(t('Error while generating CSS rules: could not load GeSHi library.'), 'error');
+      drupal_set_message($this->t('Error while generating CSS rules: could not load GeSHi library.'), 'error');
     }
     return $output;
   }

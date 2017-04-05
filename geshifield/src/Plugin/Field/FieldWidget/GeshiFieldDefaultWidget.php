@@ -27,12 +27,12 @@ class GeshiFieldDefaultWidget extends WidgetBase {
     $enabled_languages = GeshiFilter::getEnabledLanguages();
 
     $element['sourcecode'] = array(
-      '#title' => t('Code'),
+      '#title' => $this->t('Code'),
       '#type' => 'textarea',
       '#default_value' => isset($items[$delta]->sourcecode) ? $items[$delta]->sourcecode : NULL,
     );
     $element['language'] = array(
-      '#title' => t('Language'),
+      '#title' => $this->t('Language'),
       '#type' => 'select',
       '#default_value' => isset($items[$delta]->language) ? $items[$delta]->language : NULL,
       '#options' => $enabled_languages,

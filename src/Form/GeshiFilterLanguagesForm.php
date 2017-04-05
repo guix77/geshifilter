@@ -102,7 +102,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
           foreach ($tags2 as $tag2) {
             if ($tag1 == $tag2) {
               $name = "language[{$language2}][tags]";
-              $form_state->setErrorByName($name, t('The language tags should differ between languages and from the generic tags.'));
+              $form_state->setErrorByName($name, $this->t('The language tags should differ between languages and from the generic tags.'));
             }
           }
         }
@@ -161,16 +161,16 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     $config = $this->config('geshifilter.settings');
     $form = array();
     $header = array(
-      t('Language'),
-      t('GeSHi language code'),
+      $this->t('Language'),
+      $this->t('GeSHi language code'),
     );
     if ($add_tag_option) {
-      $header[] = t('Tag/language attribute value');
+      $header[] = $this->t('Tag/language attribute value');
     }
     $form['language'] = array(
       '#type' => 'table',
       '#header' => $header,
-      '#empty' => t('Nome language is available.'),
+      '#empty' => $this->t('Nome language is available.'),
     );
 
     // Table body.

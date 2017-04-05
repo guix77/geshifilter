@@ -17,7 +17,7 @@ class GeshiFilterConflicts extends ControllerBase {
     if (count($conflicts) == 0) {
       $build = array(
         '#type' => 'markup',
-        '#markup' => t('No conflicts found.'),
+        '#markup' => $this->t('No conflicts found.'),
       );
       return $build;
     }

@@ -6,7 +6,7 @@
  */
 
 // Necessary for URL.
-use Drupal\geshifilter\GeshiFilterConflicts;
+//use Drupal\geshifilter\Controller\GeshiFilterConflicts;
 use Drupal\Core\Url;
 
 use \Drupal\geshifilter\GeshiFilterCss;
@@ -77,16 +77,16 @@ function geshifilter_requirements($phase) {
       );
     }
 
-    // Check for filter conflicts.
-    if (count(GeshiFilterConflicts::listConflicts()) > 0) {
-      $requirements[] = array(
-        'title' => 'GeSHi filter',
-        'value' => t('Some filter conflicts were detected.'),
-        'description' => \Drupal::l('View and resolve the detected filter conflicts',
-          URL::fromRoute('geshifilter.settings_filter_conflicts')),
-        'severity' => REQUIREMENT_ERROR,
-      );
-    }
+//    // Check for filter conflicts.
+//    if (count(GeshiFilterConflicts::listConflicts()) > 0) {
+//      $requirements[] = array(
+//        'title' => 'GeSHi filter',
+//        'value' => t('Some filter conflicts were detected.'),
+//        'description' => \Drupal::l('View and resolve the detected filter conflicts',
+//          URL::fromRoute('geshifilter.settings_filter_conflicts')),
+//        'severity' => REQUIREMENT_ERROR,
+//      );
+//    }
   }
   return $requirements;
 }

@@ -13,7 +13,7 @@ class GeshiFilterConflicts extends ControllerBase {
    * {@inheritdoc}
    */
   public function content() {
-    $conflicts = $this->listConflicts();
+    $conflicts = self::listConflicts();
     if (count($conflicts) == 0) {
       $build = array(
         '#type' => 'markup',
@@ -35,7 +35,7 @@ class GeshiFilterConflicts extends ControllerBase {
    *   An array with the filter conflics found, or an empty array if there is
    *   no conflics.
    */
-  public function listConflicts() {
+  public static function listConflicts() {
     return array();
   }
 }

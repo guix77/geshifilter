@@ -55,11 +55,13 @@ class GeshiFilterProcess {
    *   When to write all styles inline or from a css.
    * @param string $title
    *   The title to use in code.
+   * @param array $special_lines
+   *   Special lines to highlight.
    *
    * @return string
    *   The sourcecode after process by Geshi.
    */
-  public static function geshiProcess($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL) {
+  public static function geshiProcess($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL, $special_lines = array()) {
     $config = \Drupal::config('geshifilter.settings');
     // Load GeSHi library (if not already).
     $geshi_library = GeshiFilter::loadGeshi();
@@ -97,6 +99,8 @@ class GeshiFilterProcess {
         . '><code class="' . $code_class . '">' . $geshi->parse_code() . '</code></span>';
     }
     else {
+      $geshi->highlight_lines_extra($special_lines);
+      
       // Block source code mode.
       $geshi->set_header_type((int) $config->get('code_container', GESHI_HEADER_PRE));
       if ($line_numbering == 1) {
@@ -154,16 +158,13 @@ class GeshiFilterProcess {
    *   When to write all styles inline or from a css.
    * @param string $title
    *   The title to use in code.
+   * @paran array $special_lines
+   *   Lines to highlight.
    *
    * @return string
    *   The sourcecode after process by Geshi.
    */
-  public static function processSourceCode($source_code,
-  $lang,
-  $line_numbering = 0,
-                                          $linenumbers_start = 1,
-  $inline_mode = FALSE,
-  $title = NULL) {
+  public static function processSourceCode($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL, $special_lines = array()) {
     $config = \Drupal::config('geshifilter.settings');
     // Process.
     if ($lang == 'php' && $config->get('use_highlight_string_for_php', FALSE)) {
@@ -171,7 +172,7 @@ class GeshiFilterProcess {
     }
     else {
       // Process with GeSHi.
-      return self::geshiProcess($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
+      return self::geshiProcess($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title, $special_lines);
     }
   }
 

@@ -59,6 +59,11 @@ class GeshiFilter {
    * Attributes valid to set title.
    */
   const ATTRIBUTE_TITLE = 'title';
+  
+  /**
+   * Attributes valid to set special lines(lines to highlight).
+   */
+  const ATTRIBUTE_SPECIAL_LINES = 'special';
 
   /**
    * Parse code with tags inside <>, example, <code>.

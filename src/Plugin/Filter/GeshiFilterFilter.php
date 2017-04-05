@@ -726,6 +726,9 @@ class GeshiFilterFilter extends FilterBase {
     if (isset($settings['title'])) {
       $title = $settings['title'];
     }
+    if (isset($settings['special_lines'])) {
+      $special_lines = $settings['special_lines'];
+    }
 
     if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
       // Do nothing, and return the original.
@@ -737,7 +740,7 @@ class GeshiFilterFilter extends FilterBase {
     }
     $inline_mode = (strpos($source_code, "\n") === FALSE);
     // Process and return.
-    return GeshiFilterProcess::processSourceCode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title);
+    return GeshiFilterProcess::processSourceCode($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode, $title, $special_lines);
   }
 
   /**
@@ -758,6 +761,7 @@ class GeshiFilterFilter extends FilterBase {
     $line_numbering = NULL;
     $linenumbers_start = NULL;
     $title = NULL;
+    $special_lines = [];
 
     // Get the possible tags and languages.
     list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
@@ -769,6 +773,7 @@ class GeshiFilterFilter extends FilterBase {
         GeshiFilter::ATTRIBUTE_LINE_NUMBERING_START,
         GeshiFilter::ATTRIBUTE_FANCY_N,
         GeshiFilter::ATTRIBUTE_TITLE,
+        GeshiFilter::ATTRIBUTE_SPECIAL_LINES,
       )
     ));
     $enabled_languages = GeshiFilter::getEnabledLanguages();
@@ -830,6 +835,9 @@ class GeshiFilterFilter extends FilterBase {
       elseif ($att_name == GeshiFilter::ATTRIBUTE_TITLE) {
         $title = $att_value;
       }
+      elseif ($att_name == GeshiFilter::ATTRIBUTE_SPECIAL_LINES) {
+        $special_lines = explode(',', $att_value);
+      }
     }
     // Return parsed results.
     return array(
@@ -837,6 +845,7 @@ class GeshiFilterFilter extends FilterBase {
       'line_numbering' => $line_numbering,
       'linenumbers_start' => $linenumbers_start,
       'title' => $title,
+      'special_lines' => $special_lines,
     );
   }
 

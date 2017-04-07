@@ -2,6 +2,8 @@
 
 namespace Drupal\geshifilter;
 
+use Drupal\Core\Url;
+
 /**
  * Contains constantas and some helper functions.
  */
@@ -234,6 +236,10 @@ class GeshiFilter {
     else {
       $library['loaded'] = FALSE;
       $library['library path'] = '';
+      $library['error message'] = t('The GeSHi filter requires the GeSHi library (which needs to be @downloaded and installed seperately). Please review the install instruction at @readme.', [
+        '@downloaded' => \Drupal::l(t('downloaded'), Url::fromUri('http://qbnz.com/highlighter/')),
+        '@readme' => \Drupal::l(t('README.TXT'), Url::fromUri('http://cgit.drupalcode.org/geshifilter/tree/README.txt?h=8.x-1.x')),
+      ]);
     }
     return $library;
   }

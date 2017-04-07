@@ -52,8 +52,9 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
     $form['library'] = [
       '#type' => 'fieldset',
       '#title' => defined('GESHI_VERSION') ? $this->t('GeSHi library version @version detected', ['@version' => GESHI_VERSION]) : $this->t('GeSHi library'),
-      '#description' => $this->t('The GeSHi filter requires the GeSHi library (which needs to be @downloaded and installed seperately).', [
-        '@downloaded' => \Drupal::l($this->t('downloaded'), Url::fromUri('http://qbnz.com/highlighter/')),
+      '#description' => $this->t('The GeSHi filter requires the GeSHi library (which needs to be @downloaded and installed seperately). Please review the install instruction at @readme.', [
+        '@downloaded' => $this->l($this->t('downloaded'), Url::fromUri('http://qbnz.com/highlighter/')),
+        '@readme' => $this->l($this->t('README.TXT'), Url::fromUri('http://cgit.drupalcode.org/geshifilter/tree/README.txt?h=8.x-1.x')),
       ]),
       '#collapsible' => TRUE,
       '#collapsed' => $geshi_library['loaded'],

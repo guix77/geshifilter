@@ -22,14 +22,14 @@ class GeshiFieldDefaultFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = array();
+    $elements = [];
     foreach ($items as $delta => $item) {
-      $source = array(
+      $source = [
         '#theme' => 'geshifield_default',
         '#language' => $item->language,
         '#sourcecode' => $item->sourcecode,
-      );
-      $elements[$delta] = array('#markup' => drupal_render($source));
+      ];
+      $elements[$delta] = ['#markup' => drupal_render($source)];
     }
 
     return $elements;

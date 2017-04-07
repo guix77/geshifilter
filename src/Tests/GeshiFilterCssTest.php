@@ -31,9 +31,9 @@ class GeshiFilterCssTest extends WebTestBase {
    *
    * @var object
    */
-  public static $modules = array('node', 'geshifilter', 'filter',
+  public static $modules = ['node', 'geshifilter', 'filter',
     'file',
-  );
+  ];
 
   /**
    * Configuration object.
@@ -54,26 +54,26 @@ class GeshiFilterCssTest extends WebTestBase {
     // And set the path to the geshi library.
     $this->config->set('geshi_dir', '/libraries/geshi');
 
-    $settings = array(
+    $settings = [
       // Override default type (a random name).
       'type' => 'geshifilter_content_type',
       'name' => 'Geshifilter Content',
-    );
+    ];
     $this->drupalCreateContentType($settings);
 
     // Create a filter admin user.
-    $permissions = array(
+    $permissions = [
       'administer filters',
       'access administration pages',
       'administer site configuration',
-    );
+    ];
     $this->filterAdminUser = $this->drupalCreateUser($permissions);
 
     // Log in with filter admin user.
     $this->drupalLogin($this->filterAdminUser);
 
     // Add an text format with only geshi filter.
-    $this->createTextFormat('geshifilter_text_format', array('filter_geshifilter'));
+    $this->createTextFormat('geshifilter_text_format', ['filter_geshifilter']);
   }
 
   /**
@@ -84,22 +84,22 @@ class GeshiFilterCssTest extends WebTestBase {
     $this->drupalGet('admin/config/content/formats/geshifilter/generate_css');
     $this->assertRaw('GeSHi Dynamically Generated Stylesheet', 'Test for geshifilter generate css');
 
-    $form_values = array(
+    $form_values = [
       'css_mode' => 2,
-    );
+    ];
     $this->drupalPostForm('admin/config/content/formats/geshifilter', $form_values, t('Save configuration'));
 
     // Create a node.
-    $node = array(
+    $node = [
       'title' => 'Test for GeShi Filter',
-      'body' => array(
-        array(
+      'body' => [
+        [
           'value' => 'dfgdfg <code language="php">echo("hi");</code> dfgdg',
           'format' => 'geshifilter_text_format',
-        ),
-      ),
+        ],
+      ],
       'type' => 'geshifilter_content_type',
-    );
+    ];
     $this->drupalCreateNode($node);
     $this->drupalGet('node/1');
     $this->assertRaw('/assets/css/geshifilter.css', 'The CSS file /assets/css/geshifilter.css is present.');
@@ -115,7 +115,7 @@ class GeshiFilterCssTest extends WebTestBase {
    *   Array with the machine names of filters to enable.
    */
   protected function createTextFormat($format_name, array $filters) {
-    $edit = array();
+    $edit = [];
     $edit['format'] = $format_name;
     $edit['name'] = $this->randomMachineName();
     $edit['roles[' . DRUPAL_AUTHENTICATED_RID . ']'] = 1;
@@ -123,7 +123,7 @@ class GeshiFilterCssTest extends WebTestBase {
       $edit['filters[' . $filter . '][status]'] = TRUE;
     }
     $this->drupalPostForm('admin/config/content/formats/add', $edit, t('Save configuration'));
-    $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
+    $this->assertRaw(t('Added text format %format.', ['%format' => $edit['name']]), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
 

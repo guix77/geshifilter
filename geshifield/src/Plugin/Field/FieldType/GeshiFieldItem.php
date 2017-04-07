@@ -28,20 +28,20 @@ class GeshiFieldItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field) {
-    return array(
-      'columns' => array(
-        'sourcecode' => array(
+    return [
+      'columns' => [
+        'sourcecode' => [
           'type' => 'text',
           'size' => 'big',
           'not null' => FALSE,
-        ),
-        'language' => array(
+        ],
+        'language' => [
           'type' => 'varchar',
           'length' => 256,
           'not null' => FALSE,
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
   }
 
   /**

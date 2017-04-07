@@ -7,18 +7,18 @@
  * @todo: is the GeSHi CSS file always loaded when needed?
  */
 
-use \Drupal\geshifilter\GeshiFilterProcess;
+use Drupal\geshifilter\GeshiFilterProcess;
 
 /**
  * Implements hook_theme().
  */
 function geshifield_theme() {
-  return array(
-    'geshifield_default' => array(
+  return [
+    'geshifield_default' => [
       'function' => 'geshifield_formatter_default',
       'render element' => 'geshifield',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -40,9 +40,9 @@ function geshifield_formatter_default(array $variables) {
   if ($sourcecode) {
     $output .= GeshiFilterProcess::geshiProcess($sourcecode, $language);
   }
-  $elements = array();
-  $elements[] = array(
+  $elements = [];
+  $elements[] = [
     '#markup' => $output,
-  );
+  ];
   return $output;
 }

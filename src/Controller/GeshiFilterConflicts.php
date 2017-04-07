@@ -15,14 +15,14 @@ class GeshiFilterConflicts extends ControllerBase {
   public function content() {
     $conflicts = self::listConflicts();
     if (count($conflicts) == 0) {
-      $build = array(
+      $build = [
         '#type' => 'markup',
         '#markup' => $this->t('No conflicts found.'),
-      );
+      ];
       return $build;
     }
     else {
-      return array();
+      return [];
     }
   }
 
@@ -36,6 +36,7 @@ class GeshiFilterConflicts extends ControllerBase {
    *   no conflics.
    */
   public static function listConflicts() {
-    return array();
+    return [];
   }
+
 }

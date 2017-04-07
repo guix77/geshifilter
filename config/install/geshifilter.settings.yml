@@ -1,5 +1,3 @@
-# Default settings for GeshiFilter
-
 # Use a specific options for each filter format
 use_format_specific_options: false
 
@@ -37,21 +35,21 @@ tags: 'code blockcode'
 # - 1 <> (<cpp>).
 # - 2 [] ([cpp]).
 # - 4 [[]] ([[CPP]]).
-# - 8 <?PHP php block.
+# - 8 <?PHP php block .
 tag_styles:
   1: 1
   2: 2
   4: 0
   8: 0
 
-#Default languages and tags
+# Default languages and tags.
 language:
   php:
-    enabled: true
+    enabled: TRUE
     tags: 'php'
   cpp:
-    enabled: true
+    enabled: TRUE
     tags: 'cpp'
   java:
-    enabled: true
+    enabled: TRUE
     tags: 'java'

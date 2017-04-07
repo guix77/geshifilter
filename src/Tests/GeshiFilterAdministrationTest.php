@@ -5,7 +5,7 @@ namespace Drupal\geshifilter\Tests;
 // Use of base class for the tests.
 use Drupal\simpletest\WebTestBase;
 
-use \Drupal\geshifilter\GeshiFilter;
+use Drupal\geshifilter\GeshiFilter;
 
 /**
  * Test for administrative interface of GeshiFilter.
@@ -33,7 +33,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('geshifilter', 'filter');
+  public static $modules = ['geshifilter', 'filter'];
 
   /**
    * Configuration object.
@@ -52,11 +52,11 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->config = \Drupal::configFactory()->getEditable('geshifilter.settings');
 
     // Create a filter admin user.
-    $permissions = array(
+    $permissions = [
       'administer filters',
       'access administration pages',
       'administer site configuration',
-    );
+    ];
     $this->filterAdminUser = $this->drupalCreateUser($permissions);
 
     // Log in with filter admin user.
@@ -69,10 +69,10 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     // Set default highlighting mode to "do nothing".
     $this->config->set('default_highlighting', GeshiFilter::DEFAULT_PLAINTEXT);
     $this->config->set('use_format_specific_options', FALSE);
-    $this->config->set('tag_styles', array(
+    $this->config->set('tag_styles', [
       GeshiFilter::BRACKETS_ANGLE => GeshiFilter::BRACKETS_ANGLE,
       GeshiFilter::BRACKETS_SQUARE => GeshiFilter::BRACKETS_SQUARE,
-    ));
+    ]);
     $this->config->set('default_line_numbering', GeshiFilter::LINE_NUMBERS_DEFAULT_NONE);
     $this->config->save();
   }
@@ -91,17 +91,17 @@ class GeshiFilterAdministrationTest extends WebTestBase {
     $this->config->save();
 
     // A language tag should differ from the generic tags.
-    $form_values = array(
+    $form_values = [
       'language[php][tags]' => 'php generictag',
-    );
+    ];
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $form_values, t('Save configuration'));
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ from generic tags (with generic tag options)'));
 
     // Language tags should differ between languages.
-    $form_values = array(
+    $form_values = [
       'language[php][tags]' => 'php languagetag',
       'language[python][tags]' => 'languagetag python',
-    );
+    ];
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $form_values, t('Save configuration'));
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with generic tag options)'));
 
@@ -147,7 +147,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
    *   Array with the machine names of filters to enable.
    */
   protected function createTextFormat($format_name, array $filters) {
-    $edit = array();
+    $edit = [];
     $edit['format'] = $format_name;
     $edit['name'] = $this->randomMachineName();
     $edit['roles[' . DRUPAL_AUTHENTICATED_RID . ']'] = 1;
@@ -155,7 +155,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
       $edit['filters[' . $filter . '][status]'] = TRUE;
     }
     $this->drupalPostForm('admin/config/content/formats/add', $edit, t('Save configuration'));
-    $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
+    $this->assertRaw(t('Added text format %format.', ['%format' => $edit['name']]), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
 
@@ -163,7 +163,7 @@ class GeshiFilterAdministrationTest extends WebTestBase {
    * Tests for GeshiFilterLanguageForm.
    */
   public function testLanguagesForm() {
-    $edit = array();
+    $edit = [];
     $edit['language[xml][enabled]'] = TRUE;
     $edit['language[xml][tags]'] = "<xml>";
     $this->drupalPostForm('admin/config/content/formats/geshifilter/languages/all', $edit, t('Save configuration'));

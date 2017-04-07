@@ -6,11 +6,11 @@ use Drupal\Core\Form\ConfigFormBase;
 
 use Drupal\Core\Form\FormStateInterface;
 
-use \Drupal\geshifilter\GeshiFilterCss;
+use Drupal\geshifilter\GeshiFilterCss;
 
 use Drupal\Core\Cache\Cache;
 
-use \Drupal\geshifilter\GeshiFilter;
+use Drupal\geshifilter\GeshiFilter;
 
 /**
  * Form used to set enable/disabled for languages.
@@ -22,7 +22,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    *
    * @var array
    */
-  public static $modules = array('libraries', 'geshifilter');
+  public static $modules = ['libraries', 'geshifilter'];
 
   /**
    * Object with configuration.
@@ -56,7 +56,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     $geshi_library = GeshiFilter::loadGeshi();
     if (!$geshi_library['loaded']) {
       drupal_set_message($geshi_library['error message'], 'error');
-      return array();
+      return [];
     }
     $add_checkbox = TRUE;
     $add_tag_option = (!$config->get('use_format_specific_options'));
@@ -139,7 +139,7 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
     if ($config->get('css_mode', GeshiFilter::CSS_INLINE) == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
       GeshiFilterCss::generateLanguagesCssFile();
     }
-    Cache::invalidateTags(array('geshifilter'));
+    Cache::invalidateTags(['geshifilter']);
   }
 
   /**
@@ -159,19 +159,19 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
    */
   protected function perLanguageSettings($view, $add_checkbox, $add_tag_option) {
     $config = $this->config('geshifilter.settings');
-    $form = array();
-    $header = array(
+    $form = [];
+    $header = [
       $this->t('Language'),
       $this->t('GeSHi language code'),
-    );
+    ];
     if ($add_tag_option) {
       $header[] = $this->t('Tag/language attribute value');
     }
-    $form['language'] = array(
+    $form['language'] = [
       '#type' => 'table',
       '#header' => $header,
       '#empty' => $this->t('Nome language is available.'),
-    );
+    ];
 
     // Table body.
     $languages = GeshiFilter::getAvailableLanguages();
@@ -182,33 +182,33 @@ class GeshiFilterLanguagesForm extends ConfigFormBase {
         continue;
       }
       // Build language row.
-      $form['language'][$language] = array();
+      $form['language'][$language] = [];
       // Add enable/disable checkbox.
       if ($add_checkbox) {
-        $form['language'][$language]['enabled'] = array(
+        $form['language'][$language]['enabled'] = [
           '#type' => 'checkbox',
           '#default_value' => $enabled,
           '#title' => $language_data['fullname'],
-        );
+        ];
       }
       else {
-        $form['language'][$language]['fullname'] = array(
+        $form['language'][$language]['fullname'] = [
           '#type' => 'markup',
           '#markup' => $language_data['fullname'],
-        );
+        ];
       }
       // Language code.
-      $form['language'][$language]['name'] = array(
+      $form['language'][$language]['name'] = [
         '#type' => 'markup',
         '#markup' => $language,
-      );
+      ];
       // Add a textfield for tags.
       if ($add_tag_option) {
-        $form['language'][$language]['tags'] = array(
+        $form['language'][$language]['tags'] = [
           '#type' => 'textfield',
           '#default_value' => $config->get("language.{$language}.tags", ''),
           '#size' => 20,
-        );
+        ];
       }
     }
     return $form;

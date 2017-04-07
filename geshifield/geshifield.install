@@ -9,20 +9,20 @@
  * Implements hook_field_schema().
  */
 function geshifield_field_schema($field) {
-  return array(
-    'columns' => array(
-      'sourcecode' => array(
+  return [
+    'columns' => [
+      'sourcecode' => [
         'type' => 'text',
         'size' => 'big',
         'not null' => FALSE,
         'sortable' => TRUE,
-      ),
-      'language' => array(
+      ],
+      'language' => [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
         'sortable' => TRUE,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }

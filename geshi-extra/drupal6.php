@@ -18,21 +18,21 @@
  *
  */
 
-$language_data = array(
+$language_data = [
   'LANG_NAME' => 'Drupal 6',
-  'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),
-  'COMMENT_MULTI' => array('/*' => '*/'),
+  'COMMENT_SINGLE' => [1 => '//', 2 => '#'],
+  'COMMENT_MULTI' => ['/*' => '*/'],
   'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
-  'QUOTEMARKS' => array("'", '"'),
+  'QUOTEMARKS' => ["'", '"'],
   'ESCAPE_CHAR' => '\\',
-  'KEYWORDS' => array(
-    1 => array(
+  'KEYWORDS' => [
+    1 => [
       'include', 'require', 'include_once', 'require_once',
       'for', 'foreach', 'as', 'if', 'elseif', 'else', 'while', 'do', 'endwhile',
       'endif', 'switch', 'case', 'endswitch', 'endfor', 'endforeach',
       'return', 'break', 'continue',
-    ),
-    2 => array(
+    ],
+    2 => [
       'null', '__LINE__', '__FILE__',
       'false', '&lt;?php', '?&gt;', '&lt;?',
       '&lt;script language', '&lt;/script&gt;',
@@ -45,8 +45,8 @@ $language_data = array(
       'PHP_OUTPUT_HANDLER_END', 'E_ERROR', 'E_WARNING', 'E_PARSE', 'E_NOTICE',
       'E_CORE_ERROR', 'E_CORE_WARNING', 'E_COMPILE_ERROR', 'E_COMPILE_WARNING', 'E_USER_ERROR',
       'E_USER_WARNING', 'E_USER_NOTICE', 'E_ALL',
-    ),
-    3 => array(
+    ],
+    3 => [
       'zlib_get_coding_type', 'zend_version', 'zend_logo_guid', 'yp_order', 'yp_next',
       'yp_match', 'yp_master', 'yp_get_default_domain', 'yp_first', 'yp_errno', 'yp_err_string',
       'yp_cat', 'yp_all', 'xml_set_unparsed_entity_decl_handler', 'xml_set_start_namespace_decl_handler', 'xml_set_processing_instruction_handler', 'xml_set_object',
@@ -225,8 +225,8 @@ $language_data = array(
       'aggregate_methods_by_list', 'aggregate_methods', 'aggregate', 'addslashes', 'addcslashes', 'acosh',
       'acos', 'abs', '_', 'echo', 'print', 'global', 'static', 'exit', 'array', 'empty',
       'eval', 'isset', 'unset', 'die', 'list',
-    ),
-    5 => array(
+    ],
+    5 => [
       'actions_do', 'actions_list', 'actions_get_all_actions', 'actions_actions_map', 'actions_function_lookup',
       'actions_synchronize', 'actions_save', 'actions_load', 'actions_delete', '_batch_page',
       '_batch_start', '_batch_progress_page_js', '_batch_do', '_batch_progress_page_nojs',
@@ -679,8 +679,8 @@ $language_data = array(
       'template_preprocess_user_profile_category', 'user_edit', 'user_profile_form', 'user_profile_form_validate',
       'user_profile_form_submit', 'user_edit_delete_submit', 'user_confirm_delete', 'user_confirm_delete_submit',
       'user_edit_validate', 'user_edit_submit', 'user_page',
-    ),
-    6 => array(
+    ],
+    6 => [
       'CACHE_PERMANENT', 'CACHE_TEMPORARY', 'CACHE_DISABLED', 'CACHE_NORMAL', 'CACHE_AGGRESSIVE',
       'WATCHDOG_EMERG', 'WATCHDOG_ALERT', 'WATCHDOG_CRITICAL', 'WATCHDOG_ERROR', 'WATCHDOG_WARNING',
       'WATCHDOG_NOTICE', 'WATCHDOG_INFO', 'WATCHDOG_DEBUG', 'DRUPAL_BOOTSTRAP_CONFIGURATION',
@@ -720,12 +720,12 @@ $language_data = array(
       'DRUPAL_MAXIMUM_TEMP_FILE_AGE', 'UPDATE_DEFAULT_URL', 'UPDATE_CURRENT', 'UPDATE_NOT_SECURE',
       'UPDATE_NOT_CURRENT', 'UPDATE_NOT_CHECKED', 'UPDATE_UNKNOWN', 'USERNAME_MAX_LENGTH',
       'EMAIL_MAX_LENGTH',
-    ),
-  ),
-  'SYMBOLS' => array(
+    ],
+  ],
+  'SYMBOLS' => [
     '(', ')', '[', ']', '{', '}', '!', '@', '%', '&', '*', '|', '/', '<', '>',
-  ),
-  'CASE_SENSITIVE' => array(
+  ],
+  'CASE_SENSITIVE' => [
     GESHI_COMMENTS => FALSE,
     1 => FALSE,
     2 => FALSE,
@@ -733,90 +733,90 @@ $language_data = array(
     4 => FALSE,
     5 => FALSE,
     6 => FALSE,
-  ),
-  'STYLES' => array(
-    'KEYWORDS' => array(
+  ],
+  'STYLES' => [
+    'KEYWORDS' => [
       1 => 'color: #b1b100;',
       2 => 'color: #000000; font-weight: bold;',
       3 => 'color: #000066;',
       5 => 'color: #000066;',
       6 => 'color: #000000; font-weight: bold;',
-    ),
-    'COMMENTS' => array(
+    ],
+    'COMMENTS' => [
       1 => 'color: #808080; font-style: italic;',
       2 => 'color: #808080; font-style: italic;',
       'MULTI' => 'color: #808080; font-style: italic;',
-    ),
-    'ESCAPE_CHAR' => array(
+    ],
+    'ESCAPE_CHAR' => [
       0 => 'color: #000099; font-weight: bold;',
-    ),
-    'BRACKETS' => array(
+    ],
+    'BRACKETS' => [
       0 => 'color: #66cc66;',
-    ),
-    'STRINGS' => array(
+    ],
+    'STRINGS' => [
       0 => 'color: #ff0000;',
-    ),
-    'NUMBERS' => array(
+    ],
+    'NUMBERS' => [
       0 => 'color: #cc66cc;',
-    ),
-    'METHODS' => array(
+    ],
+    'METHODS' => [
       1 => 'color: #006600;',
       2 => 'color: #006600;',
-    ),
-    'SYMBOLS' => array(
+    ],
+    'SYMBOLS' => [
       0 => 'color: #66cc66;',
-    ),
-    'REGEXPS' => array(
+    ],
+    'REGEXPS' => [
       0 => 'color: #0000ff;',
       1 => 'color: #ff0000',
-    ),
-    'SCRIPT' => array(
+    ],
+    'SCRIPT' => [
       0 => '',
       1 => '',
       2 => '',
       3 => '',
-    ),
-  ),
-  'URLS' => array(
+    ],
+  ],
+  'URLS' => [
     1 => '',
     2 => '',
     3 => 'http://www.php.net/{FNAME}',
     4 => '',
     5 => 'http://api.drupal.org/api/function/{FNAME}/6',
     6 => 'http://api.drupal.org/api/constant/{FNAME}/6',
-  ),
+  ],
   'OOLANG' => TRUE,
-  'OBJECT_SPLITTERS' => array(
+  'OBJECT_SPLITTERS' => [
     1 => '-&gt;',
     2 => '::',
-  ),
-  'REGEXPS' => array(
+  ],
+  'REGEXPS' => [
     0 => "[\\$]{1,2}[a-zA-Z_][a-zA-Z0-9_]*",
-    1 => array(
+    1 => [
       GESHI_SEARCH  => "([a-zA-Z]+)(\n)(.*)(\n)(\\1;?)",
       GESHI_REPLACE => '\3',
       GESHI_BEFORE => '\1\2',
       GESHI_AFTER => '\4\5',
       GESHI_MODIFIERS => 'siU',
-    ),
-  ),
+    ],
+  ],
   'STRICT_MODE_APPLIES' => GESHI_MAYBE,
-  'SCRIPT_DELIMITERS' => array(
-    0 => array(
+  'SCRIPT_DELIMITERS' => [
+    0 => [
       '<?php' => '?>',
-    ),
-    1 => array(
+    ],
+    1 => [
       '<?' => '?>',
-    ),
-    2 => array(
+    ],
+    2 => [
       '<%' => '%>',
-    ),
-  ),
-  'HIGHLIGHT_STRICT_BLOCK' => array(
+    ],
+  ],
+  'HIGHLIGHT_STRICT_BLOCK' => [
     0 => TRUE,
     1 => TRUE,
     2 => TRUE,
     3 => TRUE,
-  ),
+  ],
   'TAB_WIDTH' => 2,
-);
+];

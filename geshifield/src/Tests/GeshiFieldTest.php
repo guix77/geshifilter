@@ -2,7 +2,7 @@
 
 namespace Drupal\geshifield\Tests;
 
-use \Drupal\geshifilter\GeshiFilter;
+use Drupal\geshifilter\GeshiFilter;
 
 // Use of base class for the tests.
 use Drupal\simpletest\WebTestBase;
@@ -36,13 +36,13 @@ class GeshiFieldTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array(
+  public static $modules = [
     'node',
     'geshifilter',
     'filter',
     'geshifield',
     'field_ui',
-  );
+  ];
 
   /**
    * Code run before each and every test method.
@@ -58,29 +58,29 @@ class GeshiFieldTest extends WebTestBase {
     $this->config->set('geshi_dir', '/libraries/geshi');
 
     // Create a content type, as we will create nodes on test.
-    $settings = array(
+    $settings = [
       // Override default type (a random name).
       'type' => 'geshifilter_content_type',
       'name' => 'Geshifilter Content',
-    );
+    ];
     $this->drupalCreateContentType($settings);
 
-    $this->adminUser = $this->drupalCreateUser(array(), NULL, TRUE);
+    $this->adminUser = $this->drupalCreateUser([], NULL, TRUE);
 
     // Log in with filter admin user.
     $this->drupalLogin($this->adminUser);
 
     // Add an text format with only geshi filter.
-    $this->createTextFormat('geshifilter_text_format', array('filter_geshifilter'));
+    $this->createTextFormat('geshifilter_text_format', ['filter_geshifilter']);
 
     // Set some default GeSHi filter admin settings.
     // Set default highlighting mode to "do nothing".
     $this->config->set('default_highlighting', GeshiFilter::DEFAULT_PLAINTEXT);
     $this->config->set('use_format_specific_options', FALSE);
-    $this->config->set('tag_styles', array(
+    $this->config->set('tag_styles', [
       GeshiFilter::BRACKETS_ANGLE => GeshiFilter::BRACKETS_ANGLE,
       GeshiFilter::BRACKETS_SQUARE => GeshiFilter::BRACKETS_SQUARE,
-    ));
+    ]);
     $this->config->set('default_line_numbering', GeshiFilter::LINE_NUMBERS_DEFAULT_NONE);
     $this->config->save();
   }
@@ -94,7 +94,7 @@ class GeshiFieldTest extends WebTestBase {
    *   Array with the machine names of filters to enable.
    */
   protected function createTextFormat($format_name, array $filters) {
-    $edit = array();
+    $edit = [];
     $edit['format'] = $format_name;
     $edit['name'] = $this->randomMachineName();
     $edit['roles[' . DRUPAL_AUTHENTICATED_RID . ']'] = 1;
@@ -102,7 +102,7 @@ class GeshiFieldTest extends WebTestBase {
       $edit['filters[' . $filter . '][status]'] = TRUE;
     }
     $this->drupalPostForm('admin/config/content/formats/add', $edit, t('Save configuration'));
-    $this->assertRaw(t('Added text format %format.', array('%format' => $edit['name'])), 'New filter created.');
+    $this->assertRaw(t('Added text format %format.', ['%format' => $edit['name']]), 'New filter created.');
     $this->drupalGet('admin/config/content/formats');
   }
 
@@ -128,12 +128,12 @@ class GeshiFieldTest extends WebTestBase {
    */
   protected function addNode($title, $body, $sourcecode, $language) {
     // Create a node.
-    $node = array(
+    $node = [
       'title[0][value]' => $title,
       'body[0][value]' => $body,
       'field_geshi[0][sourcecode]' => $sourcecode,
       'field_geshi[0][language]' => $language,
-    );
+    ];
     $this->drupalPostForm('node/add/geshifilter_content_type', $node, 'Save and publish');
     $this->drupalGet('node/1');
   }
@@ -152,9 +152,9 @@ class GeshiFieldTest extends WebTestBase {
    * @param array $instance
    *   Instance of the field.
    */
-  private function addField($type, $name, $label, $values = array(), $instance = array()) {
+  private function addField($type, $name, $label, array $values = [], array $instance = []) {
     // Choose field type and name.
-    $edit = array();
+    $edit = [];
     $edit['new_storage_type'] = $type;
     $edit['label'] = $label;
     $edit['field_name'] = $name;

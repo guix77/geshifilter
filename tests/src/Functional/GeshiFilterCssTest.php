@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\geshifilter\Tests;
+namespace Drupal\Tests\geshifilter\Functional;
 
 // Use of base class for the tests.
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Test for css generation and use in GeshiFilter.
  *
  * @group geshifilter
  */
-class GeshiFilterCssTest extends WebTestBase {
+class GeshiFilterCssTest extends BrowserTestBase {
 
   /**
    * A global filter adminstrator.

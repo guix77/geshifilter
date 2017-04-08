@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\geshifield\Tests;
+namespace Drupal\Tests\geshifield\Functional;
 
 use Drupal\geshifilter\GeshiFilter;
 
 // Use of base class for the tests.
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests for GeshiField in node content.
@@ -15,7 +15,7 @@ use Drupal\simpletest\WebTestBase;
  *
  * @group geshifilter
  */
-class GeshiFieldTest extends WebTestBase {
+class GeshiFieldTest extends BrowserTestBase {
 
   /**
    * A global filter adminstrator.

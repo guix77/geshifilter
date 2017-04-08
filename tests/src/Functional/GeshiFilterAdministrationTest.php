@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\geshifilter\Tests;
+namespace Drupal\Tests\geshifilter\Functional;
 
 // Use of base class for the tests.
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 use Drupal\geshifilter\GeshiFilter;
 
@@ -12,7 +12,7 @@ use Drupal\geshifilter\GeshiFilter;
  *
  * @group geshifilter
  */
-class GeshiFilterAdministrationTest extends WebTestBase {
+class GeshiFilterAdministrationTest extends BrowserTestBase {
 
   /**
    * A global filter adminstrator.

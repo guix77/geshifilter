@@ -83,27 +83,104 @@ class GeshiFilterCssTest extends BrowserTestBase {
     // Test if we can generate the css.
     $this->drupalGet('admin/config/content/formats/geshifilter/generate_css');
     $this->assertRaw('GeSHi Dynamically Generated Stylesheet', 'Test for geshifilter generate css');
+  }
 
-    $form_values = [
-      'css_mode' => 2,
-    ];
-    $this->drupalPostForm('admin/config/content/formats/geshifilter', $form_values, t('Save configuration'));
-
-    // Create a node.
+  /**
+   * Test the use of css when CSS mode for syntax highlighting is inline.
+   *
+   * In this case we have geshifilter.css and no geshi-languages.css.
+   */
+  public function testCssInline() {
+    // Node Content.
     $node = [
       'title' => 'Test for GeShi Filter',
       'body' => [
         [
-          'value' => 'dfgdfg <code language="php">echo("hi");</code> dfgdg',
+          'value' => "dfgdfg <code language=\"php\">echo(\"hi\");</code> dfgdg",
           'format' => 'geshifilter_text_format',
         ],
       ],
       'type' => 'geshifilter_content_type',
     ];
+
+    // Inline CSS.
+    $form_values = [
+      'css_mode' => 1,
+    ];
+    $this->drupalPostForm('admin/config/content/formats/geshifilter', $form_values, t('Save configuration'));
+
+    // Create the node and read it.
     $this->drupalCreateNode($node);
     $this->drupalGet('node/1');
+
+    // Test if we have only geshifilter.css.
+    $this->assertRaw('/assets/css/geshifilter.css', 'The CSS file /assets/css/geshifilter.css is present.');
+    $this->assertNoRaw('/geshi/geshifilter-languages.css', 'The CSS file /geshi/geshifilter-languages.css is present.');
+  }
+
+  /**
+   * Test the css when CSS mode for syntax highlighting is external managed.
+   *
+   * In this case we have both geshifilter.css and geshi-languages.css.
+   */
+  public function testCssExternal() {
+    // Node Content.
+    $node = [
+      'title' => 'Test for GeShi Filter',
+      'body' => [
+        [
+          'value' => "dfgdfg <code language=\"php\">echo(\"hi\");</code> dfgdg",
+          'format' => 'geshifilter_text_format',
+        ],
+      ],
+      'type' => 'geshifilter_content_type',
+    ];
+
+    // External managed CSS.
+    $form_values = [
+      'css_mode' => 2,
+    ];
+    $this->drupalPostForm('admin/config/content/formats/geshifilter', $form_values, t('Save configuration'));
+
+    // Create the node and read it.
+    $this->drupalCreateNode($node);
+    $this->drupalGet('node/1');
+
+    // Test if we have both css.
     $this->assertRaw('/assets/css/geshifilter.css', 'The CSS file /assets/css/geshifilter.css is present.');
     $this->assertRaw('/geshi/geshifilter-languages.css', 'The CSS file /geshi/geshifilter-languages.css is present.');
+  }
+
+  /**
+   * Test the use of css when CSS mode for syntax highlighting is only add css.
+   *
+   * In this case we do not have both geshifilter.css and geshi-languages.css.
+   */
+  public function testOnlyCss() {
+    // Node Content.
+    $node = [
+      'title' => 'Test for GeShi Filter',
+      'body' => [
+        [
+          'value' => "dfgdfg <code language=\"php\">echo(\"hi\");</code> dfgdg",
+          'format' => 'geshifilter_text_format',
+        ],
+      ],
+      'type' => 'geshifilter_content_type',
+    ];
+    // Only CSS.
+    $form_values = [
+      'css_mode' => 3,
+    ];
+    $this->drupalPostForm('admin/config/content/formats/geshifilter', $form_values, t('Save configuration'));
+
+    // Create the node and read it.
+    $this->drupalCreateNode($node);
+    $this->drupalGet('node/1');
+
+    // Test if we have both css.
+    $this->assertNoRaw('/assets/css/geshifilter.css', 'The CSS file /assets/css/geshifilter.css is present.');
+    $this->assertNoRaw('/geshi/geshifilter-languages.css', 'The CSS file /geshi/geshifilter-languages.css is present.');
   }
 
   /**

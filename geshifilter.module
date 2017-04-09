@@ -7,6 +7,7 @@
 
 // Necessary for URL.
 use Drupal\geshifilter\GeshiFilterCss;
+use Drupal\geshifilter\GeshiFilter;
 use Drupal\Core\Url;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -91,9 +92,12 @@ function geshifilter_libraries_info() {
  */
 function geshifilter_library_info_alter(&$libraries, $extension) {
   if ($extension == 'geshifilter') {
-    $css = drupal_realpath(GeshiFilterCss::languageCssPath());
-    $base = DRUPAL_ROOT;
-    $name = substr($css, strlen($base));
-    $libraries['geshifilter']['css']['component'][$name] = [];
+    $config = \Drupal::config('geshifilter.settings');
+    // Add the language CSS file if CSS classes are used for code styling.
+    if ($config->get('css_mode') == GeshiFilter::CSS_CLASSES_AUTOMATIC) {
+      $css = drupal_realpath(GeshiFilterCss::languageCssPath());
+      $name = substr($css, strlen(DRUPAL_ROOT));
+      $libraries['geshifilter']['css']['component'][$name] = [];
+    }
   }
 }

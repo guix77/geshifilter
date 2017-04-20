@@ -99,6 +99,8 @@ class GeshiFilterProcess {
     }
     else {
       $geshi->highlight_lines_extra($special_lines);
+      // How many spaces to use for tabs.
+      $geshi->set_tab_width($config->get('tab_width'));
 
       // Block source code mode.
       $geshi->set_header_type((int) $config->get('code_container', GESHI_HEADER_PRE));

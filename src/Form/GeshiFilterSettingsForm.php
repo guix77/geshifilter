@@ -136,6 +136,15 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           '@line-numbers' => \Drupal::l($this->t('Line numbers'), Url::fromUri('http://qbnz.com/highlighter/geshi-doc.html#line-numbers')),
         ]),
       ];
+      
+      // Generic tags.
+      $form['highlighting_options']["tab_width"] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Tab Width'),
+        '#default_value' => $config->get('tab_width'),
+        '#description' => $this->t('How many spaces to use when replacing tabs.'),
+      ];
+      
       // Highlight_string usage option.
       $form['highlighting_options']['use_highlight_string_for_php'] = [
         '#type' => 'checkbox',
@@ -261,6 +270,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
       $config->set('use_format_specific_options', $form_state->getValue('use_format_specific_options'))
         ->set('default_highlighting', $form_state->getValue('default_highlighting'))
         ->set('default_line_numbering', $form_state->getValue('default_line_numbering'))
+        ->set('tab_width', $form_state->getValue('tab_width'))
         ->set('use_highlight_string_for_php', $form_state->getValue('use_highlight_string_for_php'))
         ->set('enable_keyword_urls', $form_state->getValue('enable_keyword_urls'))
         ->set('css_mode', $form_state->getValue('css_mode'))

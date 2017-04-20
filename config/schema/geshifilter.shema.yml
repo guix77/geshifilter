@@ -33,6 +33,8 @@ geshifilter.settings:
       type: sequence
       sequence:
         - type: integer
+    tab_width:
+      type: integer
     language:
       type: sequence
       sequence:

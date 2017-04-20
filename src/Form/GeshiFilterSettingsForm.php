@@ -326,6 +326,7 @@ class GeshiFilterSettingsForm extends ConfigFormBase {
           '@php' => '<?php ... ?>',
           '@percent' => '<% ... %>',
         ]),
+        GeshiFilter::BRACKETS_MARKDOWNBLOCK => '<code>' . htmlentities('```foo ... ```') . '</code>',
       ],
       '#default_value' => $this->tagStyles(),
       '#description' => $this->t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),

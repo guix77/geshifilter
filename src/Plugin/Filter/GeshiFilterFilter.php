@@ -168,6 +168,11 @@ class GeshiFilterFilter extends FilterBase {
       $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
       $text = preg_replace_callback($pattern, [$this, 'preparePhpCallback'], $text);
     }
+    if (in_array(GeshiFilter::BRACKETS_MARKDOWNBLOCK, $tag_styles)) {
+      // Prepare ```php ``` blocks(markdown).
+      $pattern = '#(```([a-z]*)\n([\s\S]*?)\n```)#s';
+      $text = preg_replace_callback($pattern, [$this, 'prepareMarkdownCallback'], $text);
+    }
     return $text;
   }
 
@@ -206,6 +211,13 @@ class GeshiFilterFilter extends FilterBase {
         $bracket_close = SafeMarkup::checkPlain(']]');
       }
       $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('[[foo]]') . '</code>';
+    }
+    if (in_array(GeshiFilter::BRACKETS_MARKDOWNBLOCK, $tag_styles)) {
+      if (!$bracket_open) {
+        $bracket_open = SafeMarkup::checkPlain('```');
+        $bracket_close = SafeMarkup::checkPlain('```');
+      }
+      $tag_style_examples[] = '<code>' . SafeMarkup::checkPlain('```foo ```') . '</code>';
     }
     if (!$bracket_open) {
       drupal_set_message($this->t('Could not determine a valid tag style for GeSHi filtering.'), 'error');
@@ -536,6 +548,7 @@ class GeshiFilterFilter extends FilterBase {
           '@php' => '<?php ... ?>',
           '@percent' => '<% ... %>',
         ]),
+        GeshiFilter::BRACKETS_MARKDOWNBLOCK => '<code>' . htmlentities('```foo ... ```') . '</code>',
       ],
       '#default_value' => $this->tagStyles(),
       '#description' => $this->t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
@@ -927,6 +940,56 @@ class GeshiFilterFilter extends FilterBase {
     return '[geshifilter-questionmarkphp]'
     . str_replace(["\r", "\n"], ['', '&#10;'], SafeMarkup::checkPlain($match[2]))
     . '[/geshifilter-questionmarkphp]';
+  }
+
+  /**
+   * Callback for preparing input text from markdown(```) tags.
+   *
+   * Replaces the code tags brackets with geshifilter specific ones to prevent
+   * possible messing up by other filters, e.g.
+   *   '[python]foo[/python]' to '[geshifilter-python]foo[/geshifilter-python]'.
+   * Replaces newlines with "&#10;" to prevent issues with the line break filter
+   * Escapes the tricky characters like angle brackets with
+   * SafeMarkup::checkPlain() to prevent messing up by other filters like the
+   * HTML filter.
+   *
+   * @param array $match
+   *   An array with the pieces from matched string.
+   *
+   * @return string
+   *   Return escaped code block.
+   */
+  public function prepareMarkdownCallback(array $match) {
+    $tag_name = $match[2];
+    $tag_attributes = '';
+    $content = $match[3];
+
+    // Get the default highlighting mode.
+    $lang = $this->config->get('default_highlighting');
+    if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
+      // If the default highlighting mode is GeshiFilter::DEFAULT_DONOTHING
+      // and there is no language set (with language tag or language attribute),
+      // we should not do any escaping in this prepare phase,
+      // so that other filters can do their thing.
+      $enabled_languages = GeshiFilter::getEnabledLanguages();
+      // Usage of language tag?
+      list($generic_code_tags, $language_tags, $tag_to_lang) = $this->getTags();
+      if (isset($tag_to_lang[$tag_name]) && isset($enabled_languages[$tag_to_lang[$tag_name]])) {
+        $lang = $tag_to_lang[$tag_name];
+      }
+
+      // If no language was set: prevent escaping and return original string.
+      if ($lang == GeshiFilter::DEFAULT_DONOTHING) {
+        return $match[0];
+      }
+    }
+    if ($this->decodeEntities()) {
+      $content = $this->unencode($content);
+    }
+    // Return escaped code block.
+    return '[geshifilter-' . $tag_name . $tag_attributes . ']'
+      . str_replace(["\r", "\n"], ['', '&#10;'], SafeMarkup::checkPlain($content))
+      . '[/geshifilter-' . $tag_name . ']';
   }
 
   /**

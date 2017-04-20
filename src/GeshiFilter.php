@@ -91,6 +91,11 @@ class GeshiFilter {
   const BRACKETS_PHPBLOCK = 8;
 
   /**
+   * Parse code inside Markdown (```) blocks.
+   */
+  const BRACKETS_MARKDOWNBLOCK = 16;
+
+  /**
    * No line numbers.
    */
   const LINE_NUMBERS_DEFAULT_NONE = 0;

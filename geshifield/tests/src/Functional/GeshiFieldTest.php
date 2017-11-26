@@ -134,7 +134,7 @@ class GeshiFieldTest extends BrowserTestBase {
       'field_geshi[0][sourcecode]' => $sourcecode,
       'field_geshi[0][language]' => $language,
     ];
-    $this->drupalPostForm('node/add/geshifilter_content_type', $node, 'Save and publish');
+    $this->drupalPostForm('node/add/geshifilter_content_type', $node, 'Save');
     $this->drupalGet('node/1');
   }
 

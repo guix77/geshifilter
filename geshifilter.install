@@ -39,7 +39,8 @@ function geshifilter_requirements($phase) {
     if (!$geshi_library['loaded']) {
       $requirements['geshifilter_library'] = [
         'title' => 'GeSHi filter',
-        'value' => t('GeSHi library not found. Read the <em>INSTALLATION</em> section of <a href=":readme_url">README.txt</a> for information on how to fix this error.', [
+        'value' => t('GeSHi library not found'),
+        'description' => t('GeSHi library not found. Read the <em>INSTALLATION</em> section of <a href=":readme_url">README.txt</a> for information on how to fix this error.', [
           ':readme_url' => Url::fromUri('http://cgit.drupalcode.org/geshifilter/tree/README.txt', [
             'query' => [
               'h' => '8.x-1.x',
@@ -72,6 +73,7 @@ function geshifilter_requirements($phase) {
           '%version' => GESHI_VERSION,
         ]),
         'severity' => REQUIREMENT_OK,
+        'description' => t('The detected version of GeSHi library is supported.'),
       ];
     }
 
